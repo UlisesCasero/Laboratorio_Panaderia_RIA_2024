@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, take } from 'rxjs';
 import { OrdenCompra } from 'src/models/ordenCompra';
 import { Pedido } from 'src/models/pedido';
 import { ProductoCarrito } from 'src/models/productoCarrito';
 import { CarritoService } from 'src/services/carrito.service';
 import { OrdenCompraService } from 'src/services/orden-compra.service';
-import { OrdenesPanaderoService } from 'src/services/ordenes-panadero.service';
 import { PedidoService } from 'src/services/pedido.service';
 import { estadoOrden } from '../../enums/estado-orden';
+import { estadoPedido } from 'src/enums/estado-pedido';
 
 @Component({
   selector: 'app-carrito',
@@ -17,9 +17,10 @@ import { estadoOrden } from '../../enums/estado-orden';
 export class CarritoComponent implements OnInit {
   miCarrito$: Observable<ProductoCarrito[]>;
   mensajeConfirmacion: string = '';
-  public fechaEntrega: string = '';
+  fechaEntrega: string = '';
   minDate: string;
   carritoSub!: Subscription;
+  hayProductos: boolean = false;
 
 
   constructor(
@@ -34,6 +35,7 @@ export class CarritoComponent implements OnInit {
   ngOnInit(): void {
     this.carritoSub = this.miCarrito$.subscribe((data) => {
       console.log('Productos en el carrito:', data);
+      this.hayProductos = data.length > 0;
     });
   }
 
@@ -65,9 +67,9 @@ export class CarritoComponent implements OnInit {
   }
 
   totalCarrito() {
-    const resultado = this.carritoSvc.totalCarrito();
-    return resultado;
+    return this.carritoSvc.totalCarrito();
   }
+
   // falla
   crearPedido(producto: ProductoCarrito, idOrden: number) {
     console.log('Producto para pedido: ', producto);
@@ -76,7 +78,7 @@ export class CarritoComponent implements OnInit {
       producto.id,
       idOrden,
       producto.cantidad,
-      'PENDIENTE'
+      estadoPedido.PENDIENTE
     );
 
     console.log('El pedido genereado: ', nuevoPedido);
@@ -110,7 +112,7 @@ export class CarritoComponent implements OnInit {
             //this.ordenesPanaderoSvc.actualizarListaSinASignar();
             console.log('Response: ', response.id);
             //console.log('Orden creada:', response);
-            this.miCarrito$.subscribe((productos) => {
+            this.miCarrito$.pipe(take(1)).subscribe((productos) => {
               productos.forEach((producto) => {
                 this.crearPedido(producto, response.id);
               });

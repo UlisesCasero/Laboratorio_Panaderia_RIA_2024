@@ -17,7 +17,7 @@
         </svg>
     </div>
 
-    <div *ngIf="isUser()" [routerLink]="['/carrito']"
+    <div *ngIf="isUser() && cantCarrito > 0" [routerLink]="['/carrito']"
         class="h-10 w-10 flex items-center justify-center rounded-lg cursor-pointer hover:text-gray-800 hover:bg-white  hover:duration-300 hover:ease-linear focus:bg-white">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
             class="size-6">

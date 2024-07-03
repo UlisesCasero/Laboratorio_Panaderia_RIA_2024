@@ -107,7 +107,7 @@ exports.getOrdenesCompraAdmin = async (req, res) => {
 // Obtiene las oredenes y sus pedidos para un panadero especifico
 exports.getOrdenesCompraPanadero = async (req, res) => {
     const { id } = req.params;
-    const ordenesDePanadero = ordenes.filter(o => o.idPanadero == id);
+    const ordenesDePanadero = ordenes.filter(o => o.idPanadero == id && o.estado != estadoOrden.LISTO_PARA_RECOGER);
 
     if (ordenesDePanadero.length > 0) {
         try {

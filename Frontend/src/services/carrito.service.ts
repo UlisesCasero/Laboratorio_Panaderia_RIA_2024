@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, lastValueFrom } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { Producto } from 'src/models/producto';
 import { ProductoCarrito } from 'src/models/productoCarrito';
 
 @Injectable({
@@ -18,26 +17,18 @@ export class CarritoService {
   //Carrito observable
   private miCarrito = new BehaviorSubject<ProductoCarrito[]>([]);
   miCarrito$ = this.miCarrito.asObservable();
-
+  
   addProducto(producto: ProductoCarrito) {
-    console.log('MI LISTA: ', this.miLista);
-    if (this.miLista.length === 0) {
+    const productoExistente = this.miLista.find(
+      (element) => element.id === producto.id
+    );
+    if (productoExistente) {
+      productoExistente.cantidad += 1;
+    } else {
       producto.cantidad = 1;
       this.miLista.push(producto);
-      this.miCarrito.next(this.miLista);
-    } else {
-      const productoModificado = this.miLista.find((element) => {
-        return element.id === producto.id;
-      });
-      if (productoModificado) {
-        productoModificado.cantidad += 1;
-        this.miCarrito.next(this.miLista);
-      } else {
-        producto.cantidad = 1;
-        this.miLista.push(producto);
-        this.miCarrito.next(this.miLista);
-      }
     }
+    this.miCarrito.next(this.miLista);
   }
 
   eliminarProd(id: number) {
@@ -64,5 +55,4 @@ export class CarritoService {
     this.miLista = [];
     this.miCarrito.next(this.miLista);
   }
-
 }
