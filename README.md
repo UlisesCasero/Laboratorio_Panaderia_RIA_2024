@@ -1,54 +1,36 @@
 # Laboratorio_Panaderia_RIA_2024
 
 ###################################################################################################
-##Guía de Instalación y Ejecución del Proyecto Laboratorio Panadería RIA 2024
-##Este repositorio contiene el código fuente del proyecto Laboratorio Panadería RIA 2024, que ##incluye el backend y frontend de una aplicación para gestionar una panadería.
+##Funcionalidades implementadas:
 
-Requisitos Previos
-Antes de comenzar, asegúrate de tener instalados en tu sistema:
+ - Inicio de Sesión y Registro:
+    * Sistema de autenticación para permitir que los usuarios inicien sesión según su rol.
+    * Formularios de registro para CLIENTES.
 
-Node.js (preferiblemente la versión LTS)
-npm (administrador de paquetes de Node.js)
-Angular CLI (para ejecutar el frontend)
+ - Gestión de Productos (ADMIN):
+    * Página para listar todos los productos disponibles.
+    * Formularios para agregar, editar y eliminar productos.
+    * Página para listar todos los insumos disponibles.
+    * Formularios para agregar, editar y eliminar Insumos.
 
-##########################################################################################
+ - Catálogo de Productos (CLIENTES):
+    * Página para visualizar todos los productos disponibles.
+    * Funcionalidad para seleccionar productos y añadirlos a un carrito de compras.
+    * Formulario para realizar pedidos.
+    * Página para visualizar todos las órdenes realizadas.
 
-------------------------------------------------------------------------------
-Clonar el Repositorio
-git clone https://github.com/UlisesCasero/Laboratorio_Panaderia_RIA_2024.git
-------------------------------------------------------------------------------
-###########################################################################################
+ - Gestión de Órdenes (PANADERO):
+    * Página para listar todas las órdenes pendientes.
+    * Página para listar todas las órdenes sin asignar.
+    * Funcionalidad para actualizar el estado de las órdenes (pendiente, en preparación, listo para recoger).
 
-------------------------------------------------------------------------------
-Configuración y Ejecución del Backend
-Abrir una terminal (por ejemplo, Command Prompt o Terminal).
+ - Perfil de Usuario:
+    * Cadausuario podrá acceder a su perfil para ver sus datos personales y órdenes realizadas (CLIENTES)
+    * Formulario para editar informacion de usuario
 
-Navegar al directorio del backend:
-cd {{tu Directorio Donde Clonaste El Repositorio}}
-cd ..\Laboratorio_Panaderia_RIA_2024\Frontend
+ - Envio de correos automático
+    * Envío de correo a cliente en tres momentos del flujo: al crear orden, al asignar orden a panadero y al finalizar orden
+    * Envío de correo a cliente al crear usuario
 
-Instalar las dependencias del backend:
-npm install
-
-Iniciar el servidor backend:
-node ./app.js
-El backend debería estar corriendo en http://localhost:3000.
--------------------------------------------------------------------------------
-############################################################################################
-
-Configuración y Ejecución del Frontend
-Abrir otra terminal.
-
-Navegar al directorio del frontend:
-cd {{tu Directorio Donde Clonaste El Repositorio}}
-cd ..\Laboratorio_Panaderia_RIA_2024\Backend
-
-Instalar las dependencias del frontend:
-npm install
-
-Iniciar el servidor de desarrollo del frontend:
-ng serve --open
-
-Esto abrirá automáticamente el navegador en http://localhost:4200, donde podrás ver y interactuar con la aplicación frontend.
 #############################################################################################
 -------------------------------------------------------------------------------------
