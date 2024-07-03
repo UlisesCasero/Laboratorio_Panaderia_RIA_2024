@@ -12,6 +12,7 @@ import { ProductoCarrito } from 'src/models/productoCarrito';
 })
 export class HomeComponent implements OnInit{
   productos: any[] = [];
+  notificationMessage: string = ''; 
 
   constructor(private serviciosService: ServiciosService, private carritoSvc: CarritoService, private productosSvc: ProductoService) { }
 

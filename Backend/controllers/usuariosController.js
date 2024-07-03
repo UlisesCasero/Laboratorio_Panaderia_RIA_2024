@@ -165,7 +165,7 @@ const getUserByEmail = (req, res) => {
 
 const updateUsuario = async (req, res) => {
   const { id } = req.params;
-  const { email, password, telefono } = req.body;
+  const { email, password, telefono, role } = req.body;
   const userIndex = usuarios.findIndex(u => u.id == id);
 
   if (userIndex === -1) {
@@ -176,6 +176,7 @@ const updateUsuario = async (req, res) => {
   if (email) usuarios[userIndex].email = email;
   if (password) usuarios[userIndex].password =  hashedPassword;
   if (telefono) usuarios[userIndex].telefono = telefono;
+  if (role) usuarios[userIndex].role = role;
 
   res.json({ message: 'Usuario actualizado correctamente', usuario: usuarios[userIndex] });
 };

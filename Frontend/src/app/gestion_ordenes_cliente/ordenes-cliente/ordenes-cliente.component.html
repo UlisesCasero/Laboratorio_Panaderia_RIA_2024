@@ -89,7 +89,7 @@
                             </td>
                             <td
                                 class="border-t-0 px-6 align-center border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                <button (click)="verDetalle(orden.id)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+                                <button (click)="openModalModificacion(orden.id)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
                                     Ver detalle
                                 </button>   
                             </td>
@@ -117,6 +117,6 @@
                 </div>
               </div>
             </div>
-
+<app-modal-detalle-cliente #modificarProductoModal></app-modal-detalle-cliente>
             <app-footer class="fixed bottom-0 w-full"></app-footer>
           </div>

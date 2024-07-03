@@ -24,6 +24,8 @@ export class ModificarProductoComponent {
   mostrarModalInsumos = false;
   insumosSeleccionados: InsumoP[] = [];
   insumoSeleccionadoss: any[] = [];
+  registroExitoso: boolean = false;
+  registroFallido: boolean = false;
 
   constructor(private productoSVC: ProductoService, private cd: ChangeDetectorRef) { }
 
@@ -266,11 +268,16 @@ export class ModificarProductoComponent {
         console.log('Producto modificado:', data);
         this.productoModificado.emit(productoModificado);
         this.insumoSeleccionadoss = [];
-        this.close();
+         this.registroExitoso = true;
+          setTimeout(() => {
+          this.close();
+        }, 4000);
         this.cd.detectChanges();
       },
       error: (error) => {
-        console.error('Error al modificar producto:', error);
+        setTimeout(() => {
+          this.registroFallido = true;
+        }, 4000);
       }
     });
   }

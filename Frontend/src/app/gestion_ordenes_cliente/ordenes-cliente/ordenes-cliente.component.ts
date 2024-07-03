@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { OrdenCompra } from 'src/models/ordenCompra';
 import { OrdenCompraService } from 'src/services/orden-compra.service';
 import { estadoOrden } from 'src/enums/estado-orden';
 import { OrdenVista } from 'src/models/ordenVistaPanadero';
+import { ModalDetalleClienteComponent } from '../modal-detalle-cliente/modal-detalle-cliente.component';
 
 @Component({
   selector: 'app-ordenes-cliente',
@@ -101,5 +102,9 @@ export class OrdenesClienteComponent implements OnInit {
   filteredOrdenes: OrdenCompra[] = [];
   selectedEstado: string = 'Todos';
   estados: string[] = ['Listo para recoger', 'Pendiente', 'En preparación'];
-
+  
+  @ViewChild('modificarProductoModal') modificarProductoModal!: ModalDetalleClienteComponent;
+  openModalModificacion(id: number) {
+    this.modificarProductoModal.open(id);
+  }
 }

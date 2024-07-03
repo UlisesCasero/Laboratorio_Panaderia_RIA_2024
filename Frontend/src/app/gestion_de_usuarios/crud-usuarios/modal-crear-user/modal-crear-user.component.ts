@@ -41,7 +41,11 @@ export class ModalCrearUserComponent {
       this.servicioService.registro(registroData).subscribe(
         response => {
           console.log('Respuesta del servidor:', response);
-          this.registroExitoso = true;
+          this.registroExitoso = true,
+          this.insumoAgregado.emit({ usuario: response }); 
+          setTimeout(() => {
+            this.close();
+          }, 4000);
         },
         error => {
           setTimeout(() => {
@@ -58,5 +62,27 @@ export class ModalCrearUserComponent {
 
   close(): void {
     this.mostrar = false;
+  }
+
+  actualizarUsuario() {
+    this.servicioService.actualizarUsuario(this.usuario.id,this.usuario).subscribe(
+      (response) => {
+        this.registroExitoso = true;
+        this.registroFallido = false;
+        this.insumoAgregado.emit({ usuario: response });
+        setTimeout(() => {
+          this.registroExitoso = false;
+          this.close();
+        }, 3000);
+      },
+      (error) => {
+        console.error('Error al actualizar usuario:', error);
+        this.registroFallido = true;
+        this.registroExitoso = false;
+        setTimeout(() => {
+          this.registroFallido = false;
+        }, 3000);
+      }
+    );
   }
 }

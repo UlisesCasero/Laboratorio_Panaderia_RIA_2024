@@ -1,0 +1,50 @@
+<div class="modal" [ngClass]="{'show': isVisible}" (click)="close()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+        <span class="close" (click)="close()">&times;</span>
+        <div class="block w-full overflow-x-auto">
+            <table class="items-center bg-transparent w-full border-collapse ">
+                <thead>
+                    <tr>
+                        <th
+                            class="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                            Productos
+                        </th>
+                        <th
+                            class="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                            Cantidad
+                        </th>
+                        <th
+                            class="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                            Total (UYU)
+                        </th>
+                        <th
+                            class="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                            Estado del Pedido
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr *ngFor="let pedido of pedidos">
+                        <th
+                            class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left text-blueGray-700 ">
+                            {{pedido.nombre}}
+                        </th>
+                        <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 ">
+                            {{ pedido.cantidad }}
+                        </td>
+                        <td class="border-t-0 px-6 align-center border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                            ${{ pedido.total }}
+                        </td>
+                        <td [ngClass]="{
+                'text-green-500': pedido.estado === 'Listo',
+                'text-red-500': pedido.estado === 'Pendiente',
+                'text-yellow-500': pedido.estado === 'En preparación'
+            }" class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                            {{ pedido.estado }}
+                        </td>
+                    </tr>
+                </tbody>
+
+            </table>
+        </div>

@@ -8,16 +8,16 @@ import { Observable, catchError, throwError } from 'rxjs';
 export class ServiciosService {
 
   constructor(private http: HttpClient) { }
-  
-  registro(registro: { email: string, password: string, telefono: number, role: string}): Observable<any> {
+
+  registro(registro: { email: string, password: string, telefono: number, role: string }): Observable<any> {
     return this.http.post<any>('http://localhost:3000/usuarios/register', registro);
   }
 
-  reset(registro: { email: string}): Observable<any> {
+  reset(registro: { email: string }): Observable<any> {
     return this.http.post<any>('http://localhost:3000/usuarios/forgot-password', registro);
   }
 
-  cambioPassword(cambioPassword: { id:number, oldPassword: string, newPassword: string}): Observable<any> {
+  cambioPassword(cambioPassword: { id: number, oldPassword: string, newPassword: string }): Observable<any> {
     return this.http.post<any>('http://localhost:3000/usuarios/change-password', cambioPassword);
   }
 
@@ -30,7 +30,7 @@ export class ServiciosService {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        'Authorization': 'bearer '+ token
+        'Authorization': 'bearer ' + token
       })
     };
 
@@ -86,7 +86,7 @@ export class ServiciosService {
   }
 
   obtenerUsuarioPorEmail(email: string): Observable<any> {
-  
+
     return this.http.get<any>(`http://localhost:3000/usuarios/email/${email}`)
       .pipe(
         catchError(error => {
@@ -99,12 +99,18 @@ export class ServiciosService {
       headers: { 'Content-Type': 'application/json' }
     });
   }
-/*  
-  actualizarUsuario(id: number, usuario: any): Observable<any> {
+
+  activar(id: { id: number }): Observable<any> {
+    return this.http.post<any>('http://localhost:3000/usuarios/enable-user', id);
+  }
+
+  desactivar(id: { id: number }): Observable<any> {
+    return this.http.post<any>('http://localhost:3000/usuarios/disable-user', id);
+  }
+
+  obtenerUsuarioPorId2(id: number): Observable<any> {
     const token = localStorage.getItem('token');
-    if (!token) {
-      return throwError('No hay token almacenado');
-    }
+   
 
     const httpOptions = {
       headers: new HttpHeaders({
@@ -113,12 +119,12 @@ export class ServiciosService {
       })
     };
 
-    return this.http.put<any>(`http://localhost:3000/usuarios/actualizar/${id}`, usuario, httpOptions)
+    return this.http.get<any>(`http://localhost:3000/usuarios/${id}`, httpOptions)
       .pipe(
         catchError(error => {
           return throwError(error);
         })
       );
   }
-*/
+
 }

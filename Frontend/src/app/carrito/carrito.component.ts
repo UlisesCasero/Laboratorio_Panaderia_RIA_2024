@@ -29,7 +29,7 @@ export class CarritoComponent implements OnInit {
     private pedidoSvc: PedidoService,
   ) {
     this.miCarrito$ = this.carritoSvc.miCarrito$;
-    this.minDate = new Date().toISOString().split('T')[0]; 
+    this.minDate = new Date().toISOString().split('T')[0];
   }
 
   ngOnInit(): void {
@@ -117,11 +117,19 @@ export class CarritoComponent implements OnInit {
                 this.crearPedido(producto, response.id);
               });
             });
-            this.carritoSvc.vaciarCarrito();
             this.mensajeConfirmacion = 'Orden realizada!';
             setTimeout(() => {
               this.mensajeConfirmacion = '';
             }, 3000);
+            setTimeout(() => {
+              this.carritoSvc.vaciarCarrito();
+            }, 3000);
+            setTimeout(() => {
+              this.mensajeConfirmacion = 'Vaciando Carrito.....!';
+            }, 2000);
+            setTimeout(() => {
+              this.mensajeConfirmacion = '';
+            }, 1000);
           },
           (error) => console.error('Error al crear la orden:', error)
         );

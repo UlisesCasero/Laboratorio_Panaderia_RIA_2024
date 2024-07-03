@@ -12,7 +12,9 @@ import { ProductoCarrito } from 'src/models/productoCarrito';
 })
 export class HomeClienteComponent {
   productos: any[] = [];
-
+  notificationMessage: string = '';
+  productosFiltrados: any[] = [];
+  terminoBusqueda: string = '';
   constructor(private serviciosService: ServiciosService, private carritoSvc: CarritoService, private productosSvc: ProductoService) { }
 
   ngOnInit(): void {
@@ -22,17 +24,19 @@ export class HomeClienteComponent {
   obtenerProductos() {
     if (this.isUser()) {
       this.productosSvc.getProductosCarrito()
-          .subscribe(
-              (data) => {
-                  this.productos = data;
-              },
-              (error) => {
-                  console.error('Error al obtener productos:', error);
-              }
-          );
-  } else {
+        .subscribe(
+          (data) => {
+            this.productos = data;
+            this.productosFiltrados = this.productos;
+            console.log('productos:', this.productos);
+          },
+          (error) => {
+            console.error('Error al obtener productos:', error);
+          }
+        );
+    } else {
       console.log('El usuario no tiene permisos para obtener productos.');
-  }
+    }
   }
   serverBaseUrl = 'http://localhost:3000/uploads/';
 
@@ -43,7 +47,7 @@ export class HomeClienteComponent {
       return '';
     }
   }
-  
+
   isAdmin(): boolean {
     const role = localStorage.getItem('rol');
     return role === 'ADMIN';
@@ -59,8 +63,26 @@ export class HomeClienteComponent {
     return role === 'PANADERO';
   }
 
-  addCarrito(producto: ProductoCarrito){
-    console.log('PRODUCTO: ',producto);
+  addCarrito(producto: ProductoCarrito) {
+    console.log('PRODUCTO: ', producto);
+    this.notificationMessage = 'Agregado!';
+    setTimeout(() => {
+      this.notificationMessage = '';
+    }, 500);
     return this.carritoSvc.addProducto(producto);
+  }
+
+  filtrarProductos(): void {
+    const nombresProductos = this.productos.map(producto => producto.nombre.toLowerCase());
+    const termino = this.terminoBusqueda.toLowerCase().trim();
+    if (termino === '') {
+      this.productosFiltrados = [...this.productos];
+    } else {
+      this.productosFiltrados = this.productos.filter((productos, index) =>
+        nombresProductos[index].includes(termino),
+        console.log('aaadsdf', this.productosFiltrados)
+      );
+    }
+    console.log(termino);
   }
 }

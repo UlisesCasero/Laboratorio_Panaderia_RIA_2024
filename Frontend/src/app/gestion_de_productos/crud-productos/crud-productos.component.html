@@ -133,7 +133,7 @@
     </div>
     <app-insumos-modal #agregarInsumoModal></app-insumos-modal>
     <!-- Modificación de producto -->
-    <app-modificar-producto #modificarProductoModal></app-modificar-producto>
+    <app-modificar-producto #modificarProductoModal (closed)="handleModalClose()"></app-modificar-producto>
   </div>
 </div>
 <app-footer class="fixed bottom-0 w-full"></app-footer>

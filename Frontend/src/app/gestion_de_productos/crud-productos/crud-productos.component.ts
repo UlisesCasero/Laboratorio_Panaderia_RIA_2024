@@ -330,4 +330,8 @@ export class CRUDProductosComponent implements OnInit {
   cerrarInsumosModal() {
     this.mostrarModalInsumos = false;
   }
+
+  handleModalClose(): void {
+    this.obtenerProductos();
+  }
 }

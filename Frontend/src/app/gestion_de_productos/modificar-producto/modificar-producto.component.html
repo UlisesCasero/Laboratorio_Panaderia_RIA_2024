@@ -123,5 +123,11 @@
         Modificar Producto
       </button>
     </form>
+    <div *ngIf="registroExitoso" class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mt-4 rounded-md">
+      <p class="font-bold">Modificado!</p>
+  </div>
+  <div *ngIf="registroFallido" class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mt-4 rounded-md">
+      <p class="font-bold">Modificacion fallida</p>
+  </div>
   </div>
 </div>

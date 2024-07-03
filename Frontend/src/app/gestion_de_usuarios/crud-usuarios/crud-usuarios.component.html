@@ -34,19 +34,22 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr *ngFor="let usuario of lista" class="border-b border-dashed last:border-b-0">
+                                    <tr *ngFor="let usuario of usuariosPaginados" class="border-b border-dashed last:border-b-0">
                                         <td class="p-3 pl-0">{{ usuario.id }}</td>
                                         <td class="p-3 pl-0">{{ usuario.email }}</td>
                                         <td class="p-3 pl-0">{{ usuario.role }}</td>
                                         <td class="p-3 pl-0">{{ usuario.telefono }}</td>
                                         <td class="p-3 pl-0">{{ usuario.enabled ? 'Activo' : 'Desactivo' }}</td>
                                         <td class="p-3 pl-0">
-                                            <button (click)="openModalCreacion2(usuario)" class="text-sm font-medium text-white bg-blue-500 hover:bg-blue-700 rounded px-2 py-1 mx-1">Modificar</button>
-                                            <button class="text-sm font-medium text-white bg-red-500 hover:bg-red-700 rounded px-2 py-1 mx-1">Desactivar</button>
+                                            <button (click)="openModalCreacion2(usuario.id)" class="text-sm font-medium text-white bg-blue-500 hover:bg-blue-700 rounded px-2 py-1 mx-1">Modificar</button>
+                                            <button (click)="descativar(usuario)"  class="text-sm font-medium text-white bg-red-500 hover:bg-red-700 rounded px-2 py-1 mx-1">Desactivar</button>
                                         </td>
                                     </tr>
                                     </tbody>
                                 </table>
+                                <div *ngIf="notification.message" [ngClass]="{'bg-green-500': notification.type === 'success', 'bg-red-500': notification.type === 'error'}" class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mt-4 rounded-md">
+                                    <p class="font-bold">   {{ notification.message }}</p>
+                                  </div>
                                 <div class="flex justify-between my-5">
                                     <button (click)="paginaAnterior()"
                                             class="px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-700 hover:bg-gray-50">Anterior

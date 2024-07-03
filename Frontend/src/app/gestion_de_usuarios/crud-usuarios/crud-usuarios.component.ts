@@ -17,7 +17,10 @@ export class CrudUsuariosComponent {
   usuariosPorPagina: number = 5;
   totalUsuarios: number = 0;
   terminoBusqueda: string = '';
-  
+  public usuarioss: Usuario[] = [];
+  public productosActuales: Usuario[] = [];
+  notification: { message: string, type: string } = { message: '', type: '' };
+  usuarioSeleccionado!: Usuario;
   public lista: Usuario[] = [];
   public usuariosOriginales: Usuario[] = []; 
  
@@ -32,8 +35,13 @@ export class CrudUsuariosComponent {
       next: (data) => {
         this.lista = data;
         this.usuariosOriginales = data;
-        console.log(this.usuarios)
-        this.filtrarProductos();
+        if (this.terminoBusqueda.trim() !== '') {
+          this.usuarioss = this.usuariosOriginales.filter(producto =>
+            producto.email.toLowerCase().includes(this.terminoBusqueda.toLowerCase())
+          );
+        } else {
+          this.usuarioss = [...data];
+        }
       },
       error: (error) => {
         console.error(error);
@@ -52,38 +60,94 @@ export class CrudUsuariosComponent {
   }
 
   siguientePagina(): void {
-   
-  }  
+    const ultimaPagina = Math.ceil(this.usuarioss.length / this.usuariosPorPagina);
+    if (this.paginaActual < ultimaPagina) {
+      this.paginaActual++;
+    }
+  }
+
+  get usuariosPaginados(): Usuario[] {
+    const indiceInicial = (this.paginaActual - 1) * this.usuariosPorPagina;
+    const indiceFinal = indiceInicial + this.usuariosPorPagina;
+    return this.usuarioss.slice(indiceInicial, indiceFinal);
+  }
 
   filtrarProductos(): void {
     const termino = this.terminoBusqueda.toLowerCase().trim();
     if (termino === '') {
-      this.lista = [...this.usuariosOriginales]; 
+      this.obtenerUsuarios();
+      this.productosActuales = [...this.usuariosOriginales];
     } else {
-      this.lista = this.usuariosOriginales.filter(usuario => {
-        return usuario.email.toLowerCase().includes(termino);
-      });
-      this.paginaActual = 1; 
+      this.usuarioss = this.usuariosOriginales.filter(producto =>
+        producto.email.toLowerCase().includes(termino) &&
+        this.usuarioss.some(p => p.id === producto.id)
+      );
     }
+    this.paginaActual = 1;
   }
+  
 
   @ViewChild('crearProductoModal') crearProductoModal!: ModalCrearUserComponent;
   openModalCreacion() {
     this.crearProductoModal.open();
     this.crearProductoModal.insumoAgregado.subscribe(({ usuario }) => {
-      //  this.agregarInsumo({ insumo, cantidad });
+      this.actualizarListaUsuarios();
        });
   }
 
-usuarioSeleccionado: Usuario | undefined; 
 @ViewChild('crearProductoModal2') crearProductoModal2!: ModalModifUserComponent;
-openModalCreacion2(usuario: Usuario) {
-  this.usuarioSeleccionado = usuario; 
-  this.crearProductoModal2.usuario = this.usuarioSeleccionado; 
-  this.crearProductoModal2.open();
-  this.crearProductoModal2.insumoAgregado.subscribe(({ usuario }) => {
-    //  this.agregarInsumo({ insumo, cantidad });
-     });
+openModalCreacion2(id: number) {
+  this.crearProductoModal2.open(id);
+  this.crearProductoModal2.usuarioModificado.subscribe(() => {
+    this.actualizarListaUsuarios();
+  });
 }
 
+descativar(usuario: Usuario) {
+  if (usuario.enabled) {
+    this.usuarios.desactivar({ id: usuario.id }).subscribe(
+      response => {
+        this.notification = { message: 'Usuario desactivado correctamente', type: 'success' };
+        setTimeout(() => {
+          this.notification = { message: '', type: '' };
+        }, 3000);
+        this.actualizarListaUsuarios();
+      },
+      error => {
+        this.notification = { message: 'Error al desactivar usuario', type: 'error' };
+        setTimeout(() => {
+          this.notification = { message: '', type: '' };
+        }, 3000);
+      }
+    );
+  } else {
+    this.usuarios.activar({ id: usuario.id }).subscribe(
+      response => {
+        this.notification = { message: 'Usuario activado correctamente', type: 'success' };
+        setTimeout(() => {
+          this.notification = { message: '', type: '' };
+        }, 3000);
+        this.actualizarListaUsuarios();
+      },
+      error => {
+        this.notification = { message: 'Error al activar usuario', type: 'error' };
+        setTimeout(() => {
+          this.notification = { message: '', type: '' };
+        }, 3000);
+      }
+    );
+  }
+}
+
+actualizarListaUsuarios(): void {
+  this.usuarios.obtenerUsuarios().subscribe({
+    next: (data) => {
+      this.usuariosOriginales = data;
+      this.filtrarProductos(); 
+    },
+    error: (error) => {
+      console.error(error);
+    }
+  });
+}
 }

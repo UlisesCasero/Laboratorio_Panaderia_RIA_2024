@@ -127,6 +127,10 @@
             "telefono": {
               "type": "string",
               "description": "Nuevo número de teléfono del usuario"
+            },
+            "role": {
+              "type": "string",
+              "description": "Nuevo role del usuario"
             }
           }
         }

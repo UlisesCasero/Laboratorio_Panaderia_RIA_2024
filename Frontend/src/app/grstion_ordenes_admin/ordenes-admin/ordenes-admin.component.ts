@@ -19,7 +19,7 @@ import { ModalInsumosTotalesComponent } from '../modal-insumos-totales/modal-ins
 })
 export class OrdenesAdminComponent implements OnInit{
   ordenesAdmin$: Observable<OrdenVista[]>;
-  pageSize = 2;
+  pageSize = 5;
   currentPage = 1;
   ordenesAsignadas: OrdenVista[] = [];
   ordenes: OrdenVista[] = [];

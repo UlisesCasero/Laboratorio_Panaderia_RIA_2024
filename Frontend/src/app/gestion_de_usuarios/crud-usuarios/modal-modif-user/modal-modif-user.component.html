@@ -1,6 +1,5 @@
 <div class="modal" [ngClass]="{'show': mostrar}" (click)="close()">
     <div class="modal-content" (click)="$event.stopPropagation()">
-     
         <div class="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
             <button (click)="close()"
                 class="bg-red-500 text-white active:bg-red-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
@@ -12,59 +11,51 @@
                 </svg>
             </button>
         </div>
-
+  
         <div class="relative w-full rounded-3xl  px-6 py-4 bg-gray-100 shadow-md">
             <label for="" class="block mt-3 text-sm text-gray-700 text-center font-semibold">
-                Modificar Usuario
+                Modificación de Usuario
             </label>
-            <form (ngSubmit)="registro(f)" #f="ngForm" class="mt-10">
+            <form (ngSubmit)="actualizarUsuario()" #f="ngForm" class="mt-10">
                 <div>
-                    <input type="text" name="Telefono" ngModel required placeholder=  "{{ usuario?.telefono }}"
+                    <input type="text" name="telefono" [(ngModel)]="usuario.telefono" required placeholder="Teléfono"
                         class="mt-1 block w-full border-none bg-gray-100 h-11 rounded-xl shadow-lg hover:bg-blue-100 focus:bg-blue-100 focus:ring-0">
-                     
-
-                    <div *ngIf="f.submitted && f.controls['Telefono']?.errors?.['required']" class="text-red-500 text-xs mt-1">
+                    <div *ngIf="f.submitted && f.controls['telefono']?.errors?.['required']" class="text-red-500 text-xs mt-1">
                         El teléfono es obligatorio.
                     </div>
-                </div>  
+                </div>
                 <div class="mt-7">
-                    <input type="email" name="Correo" ngModel required placeholder="{{ usuario?.email }}"
+                    <input type="email" name="email" [(ngModel)]="usuario.email" required placeholder="Correo electrónico"
                         class="mt-1 block w-full border-none bg-gray-100 h-11 rounded-xl shadow-lg hover:bg-blue-100 focus:bg-blue-100 focus:ring-0">
-                    <div *ngIf="f.submitted && f.controls['Correo']?.errors?.['required']" class="text-red-500 text-xs mt-1">
+                    <div *ngIf="f.submitted && f.controls['email']?.errors?.['required']" class="text-red-500 text-xs mt-1">
                         El correo electrónico es obligatorio.
                     </div>
-                </div>      
+                </div>
                 <div class="mt-7">
-                    <input type="password" name="Contraseña" ngModel required placeholder="Contraseña"
+                    <input type="password" name="password" [(ngModel)]="usuario.password" placeholder="Contraseña"
                         class="mt-1 block w-full border-none bg-gray-100 h-11 rounded-xl shadow-lg hover:bg-blue-100 focus:bg-blue-100 focus:ring-0">
-                    <div *ngIf="f.submitted && f.controls['Contraseña']?.errors?.['required']" class="text-red-500 text-xs mt-1">
-                        La contraseña es obligatoria.
-                    </div>
-                </div> 
+                </div>
                 <div class="mt-7">
-                    <select name="role" required 
-                    class="mt-1 block w-full border-none bg-gray-100 h-11 rounded-xl shadow-lg hover:bg-blue-100 focus:bg-blue-100 focus:ring-0">
-                <option value="">Selecciona un rol</option>
-                <option [ngValue]="'USER'">USER</option>
-                <option [ngValue]="'PANADERO'">PANADERO</option>
-            </select>
-                    <div *ngIf="f.submitted && f.controls['role']?.errors?.['required']" class="text-red-500 text-xs mt-1">
-                        El rol es obligatorio.
-                    </div>
+                  <select name="role" [(ngModel)]="usuario.role" required class="mt-1 block w-full border-none bg-gray-100 h-11 rounded-xl shadow-lg hover:bg-blue-100 focus:bg-blue-100 focus:ring-0">
+                    <option [ngValue]="'USER'">USER</option>
+                    <option [ngValue]="'PANADERO'">PANADERO</option>
+                    <option [ngValue]="'ADMIN'">ADMIN</option>
+                  </select>
                 </div>
                 <div class="mt-7">
                     <button type="submit"
                         class="bg-blue-500 w-full py-3 rounded-xl text-white shadow-xl hover:shadow-inner focus:outline-none transition duration-500 ease-in-out  transform hover:-translate-x hover:scale-105">
-                        Registrar
+                        Actualizar Usuario
                     </button>
                 </div>
             </form>
             <div *ngIf="registroExitoso" class="bg-blue-100 border-t border-b border-blue-500 text-blue-700 px-4 py-3" role="alert">
-                <p class="font-bold">Registro exitoso</p>
+                <p class="font-bold">Actualización exitosa</p>
             </div>
             <div *ngIf="registroFallido" class="bg-blue-100 border-t border-b border-blue-500 text-blue-700 px-4 py-3" role="alert">
-                <p class="font-bold">Registro fallido</p>
+                <p class="font-bold">Actualización fallida</p>
             </div>
         </div>
     </div>
-</div>
+  </div>
+  

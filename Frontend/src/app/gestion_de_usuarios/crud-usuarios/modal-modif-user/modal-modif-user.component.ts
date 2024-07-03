@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Usuario } from 'src/models/usuario';
+import { Usuario, Usuario2 } from 'src/models/usuario';
 import { ServiciosService } from 'src/services/servicios.service';
 
 @Component({
@@ -8,50 +8,66 @@ import { ServiciosService } from 'src/services/servicios.service';
   templateUrl: './modal-modif-user.component.html',
   styleUrls: ['./modal-modif-user.component.scss']
 })
-export class ModalModifUserComponent {
+export class ModalModifUserComponent implements OnInit {
   mostrar: boolean = false;
-  @Input() usuario: Usuario | undefined;
-
   registroExitoso: boolean = false;
   registroFallido: boolean = false;
-  @ViewChild('usuarioForm2') usuarioForm!: NgForm;
-  @Output() insumoAgregado = new EventEmitter<{ usuario: Usuario }>();
+  usuario: Usuario2 = {
+    id: 0,
+    email: '',
+    telefono: '',
+    role: '',
+    enabled: true,
+    password: ''
+  };
 
-  constructor(private servicioService: ServiciosService) { }
+  @Output() usuarioModificado = new EventEmitter<Usuario>();
 
-  ngOnInit(): void { }
+  constructor(private servicio: ServiciosService) {}
 
-  registro(form: NgForm) {
-    if (form.valid) {
-      const telefono = form.value.Telefono;
-      const correo = form.value.Correo;
-      const contraseña = form.value.Contraseña;
-      const role = form.value.rol;
-      const registroData = {
-        email: correo,
-        password: contraseña,
-        telefono: telefono,
-        role: 'USER'
-      };
-      this.servicioService.registro(registroData).subscribe(
-        response => {
-          console.log('Respuesta del servidor:', response);
-          this.registroExitoso = true;
-        },
-        error => {
-          setTimeout(() => {
-            this.registroFallido = true;
-          }, 4000);
-        }
-      );
-    }
-  }
+  ngOnInit() {}
 
-  open(): void {
-    this.mostrar = true;
-  }
-
-  close(): void {
+  close() {
     this.mostrar = false;
+  }
+
+  actualizarUsuario() {
+    this.servicio.actualizarUsuario(this.usuarioId,this.usuario).subscribe(
+      (response) => {
+        this.registroExitoso = true;
+        this.registroFallido = false;
+        this.usuarioModificado.emit(this.usuario);
+        setTimeout(() => {
+          this.registroExitoso = false;
+          this.close();
+        }, 3000);
+      },
+      (error) => {
+        console.error('Error al actualizar usuario:', error);
+        this.registroFallido = true;
+        this.registroExitoso = false;
+        setTimeout(() => {
+          this.registroFallido = false;
+        }, 3000);
+      }
+    );
+  }
+  usuarioId!:number;
+  open(id: number) {
+    this.mostrar = true;
+    console.log(id);
+    this.usuarioId = id;
+    this.obtener();
+  }  
+  obtener() {
+    this.servicio.obtenerUsuarioPorId2(this.usuarioId).subscribe(
+      (usuario: Usuario2) => {
+        this.usuario = usuario;
+        console.log('Datos del usuario recibido:', this.usuario);
+      },
+      (error) => {
+        console.error('Error al obtener los datos del usuario:', error);
+      }
+    );
   }
 }

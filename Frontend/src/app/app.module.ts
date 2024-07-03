@@ -48,6 +48,7 @@ import { PerfilClienteComponent } from './home-cliente/perfil-cliente/perfil-cli
 import { ModalInsumosTotalesComponent } from './grstion_ordenes_admin/modal-insumos-totales/modal-insumos-totales.component';
 import { ModalCrearUserComponent } from './gestion_de_usuarios/crud-usuarios/modal-crear-user/modal-crear-user.component';
 import { ModalModifUserComponent } from './gestion_de_usuarios/crud-usuarios/modal-modif-user/modal-modif-user.component';
+import { ModalDetalleClienteComponent } from './gestion_ordenes_cliente/modal-detalle-cliente/modal-detalle-cliente.component';
 
 @NgModule({
   declarations: [
@@ -95,6 +96,7 @@ import { ModalModifUserComponent } from './gestion_de_usuarios/crud-usuarios/mod
     ModalInsumosTotalesComponent,
     ModalCrearUserComponent,
     ModalModifUserComponent,
+    ModalDetalleClienteComponent,
   ],
   imports: [
     BrowserModule,

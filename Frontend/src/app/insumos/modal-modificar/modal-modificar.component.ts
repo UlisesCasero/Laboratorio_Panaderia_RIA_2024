@@ -12,8 +12,10 @@ export class ModalModificarComponent {
   constructor(private productoSVC: ProductoService) { }
   isVisible = false;
   mostrar: boolean = false;
-  insumo!: Insumo ; 
-  nombreInsumo: string = ''; 
+  insumo!: Insumo;
+  nombreInsumo: string = '';
+  registroExitoso: boolean = false;
+  registroFallido: boolean = false;
 
   @Output() closed = new EventEmitter<void>();
   @Output() insumoModificado = new EventEmitter<Insumo>();
@@ -31,19 +33,21 @@ export class ModalModificarComponent {
     this.mostrar = false;
   }
   modificarInsumo(): void {
-    // Guardar el nombre actualizado en el insumo
     this.insumo.nombre = this.nombreInsumo;
-
-    // Llamar al servicio para actualizar el insumo
     this.productoSVC.putInsumo(this.insumo.id, this.insumo).subscribe({
       next: (data) => {
         console.log('Insumo modificado:', data);
-        this.insumoModificado.emit(this.insumo); // Emitir evento de insumo modificado
-        this.close(); // Cerrar modal después de guardar cambios
+        this.registroExitoso = true;
+        setTimeout(() => {
+          this.close();
+        }, 4000);
+        this.insumoModificado.emit(this.insumo); 
       },
       error: (error) => {
-        console.error('Error al modificar insumo:', error);
-        // Manejar el error según sea necesario
+        setTimeout(() => {
+          this.registroFallido = true;
+          this.close();
+        }, 4000);
       }
     });
   }
