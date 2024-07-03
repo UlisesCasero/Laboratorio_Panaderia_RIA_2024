@@ -21,6 +21,14 @@ export class CarritoComponent implements OnInit {
   minDate: string;
   carritoSub!: Subscription;
   hayProductos: boolean = false;
+  
+  comprobarCarrito(){
+    this.miCarrito$.pipe(take(1)).subscribe((data) => {
+      console.log(data.length);
+      this.hayProductos = data.length > 0;
+      console.log(this.hayProductos);
+    })
+  }
 
 
   constructor(
@@ -34,9 +42,9 @@ export class CarritoComponent implements OnInit {
 
   ngOnInit(): void {
     this.carritoSub = this.miCarrito$.subscribe((data) => {
-      console.log('Productos en el carrito:', data);
-      this.hayProductos = data.length > 0;
+      //console.log('Productos en el carrito:', data);
     });
+    this.comprobarCarrito();
   }
 
   ngOnDestroy(): void {
@@ -49,6 +57,7 @@ export class CarritoComponent implements OnInit {
 
   borrarProd(id: number) {
     this.carritoSvc.eliminarProd(id);
+    this.comprobarCarrito();
   }
 
   actualizarCantidad(operacion: string, id: number) {
@@ -63,6 +72,7 @@ export class CarritoComponent implements OnInit {
       if (producto.cantidad === 0) {
         this.carritoSvc.eliminarProd(id);
       }
+      this.comprobarCarrito();
     }
   }
 
@@ -70,7 +80,6 @@ export class CarritoComponent implements OnInit {
     return this.carritoSvc.totalCarrito();
   }
 
-  // falla
   crearPedido(producto: ProductoCarrito, idOrden: number) {
     console.log('Producto para pedido: ', producto);
     const nuevoPedido = new Pedido(
