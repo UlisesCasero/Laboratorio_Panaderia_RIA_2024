@@ -1,0 +1,32 @@
+<div class="modal" [ngClass]="{'show': mostrar2}" (click)="close()">
+  <div class="modal-content mx-auto mt-4 max-w-4xl bg-white p-6 rounded shadow-lg" (click)="$event.stopPropagation()">
+    <div class="flex justify-between items-center mb-4">
+      <h3 class="font-semibold text-xl text-blueGray-700">Insumos de la Orden</h3>
+      <button (click)="cerrarModal()"
+        class="bg-red-500 text-white active:bg-red-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none ease-linear transition-all duration-150"
+        type="button">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="min-w-full bg-white border-collapse">
+        <thead>
+          <tr class="bg-green-100">
+            <th class="px-4 py-2 border-b border-blueGray-200 text-xs font-bold text-left">Producto</th>
+            <th class="px-4 py-2 border-b border-blueGray-200 text-xs font-bold text-left">Cantidad</th>
+            <th class="px-4 py-2 border-b border-blueGray-200 text-xs font-bold text-left">Estado</th>
+          </tr>
+        </thead>
+        <tbody *ngIf="insumosPedido$ | async as insumosPedido">
+          <tr *ngFor="let insumo of insumosPedido">
+            <td class="border-t border-blueGray-200 px-4 py-2 text-left">{{ insumo.insumoNombre }}</td>
+            <td class="border-t border-blueGray-200 px-4 py-2 text-left">{{ insumo.cantidadIndividual }}</td>
+            <td class="border-t border-blueGray-200 px-4 py-2 text-left">{{ insumo.cantidadTotal }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

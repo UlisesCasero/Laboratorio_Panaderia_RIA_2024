@@ -1,0 +1,54 @@
+.container {
+    display: flex;
+    height: calc(100vh - 64px);
+    /* Ajusta el valor de 64px si la altura del header es diferente */
+  }
+  
+  .bg-celeste-pastel {
+    background-color: #add8e6;
+  }
+  
+  .border-celeste-pastel {
+    border-color: #add8e6;
+  }
+  
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .form-container {
+    max-width: 100%; /* Ajusta este valor según tus necesidades */
+    margin: 0 auto;
+    padding: 0 20px; /* Añade un espacio interior opcional para que no esté pegado a los bordes */
+  }
+  
+  @media (min-width: 640px) {
+    .form-container {
+      max-width: 500px; /* Ancho máximo para pantallas más grandes */
+    }
+  }
+  /* Añadir esto en tu archivo CSS o SCSS */
+  .responsive-img {
+    max-width: 100px; /* Ajusta esto según tus necesidades */
+    max-height: 100px; /* Ajusta esto según tus necesidades */
+    width: auto;
+    height: auto;
+    object-fit: cover; /* Para asegurar que la imagen mantenga su proporción */
+  }
+  
+  @media (max-width: 768px) {
+    .responsive-img {
+      max-width: 75px; /* Ajusta esto según tus necesidades para pantallas más pequeñas */
+      max-height: 75px; /* Ajusta esto según tus necesidades para pantallas más pequeñas */
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .responsive-img {
+      max-width: 50px; /* Ajusta esto según tus necesidades para pantallas aún más pequeñas */
+      max-height: 50px; /* Ajusta esto según tus necesidades para pantallas aún más pequeñas */
+    }
+  }
+  

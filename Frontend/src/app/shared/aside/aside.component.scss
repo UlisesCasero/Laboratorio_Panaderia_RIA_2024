@@ -1,0 +1,38 @@
+/* Estilos base para el aside */
+aside {
+    width: 4rem; /* Ancho más delgado del aside */
+    height: 100vh; /* Altura completa del viewport */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #1f2937; /* Color de fondo del aside */
+    color: white; /* Color del texto */
+    position: fixed; /* Fijar posición */
+    top: 0; /* Fijar en la parte superior */
+    left: 0; /* Fijar a la izquierda */
+    z-index: 1000; /* Asegurar que esté sobre otros elementos */
+  }
+  
+  /* Estilos para los íconos y enlaces dentro del aside */
+  aside div {
+    width: 100%; /* Ancho completo */
+    height: 3rem; /* Altura fija para cada ítem */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease; /* Transiciones suaves */
+  }
+  
+  /* Media query para dispositivos móviles */
+  @media (max-width: 480px) {
+    aside {
+      width: 3rem; /* Ancho del aside en dispositivos móviles */
+    }
+  
+    aside div {
+      height: 3rem; /* Altura fija para cada ítem */
+    }
+  }
+  

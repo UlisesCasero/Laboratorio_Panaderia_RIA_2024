@@ -1,0 +1,87 @@
+<app-header></app-header>
+<div class="container flex flex-wrap">
+  <app-aside class="w-1/4"></app-aside>
+  <div class="main-content w-3/4">
+    <div class="flex flex-wrap -mx-3 mb-5">
+      <div class="w-full max-w-full px-3 mb-6 mx-auto">
+        <div class="relative flex-1 flex flex-col break-words min-w-0 bg-clip-border rounded-lg bg-white m-5">
+          <div
+            class="relative flex flex-col min-w-0 break-words border border-dashed bg-clip-border rounded-2xl border-stone-200 bg-light/30">
+            <div class="px-9 pt-5 flex justify-between items-stretch flex-wrap min-h-[70px] pb-0 bg-transparent">
+              <h3 class="flex flex-col items-start justify-center m-2 ml-0 font-medium text-xl text-dark">
+                <span class="mr-3 font-semibold text-dark">Insumos</span>
+              </h3>
+              <div class="relative flex flex-wrap items-center my-2">
+                <button (click)="openModalCreacion()"
+                  class="inline-block text-sm font-medium leading-normal text-center align-middle cursor-pointer rounded-2xl transition-colors duration-150 ease-in-out text-light-inverse bg-celeste-pastel border-celeste-pastel shadow-none border-0 py-2 px-5 hover:bg-secondary active:bg-light focus:bg-light">
+                  Agregar Insumo
+                </button>
+              </div>
+            </div>
+            <div class="flex-auto block py-8 pt-6 px-9">
+              <div class="overflow-x-auto">
+                <input type="text" [(ngModel)]="terminoBusqueda" (input)="filtrarInsumo()"
+                  placeholder="Buscar por nombre..."
+                  class="w-full py-2 px-3 border border-gray-300 rounded-md mb-4 focus:outline-none focus:border-blue-500">
+                <div class="overflow-x-auto">
+                  <table class="w-full my-0 align-middle text-dark border-neutral-200">
+                    <thead class="align-bottom">
+                      <tr class="font-semibold text-sm text-secondary-dark">
+                        <th class="pb-3 text-start min-w-[100px]">ID</th>
+                        <th class="pb-3 text-start min-w-[100px]">Nombre</th>
+                        <th class="pb-3 text-start min-w-[100px]">Acciones</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let insumo of insumosPaginados" class="border-b border-dashed last:border-b-0">
+                        <td class="p-3 pl-0">{{ insumo.id }}</td>
+                        <td class="p-3 pl-0">{{ insumo.nombre }}</td>
+                        <td class="p-3 pl-0">
+                          <button (click)="openModalModificacion(insumo)"
+                            class="text-sm font-medium text-white bg-blue-500 hover:bg-blue-700 rounded px-2 py-1 mx-1">Modificar</button>
+                          <button (click)="eliminarInsumo(insumo.id)"
+                            class="text-sm font-medium text-white bg-red-500 hover:bg-red-700 rounded px-2 py-1 mx-1">Eliminar</button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <div class="flex justify-between my-5">
+                    <button (click)="paginaAnterior()"
+                      class="px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-700 hover:bg-gray-50">Anterior</button>
+                    <button (click)="siguientePagina()"
+                      class="px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-700 hover:bg-gray-50">Siguiente</button>
+                  </div>
+                  <div *ngIf="insumoEliminadoExitosamente" class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mt-4 rounded-md">
+                    <p class="font-bold">¡Insumo eliminado exitosamente!</p>
+                  </div>
+                  <div *ngIf="mensajeError" class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mt-4 rounded-md">
+                    <p class="font-bold">{{ mensajeError }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="form-container max-w-md mx-auto">
+      <app-crear-insumo #crearInsumoModal>
+        <form #insumoForm="ngForm" (ngSubmit)="crearInsumo(insumoForm.value)" class="space-y-4">
+          <div>
+            <label for="nombre" class="block text-sm font-medium text-gray-700">Nombre del Insumo</label>
+            <input type="text" name="nombre" id="nombre" [(ngModel)]="datosFormulario.nombre" required
+              placeholder="Nombre del insumo"
+              class="mt-1 p-2 block w-full rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300">
+          </div>
+
+          <button type="submit"
+            class="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+            Crear Insumo
+          </button>
+        </form>
+      </app-crear-insumo>
+      <app-modal-modificar #modificarInsumoModal></app-modal-modificar>
+    </div>
+  </div>
+</div>
+<app-footer class="fixed bottom-0 w-full"></app-footer>

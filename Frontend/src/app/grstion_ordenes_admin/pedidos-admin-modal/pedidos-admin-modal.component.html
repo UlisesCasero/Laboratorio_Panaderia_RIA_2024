@@ -1,0 +1,63 @@
+<link rel="stylesheet" href="https://demos.creative-tim.com/notus-js/assets/styles/tailwind.css">
+<link rel="stylesheet" href="https://demos.creative-tim.com/notus-js/assets/vendor/@fortawesome/fontawesome-free/css/all.min.css">
+
+<div class="modal fixed inset-0 flex items-center justify-center z-50" [ngClass]="{'show': mostrar}" (click)="close()">
+    <div class="modal-content w-full max-w-4xl bg-white p-6 rounded shadow-lg" (click)="$event.stopPropagation()">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="font-semibold text-base text-blueGray-700">Pedidos Orden</h3>
+            <button (click)="cerrarModal()"
+                    class="bg-red-500 text-white active:bg-red-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none ease-linear transition-all duration-150"
+                    type="button">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+        <div class="block w-full overflow-x-auto">
+            <table class="items-center bg-transparent w-full border-collapse">
+                <thead>
+                    <tr>
+                        <th class="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                            Producto
+                        </th>
+                        <th class="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                            Cantidad
+                        </th>
+                        <th class="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                            Estado
+                        </th>
+                        <th class="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                            Detalle
+                        </th>
+                    </tr>
+                </thead>
+                <tbody *ngFor="let pedido of pedidosOrden$ | async">
+                    <tr>
+                        <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left text-blueGray-700">
+                            {{ pedido.productoNombre }}
+                        </td>
+                        <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                            {{ pedido.cantidad }}
+                        </td>
+                        <td [ngClass]="{
+                            'text-green-500': pedido.estado === 'Listo',
+                            'text-red-500': pedido.estado === 'Pendiente',
+                            'text-yellow-500': pedido.estado === 'En preparación'
+                        }" class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                            {{ pedido.estado }}
+                        </td>
+                        <td class="border-t-0 px-6 align-center border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                            <button (click)="openModalCreacion(pedido.idPedido)"
+                                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+                                Ver detalle
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<app-modal-detalle-insumos #crearProductoModal2></app-modal-detalle-insumos>

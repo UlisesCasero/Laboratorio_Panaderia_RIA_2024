@@ -1,0 +1,16 @@
+<div class="modal" [ngClass]="{'show': mostrar}" (click)="close()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+        <span class="close" (click)="close()">&times;</span>
+        <div class="form-container">
+            <h5 class="text-xl font-semibold mb-4">Agregar Insumo</h5>
+            <ul class="list-group">
+                <li *ngFor="let insumo of insumos; let i = index" class="flex justify-between items-center py-2 px-4 border-b">
+                    {{ insumo.nombre }}
+                    <input type="number" min="1" class="w-20 mx-2 p-1 border rounded" placeholder="Cantidad" #cantidadInput>
+                    <button class="bg-blue-500 text-white py-1 px-3 rounded hover:bg-blue-700"
+                            (click)="agregarInsumo(insumo, cantidadInput.value)">Agregar</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+  </div>

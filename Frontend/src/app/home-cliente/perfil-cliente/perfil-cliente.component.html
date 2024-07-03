@@ -1,0 +1,185 @@
+<div class="flex flex-col min-h-screen bg-gray-100">
+    <!-- Header -->
+    <app-header class="bg-white shadow"></app-header>
+
+    <div class="flex flex-grow">
+        <!-- Sidebar -->
+        <app-aside></app-aside>
+
+        <!-- Main Content -->
+        <main class="flex-grow p-6">
+            <div class="max-w-2xl mx-auto">
+                <!-- Card -->
+                <div class="bg-white rounded-lg shadow-lg p-8">
+                    <h2 class="text-3xl font-semibold mb-6">Perfil de Usuario</h2>
+
+                    <!-- Email -->
+                    <div class="mb-6">
+                        <label class="block text-lg font-medium text-gray-700" for="email">Correo Electrónico</label>
+                        <input type="email" id="email"
+                            class="mt-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-lg bg-green-100"
+                            placeholder="tucorreo@ejemplo.com" [(ngModel)]="usuario.email" readonly />
+                    </div>
+
+                    <!-- Teléfono -->
+                    <div class="mb-6">
+                        <label class="block text-lg font-medium text-gray-700" for="telefono">Teléfono</label>
+                        <input type="tel" id="telefono"
+                            class="mt-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-lg bg-green-100"
+                            placeholder="+1234567890" [(ngModel)]="usuario.telefono" readonly />
+                    </div>
+
+                    <!-- Cambiar Contraseña -->
+                    <div class="mb-6">
+                        <button type="button"
+                            class="w-full bg-blue-600 text-white rounded-md py-3 px-6 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                            (click)="openChangePasswordModal()">
+                            Cambiar Contraseña
+                        </button>
+                    </div>
+
+                    <!-- Cambiar Teléfono -->
+                    <div class="mb-6">
+                        <button type="button"
+                            class="w-full bg-green-600 text-white rounded-md py-3 px-6 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                            (click)="openChangeTelefonoModal()">
+                            Cambiar Teléfono
+                        </button>
+                    </div>
+
+                    <!-- Cerrar Sesión -->
+                    <div>
+                        <button type="button" (click)="logout()"
+                            class="w-full bg-red-600 text-white rounded-md py-3 px-6 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                            Cerrar Sesión
+                        </button>
+                    </div>
+                </div>
+                <div *ngIf="notification.message" [ngClass]="notification.type"
+                    class="fixed mb-4 mr-4 p-4 rounded-md shadow-lg">
+                    {{ notification.message }}
+                </div>
+                <!-- End Card -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <app-footer class="bg-gray-800 text-gray-100"></app-footer>
+</div>
+
+<!-- Modal para cambiar contraseña -->
+<div id="changePasswordModal" class="fixed z-10 inset-0 overflow-y-auto hidden">
+    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+        <span class="hidden sm:inline-block sm:align-middle sm:h-screen"></span>
+        <div
+            class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                <div class="sm:flex sm:items-start">
+                    <div
+                        class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-blue-100 sm:mx-0 sm:h-10 sm:w-10">
+                        <svg class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                            aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 11c1.654 0 3-1.346 3-3s-1.346-3-3-3-3 1.346-3 3 1.346 3 3 3zm0 4c-2.21 0-4 1.79-4 4v2h8v-2c0-2.21-1.79-4-4-4z" />
+                        </svg>
+                    </div>
+                    <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                        <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                            Cambiar Contraseña
+                        </h3>
+                        <div class="mt-2">
+                            <form #changePasswordForm="ngForm">
+                                <div class="mb-4">
+                                    <label for="current-password"
+                                        class="block text-sm font-medium text-gray-700">Contraseña Actual</label>
+                                    <input type="password" id="current-password" [(ngModel)]="currentPassword"
+                                        name="currentPassword"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm bg-green-100" />
+                                </div>
+                                <div class="mb-4">
+                                    <label for="new-password" class="block text-sm font-medium text-gray-700">Nueva
+                                        Contraseña</label>
+                                    <input type="password" id="new-password" [(ngModel)]="newPassword"
+                                        name="newPassword"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm bg-green-100" />
+                                </div>
+                                <div>
+                                    <label for="confirm-password"
+                                        class="block text-sm font-medium text-gray-700">Confirmar Nueva
+                                        Contraseña</label>
+                                    <input type="password" id="confirm-password" [(ngModel)]="confirmPassword"
+                                        name="confirmPassword"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm bg-green-100" />
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                <button type="button"
+                    class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm"
+                    (click)="submitChangePassword()">
+                    Guardar
+                </button>
+                <button type="button"
+                    class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm"
+                    (click)="closeChangePasswordModal()">
+                    Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para cambiar teléfono -->
+<div id="changeTelefonoModal" class="fixed z-10 inset-0 overflow-y-auto hidden">
+    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+        <span class="hidden sm:inline-block sm:align-middle sm:h-screen"></span>
+        <div
+            class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                <div class="sm:flex sm:items-start">
+                    <div
+                        class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-blue-100 sm:mx-0 sm:h-10 sm:w-10">
+                        <svg class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                            aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 11c1.654 0 3-1.346 3-3s-1.346-3-3-3-3 1.346-3 3 1.346 3 3 3zm0 4c-2.21 0-4 1.79-4 4v2h8v-2c0-2.21-1.79-4-4-4z" />
+                        </svg>
+                    </div>
+                    <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                        <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                            Cambiar Teléfono
+                        </h3>
+                        <div class="mt-2">
+                            <form #changeTelefonoForm="ngForm">
+                                <div class="mb-4">
+                                    <label for="new-telefono" class="block text-sm font-medium text-gray-700">Nuevo
+                                        Teléfono</label>
+                                    <input type="tel" id="new-telefono" [(ngModel)]="newTelefono" name="newTelefono"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm bg-green-100" />
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                <button type="button"
+                    class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm"
+                    (click)="submitChangeTelefono()">
+                    Guardar
+                </button>
+                <button type="button"
+                    class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm"
+                    (click)="closeChangeTelefonoModal()">
+                    Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,103 @@
+<link rel="stylesheet" href="https://demos.creative-tim.com/notus-js/assets/styles/tailwind.css">
+<link rel="stylesheet"
+  href="https://demos.creative-tim.com/notus-js/assets/vendor/@fortawesome/fontawesome-free/css/all.min.css">
+
+<div class="flex flex-col min-h-screen">
+  <app-header></app-header>
+  <div class="flex flex-1 overflow-hidden">
+    <app-aside></app-aside>
+    <main class="flex-1 p-4 overflow-y-auto">
+      <ng-container *ngIf="isPanadero">
+        <div class="container mx-auto mt-24">
+          <div class="w-full xl:w-8/12 mx-auto">
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+              <div class="bg-blueGray-50 px-6 py-3 border-b border-blueGray-200 flex items-center justify-between">
+                <h3 class="text-lg font-semibold text-blueGray-700">Órdenes Realizadas</h3>
+                <div class="flex items-center">
+                  <!-- Filtro por Fecha 
+<div class="flex items-center mt-4">
+  <label for="filtroFecha" class="mr-2 text-sm font-medium text-gray-700">Filtrar por Fecha:</label>
+  <input type="date" id="filtroFecha" [(ngModel)]="filtroFecha" class="border border-gray-300 rounded-md px-3 py-1 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+  <button class="ml-2 px-3 py-1 bg-blue-500 text-white rounded focus:outline-none" (click)="aplicarFiltroFecha()">Aplicar</button>
+</div>-->
+
+                  <!-- Ordenar por Fecha -->
+                  <button class="ml-4 px-3 py-1 bg-blue-500 text-white rounded focus:outline-none"
+                    (click)="ordenarPorFecha()">
+                    Ordenar por Fecha
+                    <svg *ngIf="ordenAscendente" xmlns="http://www.w3.org/2000/svg"
+                      class="h-4 w-4 inline-block ml-1 -mt-1" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd"
+                        d="M7.293 8.293a1 1 0 011.414 0L10 9.586l1.293-1.293a1 1 0 111.414 1.414l-2 2a1 1 0 01-1.414 0l-2-2a1 1 0 010-1.414z"
+                        clip-rule="evenodd" />
+                    </svg>
+                    <svg *ngIf="!ordenAscendente" xmlns="http://www.w3.org/2000/svg"
+                      class="h-4 w-4 inline-block ml-1 -mt-1" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd"
+                        d="M7.293 11.293a1 1 0 011.414 0L10 12.586l1.293-1.293a1 1 0 111.414 1.414l-2 2a1 1 0 01-1.414 0l-2-2a1 1 0 010-1.414z"
+                        clip-rule="evenodd" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <div class="block w-full overflow-x-auto">
+                <table class="w-full border-collapse">
+                  <thead>
+                    <tr class="bg-blueGray-100 text-blueGray-500 text-xs uppercase">
+                      <th class="px-6 py-3 border-b border-blueGray-200 text-center">Fecha Solicitada</th>
+                      <th class="px-6 py-3 border-b border-blueGray-200 text-center">Cantidad Pedidos</th>
+                      <th class="px-6 py-3 border-b border-blueGray-200 text-center">Detalle</th>
+                      <th class="px-6 py-3 border-b border-blueGray-200 text-center">Tomar</th>
+                    </tr>
+                  </thead>
+                  <tbody *ngFor="let orden of ordenesSinAsignar$ | async" class="hover:bg-blueGray-50">
+                    <tr>
+                      <td class="border-t border-blueGray-200 px-6 py-4 text-center">{{ orden.fecha_entrega }}</td>
+                      <td class="border-t border-blueGray-200 px-6 py-4 text-center">{{ orden.cantPedidos }}</td>
+                      <td (click)="openModalCreacion(orden.idOrden)"
+                        class="border-t border-blueGray-200 px-6 py-4 text-center cursor-pointer">
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+                          Ver detalle
+                        </button>
+                      </td>
+                      <td (click)="asignarOrdenPanadero(orden.idOrden)"
+                        class="border-t border-blueGray-200 px-6 py-4 text-center cursor-pointer">
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+                          Tomar orden
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div *ngIf="mostrarConfirmacion"
+                  class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mt-4 rounded-md">
+                  <p class="font-bold">Asignada correctamente!</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 flex justify-center" *ngIf="ordenes">
+            <div class="flex">
+              <button class="px-3 py-1 bg-blue-500 text-white rounded-l focus:outline-none"
+                [class.opacity-50]="currentPage === 1" [disabled]="currentPage === 1"
+                (click)="currentPage = currentPage - 1">
+                Anterior
+              </button>
+              <div class="px-3 py-1 bg-blue-100">
+                Página {{ currentPage }}
+              </div>
+              <button class="px-3 py-1 bg-blue-500 text-white rounded-r focus:outline-none"
+                [class.opacity-50]="currentPage * pageSize >= (ordenes.length || 0)"
+                [disabled]="currentPage * pageSize >= (ordenes.length || 0)" (click)="currentPage = currentPage + 1">
+                Siguiente
+              </button>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </main>
+  </div>
+  <app-modal-detalle-orden #crearProductoModal></app-modal-detalle-orden>
+  <app-footer></app-footer>
+</div>

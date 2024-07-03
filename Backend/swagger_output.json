@@ -1,0 +1,2170 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "API Documentación",
+    "description": "Documentación de la API generada automáticamente",
+    "version": "1.0.0"
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "schemes": [
+    "http"
+  ],
+  "securityDefinitions": {
+    "BearerAuth": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header",
+      "description": "Ingrese su token en el formato: Bearer <token>"
+    }
+  },
+  "paths": {
+    "/": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/usuarios/register": {
+      "post": {
+        "tags": [
+          "Usuarios"
+        ],
+        "summary": "Registra un nuevo usuario",
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Registro de nuevo usuario.",
+            "schema": {
+              "$ref": "#/definitions/RegisterUser"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/usuarios/login": {
+      "post": {
+        "tags": [
+          "Usuarios"
+        ],
+        "summary": "Inicia sesión",
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Credenciales de usuario.",
+            "schema": {
+              "$ref": "#/definitions/Login"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },"/usuarios/actualizar/{id}": {
+  "put": {
+    "tags": [
+      "Usuarios"
+    ],
+    "summary": "Actualiza un usuario por ID",
+    "description": "",
+    "parameters": [
+      {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "type": "integer",
+        "description": "ID del usuario"
+      },
+      {
+        "name": "authorization",
+        "in": "header",
+        "type": "string"
+      },
+      {
+        "name": "body",
+        "in": "body",
+        "description": "Datos actualizados del usuario.",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string",
+              "description": "Nuevo correo electrónico del usuario"
+            },
+            "password": {
+              "type": "string",
+              "description": "Nueva contraseña del usuario"
+            },
+            "telefono": {
+              "type": "string",
+              "description": "Nuevo número de teléfono del usuario"
+            }
+          }
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "OK. Usuario actualizado correctamente."
+      },
+      "400": {
+        "description": "Error de solicitud. Verifica los datos enviados."
+      },
+      "404": {
+        "description": "Usuario no encontrado."
+      },
+      "500": {
+        "description": "Error interno del servidor."
+      }
+    },
+    "security": [
+      {
+        "BearerAuth": []
+      }
+    ]
+  }
+},
+    "/usuarios/change-password": {
+      "post": {
+        "tags": [
+          "Usuarios"
+        ],
+        "summary": "Cambia la contraseña del usuario",
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Cambio de contraseña de usuario.",
+            "schema": {
+              "$ref": "#/definitions/ChangePassword"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/usuarios/users": {
+      "get": {
+        "tags": [
+          "Usuarios"
+        ],
+        "summary": "Listar todos los usuarios",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/usuarios/{id}": {
+      "get": {
+        "tags": [
+          "Usuarios"
+        ],
+        "summary": "Obtiene un usuario por ID",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID del usuario"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/usuarios/email/{email}": {
+      "get": {
+        "tags": [
+          "Usuarios"
+        ],
+        "summary": "Obtiene un usuario por email",
+        "description": "",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Email del usuario"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/usuarios/forgot-password": {
+      "post": {
+        "tags": [
+          "Usuarios"
+        ],
+        "summary": "Recupera la contraseña olvidada",
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Recuperación de contraseña de usuario.",
+            "schema": {
+              "$ref": "#/definitions/ForgotPassword"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/usuarios/enable-user": {
+      "post": {
+        "tags": [
+          "Usuarios"
+        ],
+        "summary": "Habilita un usuario",
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Habilitación de usuario.",
+            "schema": {
+              "$ref": "#/definitions/EnableDisableUser"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/usuarios/disable-user": {
+      "post": {
+        "tags": [
+          "Usuarios"
+        ],
+        "summary": "Deshabilita un usuario",
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Deshabilitación de usuario.",
+            "schema": {
+              "$ref": "#/definitions/EnableDisableUser"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/productos/": {
+      "get": {
+        "tags": [
+          "Productos"
+        ],
+        "summary": "Obtiene la lista de productos",
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Productos"
+        ],
+        "summary": "Agrega un nuevo producto",
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Agregar nuevo producto.",
+            "schema": {
+              "$ref": "#/definitions/Producto"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/productos/{id}": {
+      "get": {
+        "tags": [
+          "Productos"
+        ],
+        "summary": "Obtiene un producto por ID",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID del producto"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Productos"
+        ],
+        "summary": "Actualiza un producto existente",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID del producto"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Actualizar producto.",
+            "schema": {
+              "$ref": "#/definitions/Producto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Productos"
+        ],
+        "summary": "Elimina un producto",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID del producto"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/insumos/": {
+      "get": {
+        "tags": [
+          "Insumos"
+        ],
+        "summary": "Obtiene la lista de insumos",
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Insumos"
+        ],
+        "summary": "Agrega un nuevo insumo",
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Agregar nuevo insumo.",
+            "schema": {
+              "$ref": "#/definitions/Insumo"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/insumos/{id}": {
+      "get": {
+        "tags": [
+          "Insumos"
+        ],
+        "summary": "Obtiene un insumo por ID",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID del insumo"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Insumos"
+        ],
+        "summary": "Actualiza un insumo existente",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID del insumo"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Actualizar insumo.",
+            "schema": {
+              "$ref": "#/definitions/Insumo"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Insumos"
+        ],
+        "summary": "Elimina un insumo",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID del insumo"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/productoInsumo/": {
+      "get": {
+        "tags": [
+          "ProductoInsumo"
+        ],
+        "summary": "Obtiene la lista de relaciones producto-insumo",
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ProductoInsumo"
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "ProductoInsumo"
+        ],
+        "summary": "Agrega una nueva relación producto-insumo",
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Agregar nueva relación producto-insumo.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ProductoInsumo"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/ProductoInsumo"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/productoInsumo/{id_producto}": {
+      "get": {
+        "tags": [
+          "ProductoInsumo"
+        ],
+        "summary": "Obtiene las relaciones producto-insumo por ID de producto",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id_producto",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID del producto"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ProductoInsumo"
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/productoInsumo/{idProducto}/{idInsumo}": {
+      "delete": {
+        "tags": [
+          "ProductoInsumo"
+        ],
+        "summary": "Eliminar producto-insumo",
+        "description": "Elimina la asociación entre un producto y un insumo específico.",
+        "parameters": [
+          {
+            "name": "idProducto",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID del producto"
+          },
+          {
+            "name": "idInsumo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID del insumo"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Token de autenticación JWT"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "No encontrado"
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/pedidos/": {
+      "get": {
+        "tags": [
+          "Pedidos"
+        ],
+        "summary": "Obtiene la lista de pedidos",
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Pedidos"
+        ],
+        "summary": "Crea un nuevo pedido",
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Crear un nuevo pedido",
+            "schema": {
+              "$ref": "#/definitions/Pedido"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/pedidos/{id}": {
+      "get": {
+        "tags": [
+          "Pedidos"
+        ],
+        "summary": "Obtiene un pedido por ID",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID del pedido"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Pedidos"
+        ],
+        "summary": "Actualiza un pedido existente",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID del pedido"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Actualizar un pedido existente",
+            "schema": {
+              "$ref": "#/definitions/Pedido"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Pedidos"
+        ],
+        "summary": "Elimina un pedido",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID del pedido"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/pedidos/orden/{id}": {
+      "get": {
+        "tags": [
+          "Pedidos"
+        ],
+        "summary": "Obtiene los pedidos de una orden de compra por ID de la orden",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID de la orden"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/pedidos/pedidos-panadero-orden/{id}": {
+      "get": {
+        "tags": [
+          "Pedidos"
+        ],
+        "summary": "Obtiene los pedidos de una orden para la vista de panadero",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID de la orden"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/pedidos/insumos-pedido/{id}": {
+      "get": {
+        "tags": [
+          "Pedidos"
+        ],
+        "summary": "Obtiene los insumos de los productos de un pedido",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID de del pedido"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/pedidos/actualizar-estado/{id}": {
+      "put": {
+        "tags": [
+          "Pedidos"
+        ],
+        "summary": "Actualiza estado del pedido",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID del pedido"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/ordenesCompra/": {
+      "get": {
+        "tags": [
+          "Ordenes"
+        ],
+        "summary": "Obtiene la lista de órdenes de compra",
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Ordenes"
+        ],
+        "summary": "Crea una nueva orden de compra",
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Crear una nueva orden de compra",
+            "schema": {
+              "$ref": "#/definitions/OrdenCompra"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/ordenesCompra/{id}": {
+      "get": {
+        "tags": [
+          "Ordenes"
+        ],
+        "summary": "Obtiene una orden de compra por ID",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID de la orden de compra"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Ordenes"
+        ],
+        "summary": "Actualiza una orden de compra existente",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID de la orden de compra"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Actualizar una orden de compra existente",
+            "schema": {
+              "$ref": "#/definitions/OrdenCompra"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Ordenes"
+        ],
+        "summary": "Elimina una orden de compra",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID de la orden de compra"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/ordenesCompra/user/{id}": {
+      "get": {
+        "tags": [
+          "Ordenes"
+        ],
+        "summary": "Obtiene las órdenes de compra por ID de usuario",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID del usuario"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/ordenesCompra/ordenes-admin/": {
+      "get": {
+        "tags": [
+          "Ordenes"
+        ],
+        "summary": "Obtiene las órdenes de compra para admin",
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/ordenesCompra/panadero/{id}": {
+      "get": {
+        "tags": [
+          "Ordenes"
+        ],
+        "summary": "Obtiene las órdenes de compra por ID de panadero",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID del panadero"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/ordenesCompra/ordenes-sin-asignacion/": {
+      "get": {
+        "tags": [
+          "Ordenes"
+        ],
+        "summary": "Obtiene la lista de órdenes de compra que aún no son asignadas",
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/ordenesCompra/panadero-cliente/{idPan}/{idCli}": {
+      "get": {
+        "tags": [
+          "Ordenes"
+        ],
+        "summary": "Obtiene la lista de órdenes de compra de un cliente particular asignadas al panadero",
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "idPan",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID del panadero"
+          },
+          {
+            "name": "idCli",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID del cliente"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/ordenesCompra/asignar-panadero/{idPanadero}/{idOrden}": {
+      "put": {
+        "tags": [
+          "Ordenes"
+        ],
+        "summary": "Asignar una orden de compra a un panadero",
+        "description": "Asigna un panadero a una orden de compra existente",
+        "parameters": [
+          {
+            "name": "idPanadero",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID del panadero"
+          },
+          {
+            "name": "idOrden",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID de la orden de compra"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string",
+            "required": true,
+            "description": "Token de autorización"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Orden de compra asignada a panadero correctamente"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Orden de compra o panadero no encontrados"
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/ordenesCompra/actualizar-estado/{id}": {
+      "put": {
+        "tags": [
+          "Ordenes"
+        ],
+        "summary": "Actualiza estado de la orden",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID de la orden"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/ordenesCompra/filtro-insumos-info/": {
+      "get": {
+        "tags": [
+          "Ordenes"
+        ],
+        "summary": "Obtiene la informacion necesaria para realizar filtros de insumos",
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/ordenesCompra/filtro-insumos-panadero/{id}": {
+      "get": {
+        "tags": [
+          "Ordenes"
+        ],
+        "summary": "Obtiene la informacion necesaria para realizar filtros de insumos para panadero",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID del panadero"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/ordenesCompra/filtro-insumos-admin/": {
+      "get": {
+        "tags": [
+          "Ordenes"
+        ],
+        "summary": "Obtiene la informacion necesaria para realizar filtros de  para admin",
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "Usuario": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number",
+          "example": 1
+        },
+        "email": {
+          "type": "string",
+          "example": "user@example.com"
+        },
+        "password": {
+          "type": "string",
+          "example": "password123"
+        },
+        "role": {
+          "type": "string",
+          "example": "USER"
+        },
+        "telefono": {
+          "type": "string",
+          "example": "123456789"
+        },
+        "enabled": {
+          "type": "boolean",
+          "example": true
+        }
+      }
+    },
+    "RegisterUser": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "example": "user@example.com"
+        },
+        "password": {
+          "type": "string",
+          "example": "password123"
+        },
+        "role": {
+          "type": "string",
+          "example": "USER"
+        },
+        "telefono": {
+          "type": "string",
+          "example": "123456789"
+        }
+      }
+    },
+    "Login": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "example": "user@example.com"
+        },
+        "password": {
+          "type": "string",
+          "example": "password123"
+        }
+      }
+    },
+    "ChangePassword": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number",
+          "example": 1
+        },
+        "oldPassword": {
+          "type": "string",
+          "example": "password123"
+        },
+        "newPassword": {
+          "type": "string",
+          "example": "newpassword123"
+        }
+      }
+    },
+    "ForgotPassword": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "example": "user@example.com"
+        }
+      }
+    },
+    "EnableDisableUser": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number",
+          "example": 1
+        }
+      }
+    },
+    "Producto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number",
+          "example": 1
+        },
+        "nombre": {
+          "type": "string",
+          "example": "Producto Ejemplo"
+        },
+        "descripcion": {
+          "type": "string",
+          "example": "Descripción del producto"
+        },
+        "imagen": {
+          "type": "string",
+          "example": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..."
+        },
+        "precio": {
+          "type": "number",
+          "example": 9.99
+        },
+        "insumos": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Insumo"
+          },
+          "example": [
+            {
+              "id": 1,
+              "nombre": "Insumo Ejemplo"
+            }
+          ]
+        }
+      }
+    },
+    "Insumo": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number",
+          "example": 1
+        },
+        "nombre": {
+          "type": "string",
+          "example": "Insumo Ejemplo"
+        }
+      }
+    },
+    "Pedido": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number",
+          "example": 1
+        },
+        "idProducto": {
+          "type": "number",
+          "example": 1
+        },
+        "idOrden": {
+          "type": "number",
+          "example": 1
+        },
+        "cantidad": {
+          "type": "number",
+          "example": 2
+        },
+        "estado": {
+          "type": "string",
+          "enum": [
+            "PENDIENTE",
+            "EN PROCESO",
+            "COMPLETADO"
+          ],
+          "example": "PENDIENTE"
+        }
+      },
+      "example": {
+        "id": 1,
+        "idProducto": 1,
+        "idOrden": 1,
+        "cantidad": 2,
+        "estado": "PENDIENTE"
+      }
+    },
+    "OrdenCompra": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number",
+          "example": 1
+        },
+        "idCliente": {
+          "type": "string",
+          "example": "usuario@ejemplo.com"
+        },
+        "total": {
+          "type": "number",
+          "example": 2
+        },
+        "fecha_entrega": {
+          "type": "string",
+          "example": "2024-05-22"
+        },
+        "idPanadero": {
+          "type": "number",
+          "example": 2
+        },
+        "estado": {
+          "type": "string",
+          "enum": [
+            "PENDIENTE",
+            "EN_PROCESO",
+            "COMPLETO"
+          ],
+          "example": "PENDIENTE"
+        }
+      },
+      "example": {
+        "id": 1,
+        "idCliente": "user@example.com",
+        "total": 2,
+        "fecha_entrega": "2024-05-22",
+        "idPanadero": 2,
+        "estado": "PENDIENTE"
+      }
+    },
+    "ProductoInsumo": {
+      "type": "object",
+      "properties": {
+        "idProducto": {
+          "type": "integer",
+          "example": 1
+        },
+        "idInsumo": {
+          "type": "integer",
+          "example": 1
+        },
+        "cantidad": {
+          "type": "integer",
+          "example": 10
+        }
+      },
+      "required": [
+        "idProducto",
+        "idInsumo",
+        "cantidad"
+      ]
+    },
+    "/producto-insumo/{idProducto}/{idInsumo}": {
+      "delete": {
+        "tags": [
+          "Producto-Insumo"
+        ],
+        "summary": "Eliminar producto-insumo",
+        "description": "Elimina la asociación entre un producto y un insumo específico.",
+        "parameters": [
+          {
+            "name": "idProducto",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID del producto"
+          },
+          {
+            "name": "idInsumo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID del insumo"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Token de autenticación JWT"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "No encontrado"
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    }
+  }
+}

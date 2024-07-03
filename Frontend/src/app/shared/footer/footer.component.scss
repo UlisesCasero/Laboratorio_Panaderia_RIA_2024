@@ -1,0 +1,16 @@
+/* Estilos base para el footer */
+footer {
+    background-color: #1f2937; /* Color de fondo */
+    color: white; /* Color del texto */
+    padding: 1rem; /* Espaciado interno */
+    text-align: center; /* Alineación del texto al centro */
+    flex-shrink: 0; /* Evitar que el footer se reduzca en tamaño */
+  }
+  
+  /* Media query para pantallas más pequeñas */
+  @media (max-width: 768px) {
+    footer {
+      font-size: 0.85rem; /* Reducir el tamaño de fuente para pantallas pequeñas */
+    }
+  }
+  

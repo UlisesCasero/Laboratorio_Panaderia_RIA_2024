@@ -1,0 +1,23 @@
+<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8">
+    <div *ngFor="let producto of productos" class="producto-container">
+      <div class="w-full max-w-md aspect-w-16 aspect-h-9">
+          <img [src]="getImageUrl(producto.imagen)" alt="Imagen del producto" class="max-w-[200px]">
+      </div>
+      <div class="mt-5 flex items-center justify-between">
+        <div>
+          <h6 class="font-medium text-xl leading-8 text-black mb-2 truncate">{{ producto.nombre }}</h6>
+          <h6 class="font-semibold text-xl leading-8 text-indigo-600">$ {{ producto.precio }}</h6>
+        </div>
+        <button (click)="addCarrito(producto)"
+          class="p-1 min-[400px]:p-3 rounded-full bg-white border border-gray-300 flex items-center justify-center group shadow-sm shadow-transparent transition-all duration-500 hover:shadow-gray-200 hover:border-gray-400 hover:bg-gray-50">
+          <svg class="stroke-gray-900 transition-all duration-500 group-hover:stroke-black"
+            xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23" fill="none">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

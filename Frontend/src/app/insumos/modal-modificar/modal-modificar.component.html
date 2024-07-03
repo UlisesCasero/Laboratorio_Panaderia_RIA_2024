@@ -1,0 +1,19 @@
+<div class="modal" [ngClass]="{'show': mostrar}" (click)="close()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <span class="close" (click)="close()">&times;</span>
+      <div class="form-container">
+        <h5 class="text-xl font-semibold mb-4">Modificar Insumo</h5>
+        <ul class="list-group">
+          <li>
+            <input type="text" class="w-full p-2 border rounded" placeholder="Nombre del Insumo"
+                   [(ngModel)]="nombreInsumo" name="nombreInsumo" #nombreInsumoInput>
+          </li>
+        </ul>
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
+                (click)="modificarInsumo()">
+          Guardar Cambios
+        </button>
+      </div>
+    </div>
+  </div>
+  

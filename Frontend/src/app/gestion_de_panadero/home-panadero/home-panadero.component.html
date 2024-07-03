@@ -1,0 +1,110 @@
+<app-modal-ordenes-detalles #crearProductoModal></app-modal-ordenes-detalles>
+
+<link rel="stylesheet" href="https://demos.creative-tim.com/notus-js/assets/styles/tailwind.css">
+<link rel="stylesheet" href="https://demos.creative-tim.com/notus-js/assets/vendor/@fortawesome/fontawesome-free/css/all.min.css">
+
+<div class="flex flex-col min-h-screen">
+  <div class="flex flex-1 overflow-hidden">
+    <app-aside></app-aside>
+    <main class="flex-1 p-4 overflow-y-auto">
+      <div class="container mx-auto mt-24">
+        <div class="w-full xl:w-8/12 mx-auto">
+          <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+            <div class="bg-blueGray-50 px-6 py-3 border-b border-blueGray-200">
+              <div class="flex flex-wrap items-center">
+                <div class="w-full px-4 max-w-full flex-grow flex-1">
+                  <h3 class="font-semibold text-lg text-blueGray-700">Órdenes tomadas</h3>
+                </div>
+                <div class="w-full px-4 max-w-full flex-grow flex-1 text-right">
+                  <label for="filtroEstado" class="text-sm font-medium text-gray-700">Filtro Estado:</label>
+                  <div class="relative">
+                    <select id="filtroEstado"
+                            [(ngModel)]="selectedEstado"
+                            (change)="applyEstadoFilter()"
+                            class="block appearance-none w-full bg-white border border-gray-300 text-gray-700 py-2 px-3 pr-8 rounded-md leading-tight focus:outline-none focus:bg-white focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                      <option value="Todos">Todos</option>
+                      <option *ngFor="let estado of estados" [value]="estado">{{ estado }}</option>
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                      <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd"
+                              d="M10 12a2 2 0 100-4 2 2 0 000 4zM2 10a8 8 0 1116 0 8 8 0 01-16 0zm8-6a6 6 0 100 12 6 6 0 000-12z"
+                              clip-rule="evenodd"/>
+                      </svg>
+                    </div>
+                  </div>
+                </div>                
+                <div class="w-full px-4 max-w-full flex-grow flex-1 text-right">
+                  <button (click)="openModalCreacion2()"
+                          class="bg-blue-500 text-white active:bg-blue-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                          type="button">
+                    Insumos totales
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="block w-full overflow-x-auto">
+              <table class="w-full border-collapse">
+                <thead>
+                  <tr class="bg-blueGray-100 text-blueGray-500 text-xs uppercase">
+                    <th class="px-6 py-3 border-b border-blueGray-200 text-center">Fecha Solicitada</th>
+                    <th class="px-6 py-3 border-b border-blueGray-200 text-center">Cant. Pedidos</th>
+                    <th class="px-6 py-3 border-b border-blueGray-200 text-center">Estado</th>
+                    <th class="px-6 py-3 border-b border-blueGray-200 text-center">Detalle</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <tr *ngFor="let orden of paginatedOrdenes" class="hover:bg-blueGray-50">
+                    <td class="border-t border-blueGray-200 px-6 py-4 text-center">
+                      {{ orden.fecha_entrega }}
+                    </td>
+                    <td class="border-t border-blueGray-200 px-6 py-4 text-center">
+                      {{ orden.cantPedidos }}
+                    </td>
+                    <td [ngClass]="{
+                          'text-green-500': orden.estadoOrden === 'Listo para recoger',
+                          'text-red-500': orden.estadoOrden === 'Pendiente',
+                          'text-yellow-500': orden.estadoOrden === 'En preparación'
+                        }"
+                        class="border-t border-blueGray-200 px-6 py-4 text-center">
+                      {{ orden.estadoOrden }}
+                    </td>
+                    <td class="border-t border-blueGray-200 px-6 py-4 text-center cursor-pointer">
+                      <button (click)="openModalCreacion(orden.idOrden)"
+                              class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+                        Ver detalle
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <!-- Controles de paginación -->
+              <div class="mt-4 flex justify-center" *ngIf="totalPages > 1">
+                <div class="flex">
+                  <button class="px-3 py-1 bg-blue-500 text-white rounded-l focus:outline-none"
+                          [class.opacity-50]="currentPage === 1" [disabled]="currentPage === 1"
+                          (click)="goToPreviousPage()">
+                    Anterior
+                  </button>
+                  <div class="px-3 py-1 bg-blue-100">
+                    Página {{ currentPage }} de {{ totalPages }}
+                  </div>
+                  <button class="px-3 py-1 bg-blue-500 text-white rounded-r focus:outline-none"
+                          [class.opacity-50]="currentPage === totalPages" [disabled]="currentPage === totalPages"
+                          (click)="goToNextPage()">
+                    Siguiente
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+<app-modal-detalle-insumos-totales #crearProductoModal2></app-modal-detalle-insumos-totales>

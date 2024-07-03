@@ -1,0 +1,127 @@
+<div class="modal" [ngClass]="{'show': isVisible}" (click)="close()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <span class="close" (click)="close()">&times;</span>
+    <form *ngIf="producto" #productoForm="ngForm" (submit)="modificarProducto(producto)" class="max-w-lg mx-auto">
+      <div class="mb-4">
+        <label for="nombre" class="block text-sm font-medium text-gray-700">Nombre del Producto</label>
+        <input type="text" name="nombre" id="nombre" [(ngModel)]="producto.nombre" required
+          placeholder="Nombre del producto"
+          class="mt-1 p-2 block w-full rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300">
+      </div>
+      <div class="mb-4">
+        <label for="descripcion" class="block text-sm font-medium text-gray-700">Descripción</label>
+        <textarea name="descripcion" id="descripcion" [(ngModel)]="producto.descripcion" required
+          placeholder="Descripción"
+          class="mt-1 p-2 block w-full rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300"></textarea>
+      </div>
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700">Imagen Actual del Producto</label>
+        <img *ngIf="producto && producto.imagen" [src]="getImageUrl(producto.imagen)" alt="Imagen del producto"
+          class="max-w-[200px] mb-4">
+      </div>
+
+      <div class="mb-4">
+        <label for="nuevaImagen" class="block text-sm font-medium text-gray-700">Seleccionar Nueva Imagen</label>
+        <input type="file" id="nuevaImagen" (change)="onFileSelected($event)" accept="image/*"
+          class="mt-1 p-2 block w-full rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300">
+        <div *ngIf="imagenSeleccionada" class="mt-2">
+          <label class="block text-sm font-medium text-gray-700">Vista previa de la nueva imagen:</label>
+          <img [src]="imagenSeleccionada" alt="Imagen seleccionada" class="max-w-[200px] mb-4">
+        </div>
+      </div>
+      <!-- producto.component.html -->
+      <div class="mb-4">
+        <div class="mb-4 flex items-center">
+          <label for="insumo" class="block text-sm font-medium text-gray-700 mr-2">Insumos</label>
+          <button type="button" (click)="openModalRelacion()"
+            class="bg-green-400 text-black px-2 py-1 rounded focus:outline-none hover:bg-gray-600">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+              stroke="currentColor" class="w-6 h-6 text-gray-400">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
+          </button>
+          <app-insumos-modal #agregarInsumoModal></app-insumos-modal>
+        </div>
+      
+        <!-- Tabla de Insumos -->
+        <ng-container *ngIf="insumos.length > 0 || insumosSeleccionados.length > 0; else noInsumos">
+          <table class="mt-4 w-full border-collapse border border-gray-200">
+            <thead class="bg-gray-100">
+              <tr>
+                <th class="px-6 py-3 border-b border-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Detalles
+                </th>
+                <th class="px-6 py-3 border-b border-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Cantidad
+                </th>
+                <th class="px-6 py-3 border-b border-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Acciones
+                </th>
+              </tr>
+              
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+              <!-- Iterar por cada insumo en la tabla -->
+              <tr *ngFor="let insumo of insumos | orderBy: 'nombre'; let i = index">
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  {{ insumo.nombre }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  {{ insumo.cantidad }} <!-- Asegúrate de que insumo tenga la propiedad cantidad -->
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium flex space-x-2">
+                  <button type="button" (click)="eliminarInsumoDelProducto(insumo)" 
+                    class="bg-red-500 text-white px-2 py-1 rounded focus:outline-none hover:bg-red-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                      stroke="currentColor" class="w-6 h-6">
+                      <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M14.74 9L14.394 18M9.26 18L9.606 9M19.228 5.79C19.57 5.842 19.91 5.897 20.25 5.956M19.228 5.79L18.16 19.673C18.16 20.741 17.189 21.602 16.121 21.673H8.084C7.016 21.602 6.04 20.741 6.04 19.673L4.772 5.79M19.228 5.79A48.108 48.108 0 0 0 15.75 5.393M3.728 5.79C4.07 5.731 4.41 5.676 4.75 5.617M3.728 5.79A48.108 48.108 0 0 1 7.206 5.393M14.75 5.393V4.477C14.75 3.297 13.84 2.313 12.66 2.276A51.964 51.964 0 0 0 9.34 2.276C8.16 2.313 7.25 3.297 7.25 4.477V5.393M14.75 5.393A48.667 48.667 0 0 0 7.25 5.393" />
+                    </svg>
+                  </button>
+                  
+                </td>
+              </tr>
+        
+              <!-- Mostrar insumos seleccionados -->
+              <tr *ngFor="let insumoSeleccionado of insumosSeleccionados" class="bg-green-50">
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  {{ insumoSeleccionado.nombre }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  {{ insumoSeleccionado.cantidad }} <!-- Asegúrate de que insumoSeleccionado tenga la propiedad cantidad -->
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium flex space-x-2">
+                  <button type="button" (click)="descartarInsumoSeleccionado(insumoSeleccionado.id)"
+                    class="bg-red-500 text-white px-2 py-1 rounded focus:outline-none hover:bg-red-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                      stroke="currentColor" class="w-6 h-6">
+                      <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M14.74 9L14.394 18M9.26 18L9.606 9M19.228 5.79C19.57 5.842 19.91 5.897 20.25 5.956M19.228 5.79L18.16 19.673C18.16 20.741 17.189 21.602 16.121 21.673H8.084C7.016 21.602 6.04 20.741 6.04 19.673L4.772 5.79M19.228 5.79A48.108 48.108 0 0 0 15.75 5.393M3.728 5.79C4.07 5.731 4.41 5.676 4.75 5.617M3.728 5.79A48.108 48.108 0 0 1 7.206 5.393M14.75 5.393V4.477C14.75 3.297 13.84 2.313 12.66 2.276A51.964 51.964 0 0 0 9.34 2.276C8.16 2.313 7.25 3.297 7.25 4.477V5.393M14.75 5.393A48.667 48.667 0 0 0 7.25 5.393" />
+                    </svg>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </ng-container>
+      
+        <!-- Mensaje si no hay insumos -->
+        <ng-template #noInsumos>
+          <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+            <strong class="font-bold">Debe agregar insumos.</strong>
+          </div>
+        </ng-template>
+      </div>
+      <div class="mb-4">
+        <label for="precio" class="block text-sm font-medium text-gray-700">Precio</label>
+        <input type="number" name="precio" id="precio" [(ngModel)]="producto.precio" required placeholder="Precio"
+          class="mt-1 p-2 block w-full rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300">
+      </div>
+      <button type="button" (click)="modificarProducto(producto)"
+        class="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+        Modificar Producto
+      </button>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,65 @@
+<div class="modal" [ngClass]="{'show': mostrar}" (click)="close()">
+  <div class="modal-content mx-auto mt-4 max-w-4xl bg-white p-6 rounded shadow-lg" (click)="$event.stopPropagation()">
+    <div class="flex justify-between items-center mb-4">
+      <h3 class="font-semibold text-xl text-blueGray-700">Pedidos de la Orden</h3>
+      <button (click)="cerrarModal()"
+        class="bg-red-500 text-white active:bg-red-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none ease-linear transition-all duration-150"
+        type="button">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+    <div class="overflow-x-auto">
+        <table class="min-w-full bg-white border-collapse">
+          <thead>
+            <tr class="bg-green-100">
+              <th class="px-6 py-3 border-b border-blueGray-200 text-xs font-bold text-left">Producto</th>
+              <th class="px-6 py-3 border-b border-blueGray-200 text-xs font-bold text-left">Cantidad</th>
+              <th class="px-6 py-3 border-b border-blueGray-200 text-xs font-bold text-left">Estado</th>
+              <th class="px-6 py-3 border-b border-blueGray-200 text-xs font-bold text-left">Detalle</th>
+              <th class="px-6 py-3 border-b border-blueGray-200 text-xs font-bold text-left">Cambiar Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let pedido of pedidosOrden$ | async" class="hover:bg-blueGray-100">
+              <td class="px-6 py-4 whitespace-nowrap border-b border-blueGray-200">{{ pedido.productoNombre }}</td>
+              <td class="px-6 py-4 whitespace-nowrap border-b border-blueGray-200">{{ pedido.cantidad }}</td>
+              <td [ngClass]="{
+                    'text-green-500': pedido.estado === 'Listo',
+                    'text-red-500': pedido.estado === 'Pendiente',
+                    'text-yellow-500': pedido.estado === 'En preparación'
+                  }" class="px-6 py-4 whitespace-nowrap border-b border-blueGray-200">
+                {{ pedido.estado }}
+              </td>
+              <td class="border-t-0 px-6 align-center border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                <button (click)="openModalCreacion(pedido.idPedido)"
+                  class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+                  Ver detalle
+                </button>
+              </td>
+              <td *ngIf="pedido.estado !== 'Listo'"
+                class="border-t-0 px-6 align-center border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                <button (click)="actualizarEstado(pedido.idPedido)"
+                  class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+                  Cambiar estado
+                </button>
+              </td>
+              <td *ngIf="pedido.estado === 'Listo'"
+                class="border-t-0 px-6 align-center border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                <span
+                  class="bg-red-100 text-red-500 font-bold rounded-full px-4 py-1 animate-fade-in-out">LISTO!!</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div *ngIf="ordenEstado" class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mt-4 rounded-md">
+          <p class="font-bold">¡Perfecto!</p>
+        </div>
+        <div *ngIf="ordenEstadoListo" class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mt-4 rounded-md">
+          <p class="font-bold">{{ ordenEstadoListo }}</p>
+        </div>
+        <app-modal-detalle-insumos #crearProductoModal2></app-modal-detalle-insumos>
+      </div>
+    </div>
+  </div>

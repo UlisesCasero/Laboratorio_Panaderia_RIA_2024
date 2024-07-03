@@ -1,0 +1,13 @@
+.producto-container {
+    background-color: white;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Aumentado el tamaño y la intensidad de la sombra */
+    transition: transform 0.3s ease;
+  }
+  
+  .producto-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25); /* Aumentado el tamaño y la intensidad de la sombra en hover */
+  }
+  
