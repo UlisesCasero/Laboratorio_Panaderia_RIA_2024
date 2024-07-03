@@ -1,27 +1,53 @@
 # LaboratorioPanaderiaRia
+###################################################################################################
+##Guía de Instalación y Ejecución del Proyecto Laboratorio Panadería RIA 2024
+##Este repositorio contiene el código fuente del proyecto Laboratorio Panadería RIA 2024, que ##incluye el backend y frontend de una aplicación para gestionar una panadería.
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.2.7.
+Requisitos Previos
+Antes de comenzar, asegúrate de tener instalados en tu sistema:
 
-## Development server
+Node.js (preferiblemente la versión LTS)
+npm (administrador de paquetes de Node.js)
+Angular CLI (para ejecutar el frontend)
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+##########################################################################################
 
-## Code scaffolding
+------------------------------------------------------------------------------
+Clonar el Repositorio
+git clone https://github.com/UlisesCasero/Laboratorio_Panaderia_RIA_2024.git
+------------------------------------------------------------------------------
+###########################################################################################
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+------------------------------------------------------------------------------
+Configuración y Ejecución del Backend
+Abrir una terminal (por ejemplo, Command Prompt o Terminal).
 
-## Build
+Navegar al directorio del backend:
+cd {{tu Directorio Donde Clonaste El Repositorio}}
+cd ..\Laboratorio_Panaderia_RIA_2024\Frontend
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+Instalar las dependencias del backend:
+npm install
 
-## Running unit tests
+Iniciar el servidor backend:
+node ./app.js
+El backend debería estar corriendo en http://localhost:3000.
+-------------------------------------------------------------------------------
+############################################################################################
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Configuración y Ejecución del Frontend
+Abrir otra terminal.
 
-## Running end-to-end tests
+Navegar al directorio del frontend:
+cd {{tu Directorio Donde Clonaste El Repositorio}}
+cd ..\Laboratorio_Panaderia_RIA_2024\Backend
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+Instalar las dependencias del frontend:
+npm install
 
-## Further help
+Iniciar el servidor de desarrollo del frontend:
+ng serve --open
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+Esto abrirá automáticamente el navegador en http://localhost:4200, donde podrás ver y interactuar con la aplicación frontend.
+#############################################################################################
+-------------------------------------------------------------------------------------
