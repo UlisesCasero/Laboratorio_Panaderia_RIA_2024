@@ -1,4 +1,5 @@
-<aside [class.open]="isSidebarOpen" class="sidebar hidden md:flex h-screen w-16 flex-col space-y-10 items-center justify-center relative bg-slate-900 text-white">
+<aside [class.open]="isSidebarOpen"
+    class="sidebar hidden md:flex h-screen w-16 flex-col space-y-10 items-center justify-center relative bg-slate-900 text-white">
 
     <div class="flex flex-col items-center justify-center text-center" *ngIf="!isAdmin()">
         <div [routerLink]="['/home']" *ngIf="!isAdmin()"
@@ -13,14 +14,12 @@
     
 
     <div *ngIf="isPanadero()" [routerLink]="['/ordenes-sin-asignar']"
-    class="h-10 w-10 flex flex-col items-center justify-center rounded-lg cursor-pointer hover:text-gray-800 hover:bg-white hover:duration-300 hover:ease-linear focus:bg-white">
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-        class="w-6 h-6">
-        <path stroke-linecap="round" stroke-linejoin="round"
-            d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
-    </svg>
-    <span class="hidden md:block text-xs mt-1">Órdenes</span>
-</div>
+        class="h-10 w-10 flex items-center justify-center rounded-lg cursor-pointer hover:text-gray-800 hover:bg-white hover:duration-300 hover:ease-linear focus:bg-white">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+        </svg>
+    </div>
 
 <div *ngIf="isUser()" [routerLink]="['/carrito']"
     class="relative h-10 w-10 flex flex-col items-center justify-center rounded-lg cursor-pointer hover:text-gray-800 hover:bg-white hover:duration-300 hover:ease-linear focus:bg-white">
@@ -102,7 +101,8 @@
 
 </aside>
 <button (click)="toggleSidebar()" class="md:hidden p-2 bg-slate-900 text-white absolute top-0 left-0 mt-2 ml-2">
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+        class="w-6 h-6">
         <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
     </svg>
 </button>
