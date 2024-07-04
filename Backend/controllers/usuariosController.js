@@ -31,7 +31,7 @@ const createDefaultUsers = async () => {
 };
 
 // Llama a la función para crear usuarios por defecto al inicio
-createDefaultUsers();
+//createDefaultUsers();
 
 const register = async (req, res) => {
   const { email, password, role, telefono } = req.body;

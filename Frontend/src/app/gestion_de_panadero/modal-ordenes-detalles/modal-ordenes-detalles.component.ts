@@ -11,6 +11,7 @@ import { PedidoVista } from 'src/models/pedidoVistaPanadero';
 import { OrdenesPanaderoService } from 'src/services/ordenes-panadero.service';
 import { PedidoService } from 'src/services/pedido.service';
 import { ModalDetalleInsumosComponent } from '../modal-detalle-insumos/modal-detalle-insumos.component';
+import { ServiciosService } from 'src/services/servicios.service';
 
 @Component({
   selector: 'app-modal-ordenes-detalles',
@@ -24,11 +25,13 @@ export class ModalOrdenesDetallesComponent implements OnInit {
   idOrden!: number;
   ordenEstado = false;
   ordenEstadoListo = '';
+  email!:string;
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private ordenesPanaderoSvc: OrdenesPanaderoService,
-    private pedidoSvc: PedidoService
+    private pedidoSvc: PedidoService,
+    private service: ServiciosService
   ) {
     this.pedidosOrden$ = this.ordenesPanaderoSvc.pedidosOrden$;
   }
@@ -45,7 +48,7 @@ export class ModalOrdenesDetallesComponent implements OnInit {
       const data = await this.ordenesPanaderoSvc.obtenerpedidosOrden(
         this.idOrden
       );
-      console.log('Pedidos obtenidos: ', data);
+     // console.log('Pedidos obtenidos: ', data);
     } catch (error) {
       console.error('Error al obtener pedidos:', error);
     }
@@ -57,32 +60,48 @@ export class ModalOrdenesDetallesComponent implements OnInit {
         console.log('DATA: ', data);
         this.pedidoSvc.actualizarPedidoEstado(data.id).subscribe({
           next: () => {
-            this.ordenesPanaderoSvc
-              .actualizarEstadoOrden(this.idOrden)
-              .subscribe({
-                next: (response) => {
-                  console.log('Respuesta de actualizarEstadoOrden:', response);
-                  this.obtenerPedidosOrden();
-                  this.mostrarMensajeExito2();
-                },
-                error: (error) => {
-                  console.error(
-                    'Error al actualizar el estado de la orden:',
-                    error
+            this.ordenesPanaderoSvc.actualizarEstadoOrden(this.idOrden).subscribe({
+              next: (response) => {
+                console.log('Respuesta de actualizarEstadoOrden:', response.estado, this.idOrden);
+                this.obtenerPedidosOrden();
+                this.mostrarMensajeExito2();
+                
+                if (response.estado === 'Listo para recoger') { 
+                  this.service.obtenerUsuarioPorId2(response.idCliente).subscribe(
+                    (usuario) => {
+                      this.email = usuario.email;
+                      console.log('Email del usuario:', this.email);
+                      
+                      this.service.enviarEmailPedidoPronto(this.idOrden,this.email).subscribe(
+                        () => {
+                          console.log('Correo enviado exitosamente');
+                        },
+                        (error) => {
+                          console.error('Error al enviar el correo:', error);
+                        }
+                      );
+                    },
+                    (error) => {
+                      console.error('Error al obtener el usuario:', error);
+                    }
                   );
-                },
-              });
+                }
+              },
+              error: (error) => {
+                console.error('Error al actualizar el estado de la orden:', error);
+              }
+            });
           },
           error: (error) => {
             console.error('Error al actualizar el estado del pedido:', error);
-          },
+          }
         });
       },
       error: (error) => {
         console.error('Error al obtener el pedido:', error);
-      },
+      }
     });
-  }
+  }  
 
   cerrarModal() {
     this.mostrar = false;

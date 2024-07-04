@@ -152,4 +152,44 @@ const enviar_reset_constrasenia = (email, resetLink) => {
     });
 };
 
-module.exports = { enviar_mail, enviar_mail_cambio_constrasenia, enviar_reset_constrasenia }; // Exporta enviar_mail como una propiedad de un objeto
+const enviar_mail_pedido = (email, pedidoDetalles) => {
+    let transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+            user: process.env.MAIL_USER,
+            pass: process.env.MAIL_PASSWORD
+        }
+    });
+    const mail_option = {
+        from: 'Panaderia',
+        to: email,
+        subject: 'Confirmación de Pedido en PanaderiaRIA',
+        html: `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmación de Pedido</title>
+</head>
+<body>
+    <p>Hola!,</p>
+    <p>Gracias por tu pedido en PanaderiaRIA. Aquí están los detalles de tu pedido:</p>
+    <p>${pedidoDetalles}</p>
+    <p>Atentamente,</p>
+    <p>El equipo de PanaderiaRIA</p>
+</body>
+</html>
+`
+    };
+
+    transporter.sendMail(mail_option, (error, info) => {
+        if (error) {
+            console.error(error);
+        } else {
+            console.log('Email enviado: ' + info.response);
+        }
+    });
+};
+
+
+module.exports = { enviar_mail_pedido, enviar_mail, enviar_mail_cambio_constrasenia, enviar_reset_constrasenia }; // Exporta enviar_mail como una propiedad de un objeto

@@ -1,7 +1,10 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, catchError, throwError } from 'rxjs';
-
+import { Observable, catchError, map, throwError } from 'rxjs';
+interface UsuarioEmail {
+  email: string;
+  // otros campos si existen
+}
 @Injectable({
   providedIn: 'root'
 })
@@ -85,6 +88,29 @@ export class ServiciosService {
       );
   }
 
+  obtenerEmailUsuario(): Observable<string> {
+    const token = localStorage.getItem('token');
+    const id = localStorage.getItem('userId');
+    if (!token || !id) {
+      return throwError('No hay token o ID almacenado');
+    }
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'bearer ' + token
+      })
+    };
+  
+    return this.http.get<UsuarioEmail>(`http://localhost:3000/usuarios/${id}`, httpOptions)
+      .pipe(
+        catchError(error => {
+          return throwError(error);
+        }),
+        map(usuario => usuario.email) 
+      );
+  }
+  
   obtenerUsuarioPorEmail(email: string): Observable<any> {
 
     return this.http.get<any>(`http://localhost:3000/usuarios/email/${email}`)
@@ -127,4 +153,47 @@ export class ServiciosService {
       );
   }
 
+  enviarEmailConPedidos(idOrden: number, email: string): Observable<any> {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      return throwError('No hay token almacenado');
+    }
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': token
+      })
+    };
+
+
+    return this.http.get<any>(`http://localhost:3000/pedidos/enviar-email/${idOrden}/${email}`,httpOptions)
+      .pipe(
+        catchError(error => {
+          return throwError(error);
+        })
+      );
+  }
+
+  enviarEmailPedidoPronto(id: number, email: string): Observable<any> {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      return throwError('No hay token almacenado');
+    }
+  
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'bearer ' + token
+      })
+    };
+  
+    return this.http.get<any>(`http://localhost:3000/ordenesCompra/enviar-correo-estado/${id}/${email}`, httpOptions)
+      .pipe(
+        catchError(error => {
+          return throwError(error);
+        })
+      );
+  }
+  
 }

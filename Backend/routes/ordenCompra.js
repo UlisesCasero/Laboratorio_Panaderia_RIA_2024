@@ -20,5 +20,6 @@ router.get('/:id', verifyToken, isUser, isPanadero, ordenCompraController.getOrd
 router.post('/', verifyToken, isUser, ordenCompraController.createOrdenCompra);
 router.put('/:id', verifyToken, isUser, isPanadero, ordenCompraController.updateOrdenCompra);
 router.delete('/:id', verifyToken, isUser, ordenCompraController.deleteOrdenCompra);
+router.get('/enviar-correo-estado/:id/:email', verifyToken, isUser, ordenCompraController.getOrdenCompraParaCliente2);
 
 module.exports = router;

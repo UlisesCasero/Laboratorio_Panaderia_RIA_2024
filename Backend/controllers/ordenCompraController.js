@@ -2,17 +2,21 @@ const { obtenerProductoById } = require('./productosController');
 const { obtenerUserById } = require('./usuariosController');
 const { getInsumosPedido } = require('./pedidosController');
 const { usuarios } = require('./usuariosController');
-const { pedidos } = require('./pedidosController');
+const { pedidos, getPedidosByOrdenId2 } = require('./pedidosController');
 const estadoOrden = require('../enums/estadoOrden');
 const estadoPedido = require('../enums/estadoPedido');
 const { insumos } = require('./insumosController');
+const { enviar_mail_pedido } = require('../templates/registro');
+const Mail = require('nodemailer/lib/mailer');
 
+const nodemailer = require('nodemailer');
+require('dotenv').config();
 const ordenes = [
     { id: 1, idCliente: 5, total: 30, fecha_entrega: '2024-05-22', idPanadero: 3, estado: estadoOrden.PENDIENTE, asignada: true },
     { id: 2, idCliente: 5, total: 100, fecha_entrega: '2024-06-02', idPanadero: 3, estado: estadoOrden.PENDIENTE, asignada: true },
     { id: 3, idCliente: 5, total: 30, fecha_entrega: '2024-05-22', idPanadero: null, estado: estadoOrden.PENDIENTE, asignada: false },
     { id: 4, idCliente: 5, total: 30, fecha_entrega: '2024-05-22', idPanadero: null, estado: estadoOrden.PENDIENTE, asignada: false },
-    { id: 5, idCliente: 5, total: 30, fecha_entrega: '2024-05-22', idPanadero: 3, estado: estadoOrden.PENDIENTE, asignada: true },
+    { id: 5, idCliente: 5, total: 30, fecha_entrega: '2024-05-22', idPanadero: 3, estado: estadoOrden.LISTO_PARA_RECOGER, asignada: true },
     { id: 6, idCliente: 5, total: 30, fecha_entrega: '2024-07-05', idPanadero: 3, estado: estadoOrden.PENDIENTE, asignada: true },
     { id: 7, idCliente: 5, total: 30, fecha_entrega: '2024-08-03', idPanadero: 3, estado: estadoOrden.PENDIENTE, asignada: true },
     { id: 8, idCliente: 5, total: 30, fecha_entrega: '2024-07-01', idPanadero: 3, estado: estadoOrden.PENDIENTE, asignada: true }
@@ -107,7 +111,7 @@ exports.getOrdenesCompraAdmin = async (req, res) => {
 // Obtiene las oredenes y sus pedidos para un panadero especifico
 exports.getOrdenesCompraPanadero = async (req, res) => {
     const { id } = req.params;
-    const ordenesDePanadero = ordenes.filter(o => o.idPanadero == id && o.estado != estadoOrden.LISTO_PARA_RECOGER);
+    const ordenesDePanadero = ordenes.filter(o => o.idPanadero == id );
 
     if (ordenesDePanadero.length > 0) {
         try {
@@ -217,7 +221,6 @@ exports.getOrdenesCompraPanaderoCliente = async (req, res) => {
 
 exports.getOrdenesCompraNoAsignadas = async (req, res) => {
     const ordenesDePanadero = ordenes.filter(o => !o.asignada);
-    console.log('ordenesssss',ordenesDePanadero) ;
     if (ordenesDePanadero.length > 0) {
         try {
             const pedidosConDetalles = await Promise.all(ordenesDePanadero.map(async (orden) => {
@@ -263,10 +266,10 @@ exports.getOrdenesCompraNoAsignadas = async (req, res) => {
     }
 };
 
-exports.createOrdenCompra = (req, res) => {
+exports.createOrdenCompra = async (req, res) => {
     const newOrden = req.body;
     const Cliente = usuarios.find(u => u.id == newOrden.idCliente);
-    
+
     if (!Cliente) {
         return res.status(400).json({ message: 'Cliente no existe' });
     }
@@ -274,7 +277,9 @@ exports.createOrdenCompra = (req, res) => {
     newOrden.id = ordenes.length ? ordenes[ordenes.length - 1].id + 1 : 1;
     console.log('NUEVA ORDEN 2: ', newOrden);
     ordenes.push(newOrden);
+
     res.status(201).json(newOrden);
+
 };
 
 exports.updateOrdenCompra = (req, res) => {
@@ -347,7 +352,7 @@ exports.InfoFiltroInsumos = async (req, res) => {
                 let insumosTotales = [];
                 const insumosObtenidos = await getInsumosPedido(orden.id);
                 //console.log('INSUMOS:', insumosObtenidos);
-                
+
                 for (const insumo of insumosObtenidos) {
                     const existeInsumo = insumosTotales.find(i => i.insumoNombre === insumo.insumoNombre);
                     if (existeInsumo) {
@@ -391,7 +396,7 @@ exports.InfoFiltroInsumosPanadero = async (req, res) => {
                 let insumosTotales = [];
                 const insumosObtenidos = await getInsumosPedido(orden.id);
                 //console.log('INSUMOS:', insumosObtenidos);
-                
+
                 for (const insumo of insumosObtenidos) {
                     const existeInsumo = insumosTotales.find(i => i.insumoNombre === insumo.insumoNombre);
                     if (existeInsumo) {
@@ -434,7 +439,7 @@ exports.InfoFiltroInsumosAdmin = async (req, res) => {
                 let insumosTotales = [];
                 const insumosObtenidos = await getInsumosPedido(orden.id);
                 //console.log('INSUMOS:', insumosObtenidos);
-                
+
                 for (const insumo of insumosObtenidos) {
                     const existeInsumo = insumosTotales.find(i => i.insumoNombre === insumo.insumoNombre);
                     if (existeInsumo) {
@@ -486,5 +491,123 @@ exports.deleteOrdenCompra = (req, res) => {
         res.json(deletedOrden);
     } else {
         res.status(404).json({ message: 'Orden de compra no encontrada' });
+    }
+};
+
+exports.getOrdenCompraParaCliente2 = async (req, res) => {
+    try {
+        const { id, email } = req.params; 
+        const ordenesDelUsuario = ordenes.filter(o => o.id == id );
+
+        if (ordenesDelUsuario.length === 0) {
+            return res.status(404).json({ message: 'No se encontraron órdenes para el cliente con estado LISTO PARA RECOGER' });
+        }
+
+        const pedidosConDetalles = await Promise.all(ordenesDelUsuario.map(async (orden) => {
+            const cliente = await obtenerUserById(orden.idCliente);
+            if (!cliente) {
+                throw new Error(`Cliente con ID ${orden.idCliente} no encontrado`);
+            }
+
+            const pedidosOrden = pedidos.filter(p => p.idOrden == orden.id);
+            if (pedidosOrden.length === 0) {
+                throw new Error(`Pedidos para la orden con ID ${orden.id} no encontrados`);
+            }
+
+            const cantPedidos = pedidosOrden.length;
+
+            const pedidosDetalles = await Promise.all(pedidosOrden.map(async (pedido) => {
+                const producto = await obtenerProductoById(pedido.idProducto);
+                if (!producto) {
+                    throw new Error(`Producto con ID ${pedido.idProducto} no encontrado`);
+                }
+                return {
+                    idPedido: pedido.id,
+                    idProducto: pedido.idProducto,
+                    nombre: producto.nombre,
+                    cantidad: pedido.cantidad,
+                    precioUnitario: producto.precio,
+                    subtotal: pedido.cantidad * producto.precio
+                };
+            }));
+
+            // Construir contenido del correo electrónico
+            const emailContent = `
+                <div class="card">
+                    <h1>Detalles de la Orden</h1>
+                    <p>Orden ID: ${orden.id}</p>
+                    <p>Fecha de Entrega: ${orden.fecha_entrega}</p> <!-- Asegúrate de tener la fecha de entrega -->
+                    <p>Productos:</p>
+                    <ul>
+                        ${pedidosDetalles.map(p => `
+                            <li>
+                                <div class="producto-detalle">
+                                    <span class="nombre-producto">${p.nombre}</span>
+                                    <span class="cantidad-producto">Cantidad: ${p.cantidad}</span>
+                                    <span class="total-producto">Total: $${p.subtotal.toFixed(2)}</span>
+                                </div>
+                            </li>`).join('')}
+                    </ul>
+                    <p class="total-final">Total: $${pedidosDetalles.reduce((acc, p) => acc + p.subtotal, 0).toFixed(2)}</p>
+                  <p class="total-final">ESTADO:  ${orden.estado}</p>
+                    </div>
+            `;
+
+            let transporter = nodemailer.createTransport({
+                service: "gmail",
+                auth: {
+                    user: process.env.MAIL_USER,
+                    pass: process.env.MAIL_PASSWORD
+                }
+            });
+
+            const mailOptions = {
+                from: 'Panaderia',
+                to: email,
+                subject: 'Confirmación de Pedido en PanaderiaRIA',
+                html: `<!DOCTYPE html>
+                    <html lang="en">
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <title>Confirmación de Pedido</title>
+                    </head>
+                    <body>
+                        <p>Hola!</p>
+                        <p>Gracias por tu pedido en PanaderiaRIA. Aquí están los detalles de tu pedido:</p>
+                        ${emailContent}
+                        <p>Atentamente,</p>
+                        <p>El equipo de PanaderiaRIA</p>
+                    </body>
+                    </html>`
+            };
+
+            // Enviar correo electrónico
+            transporter.sendMail(mailOptions, (error, info) => {
+                if (error) {
+                    console.error(error);
+                    return res.status(500).json({ message: 'Error al enviar el correo electrónico', error: error.message });
+                } else {
+                    console.log('Email enviado: ' + info.response);
+                    res.status(200).json({ message: 'Correo enviado exitosamente', pedidos: pedidosDetalles });
+                }
+            });
+
+            // Retornar detalles de la orden para incluir en la respuesta JSON
+            return {
+                idOrden: orden.id,
+                idCliente: cliente.id,
+                clienteNombre: cliente.nombre,
+                fecha_entrega: orden.fecha_entrega,
+                cantPedidos: cantPedidos,
+                estadoOrden: orden.estado,
+                pedidos: pedidosDetalles
+            };
+        }));
+
+        res.status(200).json(pedidosConDetalles); // Devolver detalles de las órdenes al finalizar
+    } catch (error) {
+        console.error('Error al procesar la solicitud:', error);
+        res.status(500).json({ message: 'Error al obtener órdenes para el cliente', error: error.message });
     }
 };
