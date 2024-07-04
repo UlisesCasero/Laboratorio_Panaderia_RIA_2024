@@ -15,9 +15,9 @@ router.post('/register', (req, res) => {
           description: 'Registro de nuevo usuario.',
           schema: { $ref: '#/definitions/RegisterUser' }
       } */
-  const email = req.body.email;
-  mailer.enviar_mail(email);
-  usuariosController.register(req, res, (err, usuario) => {
+  //const email = req.body.email;
+  //mailer.enviar_mail(email);
+ usuariosController.register(req, res, (err, usuario) => {
     if (err) {
       return res.status(500).json({ error: 'Error al registrar usuario' });
     }
