@@ -126,4 +126,19 @@ router.put('/actualizar/:id', verifyToken, isAdminOrUser, async (req, res) => {
     } */
   usuariosController.updateUsuario(req, res);
 });
+
+router.post('/register-admin', (req, res) => {
+  /* #swagger.summary = 'Registra un nuevo usuario' */
+  /* #swagger.tags = ['Usuarios'] */
+  /* #swagger.security = [{ "BearerAuth": [] }] */
+  /* #swagger.parameters['body'] = {
+          in: 'body',
+          description: 'Registro de nuevo usuario.',
+          schema: { $ref: '#/definitions/RegisterUser' }
+      } */
+  //const email = req.body.email;
+  //mailer.enviar_mail(email);
+ usuariosController.registeradmin(req, res);
+});
+
 module.exports = router;

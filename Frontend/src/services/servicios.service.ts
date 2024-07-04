@@ -16,6 +16,9 @@ export class ServiciosService {
     return this.http.post<any>('http://localhost:3000/usuarios/register', registro);
   }
 
+  registro2(registro: { email: string, password: string, telefono: number, role: string }): Observable<any> {
+    return this.http.post<any>('http://localhost:3000/usuarios/register-admin', registro);
+  }
   reset(registro: { email: string }): Observable<any> {
     return this.http.post<any>('http://localhost:3000/usuarios/forgot-password', registro);
   }
