@@ -202,7 +202,7 @@ export class ModificarProductoComponent {
     this.idsInsumosEliminados.push(insumoId);
     this.insumosSeleccionados = this.insumosSeleccionados.filter(insumo => insumo.id !== insumoId);
   }
-
+cantidad!:number;
   modificarProducto(producto: Producto): void {
     if (this.productoForm.valid && producto) {
       const insumosSeleccionadosReducidos = this.insumosSeleccionados.map(insumo => ({
@@ -210,8 +210,7 @@ export class ModificarProductoComponent {
         nombre: insumo.nombre,
         cantidad: insumo.cantidad
       }));
-      console.log('sbrere', this.insumosSeleccionados);
-      console.log('a eliminar s', this.idsInsumosEliminados);
+
       const formValues = this.productoForm.value;
       const productoModificado = new Producto(
         producto.id,
@@ -221,6 +220,16 @@ export class ModificarProductoComponent {
         formValues.precio,
         insumosSeleccionadosReducidos
       );
+     
+     
+      this.productoSVC.getInsumosIdsByProductoId2(producto.id).subscribe({
+        next: (response) => {
+       this.cantidad=response.length;
+       console.log('final', this.cantidad);
+        },
+        error: (error) => {
+        }
+      });
       this.actualizarProducto(productoModificado);
       console.log('IANTES:', this.idsInsumosEliminados[0]);
       this.idsInsumosEliminados.forEach(idInsumo => {
@@ -240,8 +249,7 @@ export class ModificarProductoComponent {
             idInsumo: insumo.id,
             cantidad: insumo.cantidad || 0
           }));
-          console.log('Ifdsfdfrgre para eliminar:', this.idsInsumosEliminados);
-
+        
           this.productoSVC.postProductoConInsumos(insumosParaEnviar).subscribe({
             next: (response) => {
               console.log('Insumos asociados al producto enviado:', response);
