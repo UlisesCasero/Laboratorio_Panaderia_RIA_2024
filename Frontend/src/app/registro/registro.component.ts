@@ -11,7 +11,9 @@ import { ServiciosService } from 'src/services/servicios.service';
 export class RegistroComponent {
   registroExitoso: boolean = false;
   registroFallido: boolean = false;
+  existeUsuario: boolean = false;
   verReseteo: boolean = false;
+  mensajeError: string = '';
 
   constructor(private router: Router, private servicioService: ServiciosService) { }
 
@@ -30,15 +32,25 @@ export class RegistroComponent {
       };
       this.servicioService.registro(registroData).subscribe(
         response => {
-          console.log('Respuesta del servidor:', response);
-          this.registroExitoso = true;
-          setTimeout(() => {
-            this.router.navigate(['/login']);
-          }, 3000);
+          if (response.userExists) {
+            this.existeUsuario = true;
+            this.mensajeError = response.message || 'Mail ingresado en uso.';
+            setTimeout(() => {
+              this.registroFallido = false;
+            }, 4000);
+          } else {
+            this.registroExitoso = true;
+            setTimeout(() => {
+              this.router.navigate(['/login']);
+            }, 4000);
+          }
         },
         error => {
+          console.error('Error en el registro:', error);
+          this.registroFallido = true;
+          this.mensajeError = error.error.message || 'Ocurrió un error en el registro.';
           setTimeout(() => {
-            this.registroFallido = true;
+            this.registroFallido = false;
           }, 4000);
         }
       );

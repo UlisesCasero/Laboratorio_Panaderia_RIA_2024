@@ -68,11 +68,15 @@
 
             <div *ngIf="registroExitoso" class="bg-blue-100 border-t border-b border-blue-500 text-blue-700 px-4 py-3"
                 role="alert">
-                <p class="font-bold">Registro exitoso</p>
+                <p class="font-bold">Registro exitoso.</p>
             </div>
             <div *ngIf="registroFallido" class="bg-blue-100 border-t border-b border-blue-500 text-blue-700 px-4 py-3"
                 role="alert">
-                <p class="font-bold">Registro fallido</p>
+                <p class="font-bold">Registro fallido.</p>
+            </div>
+            <div *ngIf="existeUsuario" class="bg-blue-100 border-t border-b border-blue-500 text-blue-700 px-4 py-3"
+                role="alert">
+                <p class="font-bold">Mail ingresado se encuentra en uso.</p>
             </div>
         </div>
     </div>

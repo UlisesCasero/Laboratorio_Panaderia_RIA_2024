@@ -13,7 +13,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="block w-full overflow-x-auto">
                 <table class="items-center bg-transparent w-full border-collapse">
                     <thead>
@@ -81,8 +80,6 @@
                         </tr>
                     </tbody>
                 </table>
-
-                <!-- Sección Total a Pagar -->
                 <div class="bg-gray-50 rounded-xl p-4 w-full mb-4">
                     <div class="flex items-center justify-between w-full py-2">
                         <p class="font-manrope font-medium text-lg leading-7 text-gray-900">Total a pagar:</p>
@@ -100,10 +97,8 @@
                     </div>
 
                 </div>
-
-                <!-- Botones de Acción -->
                 <div class="flex items-center justify-center gap-2 mt-4">
-                    <button
+                    <button (click)="cancelarCarrito()"
                         class="rounded-full py-2 w-full max-w-[180px] flex items-center bg-red-50 justify-center transition-all duration-500 hover:bg-red-100">
                         <span class="px-2 font-semibold text-sm leading-7 text-red-600">Cancelar</span>
                     </button>

@@ -37,6 +37,10 @@ const createDefaultUsers = async () => {
 
 const register = async (req, res) => {
   const { email, password, role, telefono } = req.body;
+  const existingUser = usuarios.find(user => user.email === email);
+  if (existingUser) {
+    return res.json({ message: 'Este email ya se encuentra registrado', userExists: true });
+  }
   const hashedPassword = await bcrypt.hash(password, 10);
   const newUser = {
     id: usuarios.length ? usuarios[usuarios.length - 1].id + 1 : 1,
