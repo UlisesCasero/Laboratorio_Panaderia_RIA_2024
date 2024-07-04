@@ -1,14 +1,14 @@
 let insumos = [
-  { id: 1, nombre: 'Harina' },
-  { id: 2, nombre: 'Sal' },
-  { id: 3, nombre: 'Huevo' },
-  { id: 4, nombre: 'Azucar' },
-  { id: 5, nombre: 'Polvo de hornear' },
-  { id: 6, nombre: 'Leche' },
-  { id: 7, nombre: 'Agua' },
-  { id: 8, nombre: 'Queso' },
-  { id: 9, nombre: 'Aceite' },
-  { id: 10, nombre: 'Harina integral' }
+  { id: 1, nombre: 'Harina (g)' },
+  { id: 2, nombre: 'Sal (g)' },
+  { id: 3, nombre: 'Huevo (ud)' },
+  { id: 4, nombre: 'Azucar (g)' },
+  { id: 5, nombre: 'Polvo de hornear (g)' },
+  { id: 6, nombre: 'Leche (ml)' },
+  { id: 7, nombre: 'Agua (ml)' },
+  { id: 8, nombre: 'Queso (g)' },
+  { id: 9, nombre: 'Aceite (ml)' },
+  { id: 10, nombre: 'Harina integral (6)' }
 ];
 
 exports.insumos = insumos;

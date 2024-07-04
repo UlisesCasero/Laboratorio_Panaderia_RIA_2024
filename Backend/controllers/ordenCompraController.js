@@ -12,14 +12,14 @@ const Mail = require('nodemailer/lib/mailer');
 const nodemailer = require('nodemailer');
 require('dotenv').config();
 const ordenes = [
-    { id: 1, idCliente: 3, total: 30, fecha_entrega: '2024-05-22', idPanadero: 2, estado: estadoOrden.PENDIENTE, asignada: true, entregada: false },
+    { id: 1, idCliente: 3, total: 40, fecha_entrega: '2024-05-22', idPanadero: 2, estado: estadoOrden.PENDIENTE, asignada: true, entregada: false },
     { id: 2, idCliente: 3, total: 100, fecha_entrega: '2024-06-02', idPanadero: 2, estado: estadoOrden.PENDIENTE, asignada: true, entregada: false },
-    { id: 3, idCliente: 3, total: 30, fecha_entrega: '2024-05-22', idPanadero: null, estado: estadoOrden.PENDIENTE, asignada: false, entregada: false },
-    { id: 4, idCliente: 4, total: 30, fecha_entrega: '2024-05-22', idPanadero: null, estado: estadoOrden.PENDIENTE, asignada: false, entregada: false },
-    { id: 5, idCliente: 4, total: 30, fecha_entrega: '2024-05-22', idPanadero: 2, estado: estadoOrden.PENDIENTE, asignada: true, entregada: false },
-    { id: 6, idCliente: 4, total: 30, fecha_entrega: '2024-07-05', idPanadero: null, estado: estadoOrden.PENDIENTE, asignada: true, entregada: false },
-    { id: 7, idCliente: 5, total: 30, fecha_entrega: '2024-08-03', idPanadero: null, estado: estadoOrden.PENDIENTE, asignada: true, entregada: false },
-    { id: 8, idCliente: 5, total: 30, fecha_entrega: '2024-07-01', idPanadero: null, estado: estadoOrden.PENDIENTE, asignada: true, entregada: false }
+    { id: 3, idCliente: 3, total: 40, fecha_entrega: '2024-05-22', idPanadero: null, estado: estadoOrden.PENDIENTE, asignada: false, entregada: false },
+    { id: 4, idCliente: 4, total: 100, fecha_entrega: '2024-05-22', idPanadero: null, estado: estadoOrden.PENDIENTE, asignada: false, entregada: false },
+    { id: 5, idCliente: 4, total: 140, fecha_entrega: '2024-05-22', idPanadero: 2, estado: estadoOrden.PENDIENTE, asignada: true, entregada: false },
+    { id: 6, idCliente: 4, total: 80, fecha_entrega: '2024-07-05', idPanadero: null, estado: estadoOrden.PENDIENTE, asignada: true, entregada: false },
+    { id: 7, idCliente: 5, total: 40, fecha_entrega: '2024-08-03', idPanadero: null, estado: estadoOrden.PENDIENTE, asignada: true, entregada: false },
+    { id: 8, idCliente: 5, total: 100, fecha_entrega: '2024-07-01', idPanadero: null, estado: estadoOrden.PENDIENTE, asignada: true, entregada: false }
 ];
 
 exports.ordenes = ordenes;

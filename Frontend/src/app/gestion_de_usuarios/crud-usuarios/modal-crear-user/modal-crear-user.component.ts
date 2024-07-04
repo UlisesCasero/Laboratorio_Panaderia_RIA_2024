@@ -45,12 +45,13 @@ export class ModalCrearUserComponent {
           this.insumoAgregado.emit({ usuario: response }); 
           setTimeout(() => {
             this.close();
-          }, 4000);
+            form.resetForm();
+          }, 3000);
         },
         error => {
           setTimeout(() => {
             this.registroFallido = true;
-          }, 4000);
+          }, 3000);
         }
       );
     }
