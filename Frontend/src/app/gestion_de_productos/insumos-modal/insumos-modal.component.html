@@ -9,7 +9,13 @@
                     <input type="number" min="1" class="w-20 mx-2 p-1 border rounded" placeholder="Cantidad" #cantidadInput>
                     <button class="bg-blue-500 text-white py-1 px-3 rounded hover:bg-blue-700"
                             (click)="agregarInsumo(insumo, cantidadInput.value)">Agregar</button>
-                </li>
+                          </li>  <div *ngIf="mostrarMje" class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mt-4 rounded-md">
+                            <p class="font-bold">¡Debe agregar la cantidad!</p>
+                          </div>
+                          <div *ngIf="mostrarMje2" class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mt-4 rounded-md">
+                            <p class="font-bold">¡Agregado!</p>
+                          </div>
+              
             </ul>
         </div>
     </div>
