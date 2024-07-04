@@ -58,6 +58,75 @@
         ]
       }
     },
+    "/usuarios/register-admin/": {
+  "post": {
+    "tags": [
+      "Usuarios"
+    ],
+    "summary": "Registra un nuevo usuario",
+    "description": "Registra un nuevo usuario administrador en el sistema.",
+    "parameters": [
+      {
+        "name": "body",
+        "in": "body",
+        "description": "Datos del nuevo usuario.",
+        "required": true,
+        "schema": {
+          "$ref": "#/definitions/RegisterUser"
+        }
+      }
+    ],
+    "responses": {
+      "201": {
+        "description": "Creado exitosamente",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/definitions/UserResponse"
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Datos inválidos o usuario existente",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Este email ya se encuentra registrado."
+                }
+              }
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "No autorizado",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "No autorizado para registrar usuarios administradores."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "security": [
+      {
+        "BearerAuth": []
+      }
+    ]
+  }
+},
     "/usuarios/login": {
       "post": {
         "tags": [

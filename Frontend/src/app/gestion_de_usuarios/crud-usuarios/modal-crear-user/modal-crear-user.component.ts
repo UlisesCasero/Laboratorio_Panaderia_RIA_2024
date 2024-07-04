@@ -6,7 +6,7 @@ import { ServiciosService } from 'src/services/servicios.service';
 @Component({
   selector: 'app-modal-crear-user',
   templateUrl: './modal-crear-user.component.html',
-  styleUrls: ['./modal-crear-user.component.scss'],
+  styleUrls: ['./modal-crear-user.component.scss']
 })
 export class ModalCrearUserComponent {
   mostrar: boolean = false;
@@ -15,20 +15,18 @@ export class ModalCrearUserComponent {
     email: '',
     telefono: '',
     role: '',
-    enabled: true,
+    enabled: true
   };
   registroExitoso: boolean = false;
   registroFallido: boolean = false;
-  existeUsuario: boolean = false;
-  mensajeError: string = '';
-
   @ViewChild('usuarioForm') usuarioForm!: NgForm;
   @Output() insumoAgregado = new EventEmitter<{ usuario: Usuario }>();
 
-  constructor(private servicioService: ServiciosService) {}
+  constructor(private servicioService: ServiciosService) { }
 
-  ngOnInit(): void {}
-
+  ngOnInit(): void { }
+  mensaje: string = '';
+  mensajeError: string = '';
   registro(form: NgForm) {
     if (form.valid) {
       const telefono = form.value.Telefono;
@@ -39,31 +37,30 @@ export class ModalCrearUserComponent {
         email: correo,
         password: contraseña,
         telefono: telefono,
-        role: 'USER',
+        role: 'USER'
       };
-      this.servicioService.registro(registroData).subscribe(
+      this.servicioService.registro2(registroData).subscribe(
         (response) => {
-          if (response.userExists) {
-            this.existeUsuario = true;
-            setTimeout(() => {
-              this.registroFallido = true;
-              this.close();
-            }, 4000);
-          } else {
-            (this.registroExitoso = true),
-              this.insumoAgregado.emit({ usuario: response });
-            setTimeout(() => {
-              this.close();
-              form.resetForm();
-            }, 4000);
-          }
+          this.mensaje = 'Registro Exitoso';
+          setTimeout(() => {
+            this.mensaje = '';
+            this.close();
+          }, 4000);
+          this.insumoAgregado.emit({ usuario: response });
+          setTimeout(() => {
+          }, 4000);
         },
         (error) => {
+          console.error('Error del servidor:', error);
+          this.mensajeError = error.error.message || 'Error desconocido';
           setTimeout(() => {
-            this.registroFallido = true;
-          }, 3000);
+            this.mensajeError = '';
+            this.close();
+          }, 4000);
         }
       );
+      this.registroExitoso = false;
+      this.registroFallido = false;
     }
   }
 
@@ -76,26 +73,24 @@ export class ModalCrearUserComponent {
   }
 
   actualizarUsuario() {
-    this.servicioService
-      .actualizarUsuario(this.usuario.id, this.usuario)
-      .subscribe(
-        (response) => {
-          this.registroExitoso = true;
-          this.registroFallido = false;
-          this.insumoAgregado.emit({ usuario: response });
-          setTimeout(() => {
-            this.registroExitoso = false;
-            this.close();
-          }, 3000);
-        },
-        (error) => {
-          console.error('Error al actualizar usuario:', error);
-          this.registroFallido = true;
+    this.servicioService.actualizarUsuario(this.usuario.id, this.usuario).subscribe(
+      (response) => {
+        this.registroExitoso = true;
+        this.registroFallido = false;
+        this.insumoAgregado.emit({ usuario: response });
+        setTimeout(() => {
           this.registroExitoso = false;
-          setTimeout(() => {
-            this.registroFallido = false;
-          }, 3000);
-        }
-      );
+          this.close();
+        }, 3000);
+      },
+      (error) => {
+        console.error('Error al actualizar usuario:', error);
+        this.registroFallido = true;
+        this.registroExitoso = false;
+        setTimeout(() => {
+          this.registroFallido = false;
+        }, 3000);
+      }
+    );
   }
 }

@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const Mail = require('nodemailer/lib/mailer');
-const { enviar_mail_cambio_constrasenia, enviar_reset_constrasenia, enviar_mail } = require('../templates/registro');
+const { enviar_mail_cambio_constrasenia, enviar_reset_constrasenia, enviar_mail, enviar_mail2 } = require('../templates/registro');
 const usuarios = [];
 
 const generateToken = (user) => {
@@ -39,7 +39,7 @@ const register = async (req, res) => {
   const { email, password, role, telefono } = req.body;
   const existingUser = usuarios.find(user => user.email === email);
   if (existingUser) {
-    return res.json({ message: 'Este email ya se encuentra registrado', userExists: true });
+    return res.status(400).json({ message: 'Este email ya se encuentra registrado'});
   }
   const hashedPassword = await bcrypt.hash(password, 10);
   const newUser = {
@@ -52,6 +52,26 @@ const register = async (req, res) => {
   };
   usuarios.push(newUser);
   enviar_mail(email); 
+  res.status(201).json(newUser);
+};
+
+const registeradmin = async (req, res) => {
+  const { email, password, role, telefono } = req.body;
+  const existingUser = usuarios.find(user => user.email === email);
+  if (existingUser) {
+    return res.status(400).json({ message: 'Este email ya se encuentra registrado'});
+  }
+  const hashedPassword = await bcrypt.hash(password, 10);
+  const newUser = {
+    id: usuarios.length ? usuarios[usuarios.length - 1].id + 1 : 1,
+    email,
+    password: hashedPassword,
+    role,
+    telefono,
+    enabled: true,
+  };
+  usuarios.push(newUser);
+  enviar_mail2(email, password); 
   res.status(201).json(newUser);
 };
 
@@ -200,5 +220,6 @@ module.exports = {
   getUserById,
   obtenerUserById,
   getUserByEmail,
-  updateUsuario
+  updateUsuario,
+  registeradmin
 };
