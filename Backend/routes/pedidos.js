@@ -15,5 +15,5 @@ router.put('/:id', verifyToken, isUser, isPanadero, pedidosController.updatePedi
 router.put('/actualizar-estado/:id', verifyToken, isPanadero, pedidosController.updatePedidoEstado);
 
 router.delete('/:id', verifyToken, isAdmin, pedidosController.deletePedido);
-
+router.get('/enviar-email/:id/:email',verifyToken,isUser, pedidosController.enviarEmailConPedidos);
 module.exports = router;

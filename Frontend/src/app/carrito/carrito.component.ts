@@ -8,6 +8,7 @@ import { OrdenCompraService } from 'src/services/orden-compra.service';
 import { PedidoService } from 'src/services/pedido.service';
 import { estadoOrden } from '../../enums/estado-orden';
 import { estadoPedido } from 'src/enums/estado-pedido';
+import { ServiciosService } from 'src/services/servicios.service';
 
 @Component({
   selector: 'app-carrito',
@@ -21,7 +22,7 @@ export class CarritoComponent implements OnInit {
   minDate: string;
   carritoSub!: Subscription;
   hayProductos: boolean = false;
-  
+  idOrden!: number;  
   comprobarCarrito(){
     this.miCarrito$.pipe(take(1)).subscribe((data) => {
       console.log(data.length);
@@ -35,14 +36,21 @@ export class CarritoComponent implements OnInit {
     private carritoSvc: CarritoService,
     private ordenCompraSvc: OrdenCompraService,
     private pedidoSvc: PedidoService,
+    private service: ServiciosService
   ) {
     this.miCarrito$ = this.carritoSvc.miCarrito$;
     this.minDate = new Date().toISOString().split('T')[0];
   }
-
+  emailUsuario!: string;
   ngOnInit(): void {
     this.carritoSub = this.miCarrito$.subscribe((data) => {
       //console.log('Productos en el carrito:', data);
+    });
+    this.service.obtenerUsuarioPorId().subscribe(usuario => {
+      this.emailUsuario = usuario.email;
+      //console.log('Emaaaaaaaaaaaail', this.emailUsuario);
+    }, error => {
+      console.error('Error al obtener el usuario', error);
     });
     this.comprobarCarrito();
   }
@@ -118,15 +126,17 @@ export class CarritoComponent implements OnInit {
           (response) => {
             this.carritoSub.unsubscribe();
             //this.ordenesPanaderoSvc.actualizarListaSinASignar();
-            console.log('Response: ', response.id);
-            //console.log('Orden creada:', response);
             this.miCarrito$.pipe(take(1)).subscribe((productos) => {
               productos.forEach((producto) => {
                 this.crearPedido(producto, response.id);
+                this.idOrden = response.id;
               });
             });
 
             this.fechaEntrega = '';
+            this.service.enviarEmailConPedidos(this.idOrden, this.emailUsuario).subscribe(response => {
+            }, error => {
+            });
             this.mensajeConfirmacion = 'Orden realizada!';
             setTimeout(() => {
               this.mensajeConfirmacion = '';

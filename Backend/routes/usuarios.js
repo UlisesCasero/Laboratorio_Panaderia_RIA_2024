@@ -2,7 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const usuariosController = require('../controllers/usuariosController');
-const { verifyToken, isAdmin, isPanadero, isAdminOrUser } = require('../middleware/auth');
+const { verifyToken, isAdmin, isPanadero, isAdminOrUser, isAdminOrUserOrPan } = require('../middleware/auth');
 const mailer = require('../templates/registro');
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
@@ -94,7 +94,7 @@ router.get('/users', verifyToken, isAdmin, (req, res) => {
   usuariosController.getAllUsers(req, res);
 });
 
-router.get('/:id', verifyToken, isAdminOrUser, (req, res) => {
+router.get('/:id', verifyToken, isAdminOrUserOrPan, (req, res) => {
   /* #swagger.summary = 'Obtiene un insumo por ID' */
   /* #swagger.tags = ['Insumos'] */
   /* #swagger.parameters['id'] = { description: 'ID del insumo', type: 'integer', required: true } */

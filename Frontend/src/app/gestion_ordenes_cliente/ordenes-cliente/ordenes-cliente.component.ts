@@ -107,15 +107,25 @@ export class OrdenesClienteComponent implements OnInit {
   openModalModificacion(id: number) {
     this.modificarProductoModal.open(id);
   }
+  mensajeConfirmacion: string = '';
 
-  confirmarEntrega(id:number){
-    this.oredenesSVC.confirmarEntrega(id).subscribe({
-      next: (data) => {
-        console.log(data);
-      },
-      error: (error) => {
-        console.error('Error al cargar ordenes:', error);
-      }
-    });
-  }
+confirmarEntrega(id: number) {
+  this.oredenesSVC.confirmarEntrega(id).subscribe({
+    next: (data) => {
+      console.log('confirmado', data);
+      this.mensajeConfirmacion = 'Recibido!';
+      setTimeout(() => {
+        this.mensajeConfirmacion = 'Actualizando datos.....!';
+      }, 3000);
+      setTimeout(() => {
+        this.mensajeConfirmacion = '';
+        this.misOrdenes = this.misOrdenes.filter(orden => orden.id !== id);
+        this.applyEstadoFilter();
+      }, 6000);
+    },
+    error: (error) => {
+      console.error('Error al cargar ordenes:', error);
+    }
+  });
+}
 }

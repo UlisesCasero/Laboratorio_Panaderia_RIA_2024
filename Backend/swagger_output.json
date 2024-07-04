@@ -89,74 +89,75 @@
           }
         ]
       }
-    },"/usuarios/actualizar/{id}": {
-  "put": {
-    "tags": [
-      "Usuarios"
-    ],
-    "summary": "Actualiza un usuario por ID",
-    "description": "",
-    "parameters": [
-      {
-        "name": "id",
-        "in": "path",
-        "required": true,
-        "type": "integer",
-        "description": "ID del usuario"
-      },
-      {
-        "name": "authorization",
-        "in": "header",
-        "type": "string"
-      },
-      {
-        "name": "body",
-        "in": "body",
-        "description": "Datos actualizados del usuario.",
-        "schema": {
-          "type": "object",
-          "properties": {
-            "email": {
-              "type": "string",
-              "description": "Nuevo correo electrónico del usuario"
-            },
-            "password": {
-              "type": "string",
-              "description": "Nueva contraseña del usuario"
-            },
-            "telefono": {
-              "type": "string",
-              "description": "Nuevo número de teléfono del usuario"
-            },
-            "role": {
-              "type": "string",
-              "description": "Nuevo role del usuario"
+    },
+    "/usuarios/actualizar/{id}": {
+      "put": {
+        "tags": [
+          "Usuarios"
+        ],
+        "summary": "Actualiza un usuario por ID",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID del usuario"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Datos actualizados del usuario.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "description": "Nuevo correo electrónico del usuario"
+                },
+                "password": {
+                  "type": "string",
+                  "description": "Nueva contraseña del usuario"
+                },
+                "telefono": {
+                  "type": "string",
+                  "description": "Nuevo número de teléfono del usuario"
+                },
+                "role": {
+                  "type": "string",
+                  "description": "Nuevo role del usuario"
+                }
+              }
             }
           }
-        }
-      }
-    ],
-    "responses": {
-      "200": {
-        "description": "OK. Usuario actualizado correctamente."
-      },
-      "400": {
-        "description": "Error de solicitud. Verifica los datos enviados."
-      },
-      "404": {
-        "description": "Usuario no encontrado."
-      },
-      "500": {
-        "description": "Error interno del servidor."
+        ],
+        "responses": {
+          "200": {
+            "description": "OK. Usuario actualizado correctamente."
+          },
+          "400": {
+            "description": "Error de solicitud. Verifica los datos enviados."
+          },
+          "404": {
+            "description": "Usuario no encontrado."
+          },
+          "500": {
+            "description": "Error interno del servidor."
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
       }
     },
-    "security": [
-      {
-        "BearerAuth": []
-      }
-    ]
-  }
-},
     "/usuarios/change-password": {
       "post": {
         "tags": [
@@ -1214,6 +1215,55 @@
         ]
       }
     },
+    "/pedidos/enviar-email/{id}/{email}": {
+      "get": {
+        "tags": [
+          "Pedidos"
+        ],
+        "summary": "Obtiene los pedidos de una orden recien creada y manda correo",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID de la orden"
+          },
+          {
+            "name": "email",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Correo electrónico del destinatario"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
     "/pedidos/insumos-pedido/{id}": {
       "get": {
         "tags": [
@@ -1521,7 +1571,54 @@
           }
         ]
       }
-    },
+    },"/ordenesCompra/enviar-correo-estado/{id}/{email}": {
+  "get": {
+    "tags": [
+      "Ordenes"
+    ],
+    "summary": "Envía correo a cliente si la Orden está lista",
+    "description": "",
+    "parameters": [
+      {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "integer"
+        },
+        "description": "ID de la orden de compra"
+      },
+      {
+        "name": "email",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        },
+        "description": "Correo electrónico del destinatario"
+      },
+      {
+        "name": "authorization",
+        "in": "header",
+        "type": "string"
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "OK"
+      },
+      "403": {
+        "description": "Forbidden"
+      },
+      "404": {
+        "description": "Not Found"
+      },
+      "500": {
+        "description": "Internal Server Error"
+      }
+    }
+  }
+},
     "/ordenesCompra/ordenes-admin/": {
       "get": {
         "tags": [

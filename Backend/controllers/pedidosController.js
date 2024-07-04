@@ -5,7 +5,11 @@ const { productos } = require('./productosController');
 const { insumos } = require('./insumosController')
 const { productoInsumos } = require('./productoInsumoController')
 const estadoPedido = require('../enums/estadoPedido')
+const { enviar_mail_pedido } = require('../templates/registro')
+const Mail = require('nodemailer/lib/mailer');
 
+const nodemailer = require('nodemailer');
+require('dotenv').config();
 let pedidos = [
     { id: 1, idProducto: 1, idOrden: 1, cantidad: 2, estado: estadoPedido.PENDIENTE },
     { id: 2, idProducto: 2, idOrden: 1, cantidad: 1, estado: estadoPedido.PENDIENTE },
@@ -248,5 +252,95 @@ exports.deletePedido = (req, res) => {
         res.json(deletedPedido);
     } else {
         res.status(404).json({ message: 'Pedido no encontrado' });
+    }
+};
+
+exports.enviarEmailConPedidos = async (req, res) => {
+    const { id } = req.params;
+    const { email } = req.params;
+    console.log('idOrden', id);
+
+    try {
+        const pedidosOrden = pedidos.filter(p => p.idOrden == id);
+
+        if (pedidosOrden.length > 0) {
+            const pedidosConDetalles = await Promise.all(pedidosOrden.map(async (pedido) => {
+                const producto = await obtenerProductoById(pedido.idProducto);
+                if (!producto) {
+                    throw new Error(`Producto con ID ${pedido.idProducto} no encontrado`);
+                }
+                const total = producto.precio * pedido.cantidad;
+                return {
+                    nombre: producto.nombre,
+                    cantidad: pedido.cantidad,
+                    total: total,
+                    estado: pedido.estado
+                };
+            }));
+
+            const emailContent = `
+            <div class="card">
+                <h1>Detalles de la Orden</h1>
+                <p>Orden ID: ${id}</p>
+                <p>Productos:</p>
+                <ul>
+                    ${pedidosConDetalles.map(p => `
+                        <li>
+                            <div class="producto-detalle">
+                                <span class="nombre-producto">${p.nombre}</span>
+                                <span class="cantidad-producto">Cantidad: ${p.cantidad}</span>
+                                <span class="total-producto">Total: $${p.total.toFixed(2)}</span>
+                            </div>
+                        </li>`).join('')}
+                </ul>
+                <p class="total-final">Total: $${pedidosConDetalles.reduce((acc, p) => acc + p.total, 0).toFixed(2)}</p>
+            </div>
+        `;
+            console.log('pedidos', pedidosConDetalles);
+
+            let transporter = nodemailer.createTransport({
+                service: "gmail",
+                auth: {
+                    user: process.env.MAIL_USER,
+                    pass: process.env.MAIL_PASSWORD
+                }
+            });
+
+            const mailOptions = {
+                from: 'Panaderia',
+                to: email,
+                subject: 'Confirmación de Pedido en PanaderiaRIA',
+                html: `<!DOCTYPE html>
+                    <html lang="en">
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <title>Confirmación de Pedido</title>
+                    </head>
+                    <body>
+                        <p>Hola!</p>
+                        <p>Gracias por tu pedido en PanaderiaRIA. Aquí están los detalles de tu pedido:</p>
+                        ${emailContent}
+                        <p>Atentamente,</p>
+                        <p>El equipo de PanaderiaRIA</p>
+                    </body>
+                    </html>`
+            };
+
+            transporter.sendMail(mailOptions, (error, info) => {
+                if (error) {
+                    console.error(error);
+                    return res.status(500).json({ message: 'Error al enviar el correo electrónico', error: error.message });
+                } else {
+                    console.log('Email enviado: ' + info.response);
+                    res.status(200).json({ message: 'Correo enviado exitosamente', pedidos: pedidosConDetalles });
+                }
+            });
+
+        } else {
+            res.status(404).json({ message: 'Pedidos para ese idOrden no encontrados' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
 };

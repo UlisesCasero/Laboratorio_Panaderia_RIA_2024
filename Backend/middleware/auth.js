@@ -59,11 +59,20 @@ const isAdminOrUser = (req, res, next) => {
     }
 };
 
+const isAdminOrUserOrPan = (req, res, next) => {
+    const role = req.userRole;
+    if (role === 'ADMIN' || role === 'USER' || role === 'PANADERO') {
+        next();
+    } else {
+        return res.status(403).json({ message: 'Requires Admin or User Role' });
+    }
+};
 module.exports = {
     verifyToken,
     isAdmin,
     isPanadero,
     isUser,
     isAdminOrPanadero,
-    isAdminOrUser
+    isAdminOrUser,
+    isAdminOrUserOrPan
 };
