@@ -91,12 +91,18 @@
                                 class="border-t-0 px-6 align-center border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                                 <button (click)="openModalModificacion(orden.id)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
                                     Ver detalle
+                                </button>     <button *ngIf="orden.estado === 'Listo para recoger'"  (click)="confirmarEntrega(orden.id)" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full">
+                                    Recibido
                                 </button>   
                             </td>
+                          
                         </tr>
                     </tbody>
 
                 </table>
+                <div *ngIf="mensajeConfirmacion" class="bg-green-100 border-l-4 border-green-500 text-green-700 p-2 mt-4">
+                    <p class="font-bold">{{mensajeConfirmacion}}</p>
+                  </div>
                 <div class="mt-4 flex justify-center">
                     <div class="flex">
                       <button class="px-3 py-1 bg-blue-500 text-white rounded-l focus:outline-none"
