@@ -13,29 +13,31 @@ import { estadoPedido } from 'src/enums/estado-pedido';
 export class OrdenesClienteModalComponent implements OnInit {
   public pedidos: PedidoOrden[] = [];
 
-  constructor(private route: ActivatedRoute, private pedidosSvc: PedidoService, private router: Router) {}
+  constructor(
+    private route: ActivatedRoute,
+    private pedidosSvc: PedidoService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.obtenerpedidosOrden();
   }
 
   obtenerpedidosOrden() {
-    this.route.params.subscribe(params => {
+    this.route.params.subscribe((params) => {
       const id = +params['id'];
-      console.log('ID LLEGADA: ', id)
       this.pedidosSvc.getPedidosByOrdenId(id).subscribe({
         next: (data) => {
           this.pedidos = data;
-          console.log('Ordenes cargadas:', this.pedidos);
         },
         error: (error) => {
           console.error('Error al cargar la orden:', error);
-        }
+        },
       });
     });
-}
+  }
 
-  cerrarModal(){
+  cerrarModal() {
     this.router.navigate(['/ordenesCliente']);
   }
 }

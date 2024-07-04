@@ -28,8 +28,6 @@ export class PedidoService {
       }),
     };
 
-    console.log('LLEGA A PEDIDO SERVICE');
-
     return this.http.post<Pedido>(this.apiUrl, pedido, httpOptions).pipe(
       catchError((error) => {
         return throwError(error);
@@ -58,25 +56,9 @@ export class PedidoService {
     );
   }
 
-  getPedidosByOrdenId(id: number): Observable<PedidoOrden[]> {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      return throwError('No hay token almacenado');
-    }
-
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        Authorization: 'bearer ' + token,
-      }),
-    };
-
-    const url = `http://localhost:3000/pedidos/orden/${id}`;
-    return this.http.get<PedidoOrden[]>(url, httpOptions).pipe(
-      catchError((error) => {
-        return throwError(error);
-      })
-    );
+  isPanadero(): boolean {
+    const role = localStorage.getItem('rol');
+    return role === 'PANADERO';
   }
 
   getPedidosPanaderoByOrdenId(id: number): Observable<PedidoVista[]> {
@@ -183,5 +165,30 @@ export class PedidoService {
         return throwError(error);
       })
     );
+  }
+
+  getPedidosByOrdenId(id: number): Observable<PedidoOrden[]> {
+    if (this.isPanadero()) {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        return throwError('No hay token almacenado');
+      }
+
+      const httpOptions = {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: 'bearer ' + token,
+        }),
+      };
+
+      const url = `http://localhost:3000/pedidos/orden/${id}`;
+      return this.http.get<PedidoOrden[]>(url, httpOptions).pipe(
+        catchError((error) => {
+          return throwError(error);
+        })
+      );
+    } else {
+      return throwError('Acceso denegado: el usuario no es panadero');
+    }
   }
 }

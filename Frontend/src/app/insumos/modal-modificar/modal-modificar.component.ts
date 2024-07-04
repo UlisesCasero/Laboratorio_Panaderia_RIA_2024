@@ -1,4 +1,10 @@
-import { ChangeDetectorRef, Component, EventEmitter, Output, ViewChild } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Insumo } from 'src/models/insumo';
 import { ProductoService } from 'src/services/producto.service';
@@ -6,10 +12,10 @@ import { ProductoService } from 'src/services/producto.service';
 @Component({
   selector: 'app-modal-modificar',
   templateUrl: './modal-modificar.component.html',
-  styleUrls: ['./modal-modificar.component.scss']
+  styleUrls: ['./modal-modificar.component.scss'],
 })
 export class ModalModificarComponent {
-  constructor(private productoSVC: ProductoService) { }
+  constructor(private productoSVC: ProductoService) {}
   isVisible = false;
   mostrar: boolean = false;
   insumo!: Insumo;
@@ -25,7 +31,7 @@ export class ModalModificarComponent {
   open(producto: Insumo) {
     this.insumo = producto; // Asigna el insumo recibido
     this.nombreInsumo = producto.nombre; // Asigna el nombre del insumo al input
-    this.mostrar = true; 
+    this.mostrar = true;
     this.isVisible = true;
   }
 
@@ -36,19 +42,18 @@ export class ModalModificarComponent {
     this.insumo.nombre = this.nombreInsumo;
     this.productoSVC.putInsumo(this.insumo.id, this.insumo).subscribe({
       next: (data) => {
-        console.log('Insumo modificado:', data);
         this.registroExitoso = true;
         setTimeout(() => {
           this.close();
         }, 4000);
-        this.insumoModificado.emit(this.insumo); 
+        this.insumoModificado.emit(this.insumo);
       },
       error: (error) => {
         setTimeout(() => {
           this.registroFallido = true;
           this.close();
         }, 4000);
-      }
+      },
     });
   }
 }

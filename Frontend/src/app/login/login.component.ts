@@ -5,19 +5,18 @@ import { AuthService } from 'src/app/auth.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent {
   loginExitoso = false;
   loginFallido = false;
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(private authService: AuthService, private router: Router) {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   login(email: string, password: string): void {
     this.authService.login({ email, password }).subscribe(
-      response => {
+      (response) => {
         const nombre = response.nombre;
         const role = response.role;
 
@@ -27,16 +26,13 @@ export class LoginComponent {
         localStorage.setItem('rol', role);
         localStorage.setItem('token', response.token);
 
-        console.log('Token almacenado en localStorage:', response.token);
-        console.log('Nombre:', nombre);
-        console.log('Rol:', role);
         this.loginExitoso = true;
         setTimeout(() => {
           this.loginExitoso = false;
         }, 4000);
         this.router.navigate(['/home']);
       },
-      error => {
+      (error) => {
         console.error('Error al iniciar sesión:', error);
         this.loginFallido = true;
         setTimeout(() => {
@@ -64,8 +60,12 @@ export class LoginComponent {
       return;
     }
 
-    const emailInput = form.elements.namedItem('email') as HTMLInputElement | null;
-    const passwordInput = form.elements.namedItem('password') as HTMLInputElement | null;
+    const emailInput = form.elements.namedItem(
+      'email'
+    ) as HTMLInputElement | null;
+    const passwordInput = form.elements.namedItem(
+      'password'
+    ) as HTMLInputElement | null;
 
     if (emailInput && passwordInput) {
       const email = emailInput.value;

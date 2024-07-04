@@ -9,7 +9,7 @@ import { ModalDetalleInsumosComponent } from '../modal-detalle-insumos/modal-det
 @Component({
   selector: 'app-modal-detalle-orden',
   templateUrl: './modal-detalle-orden.component.html',
-  styleUrls: ['./modal-detalle-orden.component.scss']
+  styleUrls: ['./modal-detalle-orden.component.scss'],
 })
 export class ModalDetalleOrdenComponent {
   @Output() ordenesActualizadas: EventEmitter<void> = new EventEmitter<void>();
@@ -24,20 +24,19 @@ export class ModalDetalleOrdenComponent {
     private ordenesPanaderoSvc: OrdenesPanaderoService,
     private pedidoSvc: PedidoService
   ) {
-    this.pedidosOrden$ = this.ordenesPanaderoSvc.pedidosOrden$;  }
+    this.pedidosOrden$ = this.ordenesPanaderoSvc.pedidosOrden$;
+  }
 
   ngOnInit(): void {
     this.obtenerPedidosOrden();
-    this.pedidosOrden$.subscribe((data) => {
-      console.log('Pedidos Orden: ', data);
-    });
+    this.pedidosOrden$.subscribe((data) => {});
   }
 
- 
   async obtenerPedidosOrden(): Promise<void> {
     try {
-      const data = await this.ordenesPanaderoSvc.obtenerpedidosOrden(this.idOrden);
-      console.log('Pedidos obtenidos: ', data);
+      const data = await this.ordenesPanaderoSvc.obtenerpedidosOrden(
+        this.idOrden
+      );
     } catch (error) {
       console.error('Error al obtener pedidos:', error);
     }
@@ -46,19 +45,22 @@ export class ModalDetalleOrdenComponent {
   actualizarEstado(idPedido: number) {
     this.pedidoSvc.getPedidoById(idPedido).subscribe({
       next: (data) => {
-        console.log('DATA: ', data);
         this.pedidoSvc.actualizarPedidoEstado(data.id).subscribe({
           next: () => {
-            this.ordenesPanaderoSvc.actualizarEstadoOrden(this.idOrden).subscribe({
-              next: (response) => {
-                console.log('Respuesta de actualizarEstadoOrden:', response);
-                this.obtenerPedidosOrden(); 
-                this.mostrarMensajeExito2();
-              },
-              error: (error) => {
-                console.error('Error al actualizar el estado de la orden:', error);
-              }
-            });
+            this.ordenesPanaderoSvc
+              .actualizarEstadoOrden(this.idOrden)
+              .subscribe({
+                next: (response) => {
+                  this.obtenerPedidosOrden();
+                  this.mostrarMensajeExito2();
+                },
+                error: (error) => {
+                  console.error(
+                    'Error al actualizar el estado de la orden:',
+                    error
+                  );
+                },
+              });
           },
           error: (error) => {
             console.error('Error al actualizar el estado del pedido:', error);
@@ -70,24 +72,25 @@ export class ModalDetalleOrdenComponent {
       },
     });
   }
-  
+
   cerrarModal() {
     this.mostrar = false;
-    this.ordenesActualizadas.emit(); 
+    this.ordenesActualizadas.emit();
   }
 
   verDetalle(idPedido: number) {
     this.router.navigate(['/insumos-pedido', idPedido]);
   }
 
-  @ViewChild(ModalDetalleInsumosComponent) crearProductoModal2!: ModalDetalleInsumosComponent;
+  @ViewChild(ModalDetalleInsumosComponent)
+  crearProductoModal2!: ModalDetalleInsumosComponent;
 
   openModalCreacion2(idOrden: number) {
     if (this.crearProductoModal2) {
       this.crearProductoModal2.open(idOrden);
       this.crearProductoModal2.ordenesActualizadas2.subscribe(() => {
-       // this.actualizarTabla();
-     });
+        // this.actualizarTabla();
+      });
     } else {
       console.error('El modal aún no está disponible.');
     }

@@ -40,7 +40,6 @@ export class OrdenesPanaderoService {
       const ordenes = await lastValueFrom(
         this.ordenesSvc.getOrdenCompraByPanaderoId()
       );
-      console.log('ORDENES: ', ordenes);
       this.miListaOrdenes = ordenes;
       this.misOrdens.next(this.miListaOrdenes);
     } catch (error) {
@@ -120,7 +119,6 @@ export class OrdenesPanaderoService {
       const pedidos = await lastValueFrom(
         this.pedidosSvc.getPedidosPanaderoByOrdenId(idOrden)
       );
-      console.log('Pedidos: ', pedidos);
       this.listaPedidosOrden = pedidos;
       this.pedidosOrden.next(this.listaPedidosOrden);
     } catch (error) {
@@ -138,11 +136,10 @@ export class OrdenesPanaderoService {
   //Obtener insumos de pedido
   async obtenerInsumosPedido(idPedido: number) {
     try {
-      console.log('Llega a aca');
+
       const insumos = await lastValueFrom(
         this.pedidosSvc.getInsumosByPedidoId(idPedido)
       );
-      console.log('Insumos: ',insumos);
       this.listaInsumosPedido = insumos;
       this.insumosPedido.next(this.listaInsumosPedido);
     } catch (error) {
@@ -186,7 +183,6 @@ export class OrdenesPanaderoService {
       const totalInsumos = await lastValueFrom(
         this.pedidosSvc.getInsumosTotalesPanadero()
       );
-      console.log('Insumos: ', totalInsumos);
       this.listaTotalInsumos = totalInsumos;
       this.totalInsumos.next(this.listaTotalInsumos);
     } catch (error) {

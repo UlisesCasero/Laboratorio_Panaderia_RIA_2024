@@ -43,7 +43,6 @@ export class ModalCrearUserComponent {
       };
       this.servicioService.registro(registroData).subscribe(
         (response) => {
-          console.log('Respuesta del servidor:', response);
           if (response.userExists) {
             this.existeUsuario = true;
             setTimeout(() => {

@@ -10,7 +10,7 @@ import { ModalDetalleOrdenComponent } from '../modal-detalle-orden/modal-detalle
 @Component({
   selector: 'app-ordenes-no-asignadas',
   templateUrl: './ordenes-no-asignadas.component.html',
-  styleUrls: ['./ordenes-no-asignadas.component.scss']
+  styleUrls: ['./ordenes-no-asignadas.component.scss'],
 })
 export class OrdenesNoAsignadasComponent implements OnInit {
   ordenesSinAsignar$: Observable<OrdenVista[]>;
@@ -22,8 +22,11 @@ export class OrdenesNoAsignadasComponent implements OnInit {
   ordenAscendente: boolean = true;
   filtroFecha: string = '';
   ordenesOriginales: OrdenVista[] = [];
-  
-  constructor(private router: Router, private ordenesPanaderoSvc: OrdenesPanaderoService) {
+
+  constructor(
+    private router: Router,
+    private ordenesPanaderoSvc: OrdenesPanaderoService
+  ) {
     this.ordenesSinAsignar$ = this.ordenesPanaderoSvc.ordenSinAsignar$;
   }
 
@@ -33,7 +36,6 @@ export class OrdenesNoAsignadasComponent implements OnInit {
       this.ordenes = data;
       this.ordenesOriginales = data;
     });
-
   }
 
   aplicarFiltroFecha() {
@@ -41,15 +43,12 @@ export class OrdenesNoAsignadasComponent implements OnInit {
       const fechaSeleccionada = new Date(this.filtroFecha);
       const filtroFormateado = fechaSeleccionada.toISOString().split('T')[0];
 
-      this.ordenesOriginales = this.ordenes.filter(orden => {
+      this.ordenesOriginales = this.ordenes.filter((orden) => {
         const fechaOrden = orden.fecha_entrega.split('T')[0];
 
-        console.log('fecha', fechaOrden === filtroFormateado);
         return fechaOrden === filtroFormateado;
       });
-      console.log('fecha2', this.ordenesOriginales);
       this.ordenesOriginales = this.ordenes;
-
     } else {
       this.ordenesOriginales = this.ordenes;
     }
@@ -59,9 +58,15 @@ export class OrdenesNoAsignadasComponent implements OnInit {
     if (this.ordenes) {
       this.ordenes.sort((a, b) => {
         if (this.ordenAscendente) {
-          return new Date(a.fecha_entrega).getTime() - new Date(b.fecha_entrega).getTime();
+          return (
+            new Date(a.fecha_entrega).getTime() -
+            new Date(b.fecha_entrega).getTime()
+          );
         } else {
-          return new Date(b.fecha_entrega).getTime() - new Date(a.fecha_entrega).getTime();
+          return (
+            new Date(b.fecha_entrega).getTime() -
+            new Date(a.fecha_entrega).getTime()
+          );
         }
       });
       this.ordenAscendente = !this.ordenAscendente;
@@ -80,14 +85,15 @@ export class OrdenesNoAsignadasComponent implements OnInit {
       },
       error: (error) => {
         console.error(error);
-      }
+      },
     });
   }
 
   mostrarMensaje() {
     this.mostrarConfirmacion = true;
   }
-  @ViewChild(ModalDetalleOrdenComponent) crearProductoModal!: ModalDetalleOrdenComponent;
+  @ViewChild(ModalDetalleOrdenComponent)
+  crearProductoModal!: ModalDetalleOrdenComponent;
 
   openModalCreacion(idOrden: number) {
     if (this.crearProductoModal) {
@@ -103,7 +109,7 @@ export class OrdenesNoAsignadasComponent implements OnInit {
 
   verDetalle(idOrden: number, origen: string) {
     this.router.navigate(['/pedidos-orden', idOrden], {
-      queryParams: { origen: origen }
+      queryParams: { origen: origen },
     });
   }
 

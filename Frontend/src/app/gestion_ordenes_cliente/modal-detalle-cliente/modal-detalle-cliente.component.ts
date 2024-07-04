@@ -5,7 +5,7 @@ import { PedidoService } from 'src/services/pedido.service';
 @Component({
   selector: 'app-modal-detalle-cliente',
   templateUrl: './modal-detalle-cliente.component.html',
-  styleUrls: ['./modal-detalle-cliente.component.scss']
+  styleUrls: ['./modal-detalle-cliente.component.scss'],
 })
 export class ModalDetalleClienteComponent implements OnInit {
   public pedidos: PedidoOrden[] = [];
@@ -13,7 +13,7 @@ export class ModalDetalleClienteComponent implements OnInit {
   orderId!: number;
   @Input() id!: number;
 
-  constructor(private pedidosSvc: PedidoService) { }
+  constructor(private pedidosSvc: PedidoService) {}
 
   ngOnInit(): void {
     this.obtenerpedidosOrden(this.id);
@@ -23,11 +23,10 @@ export class ModalDetalleClienteComponent implements OnInit {
     this.pedidosSvc.getPedidosByOrdenId(id).subscribe({
       next: (data) => {
         this.pedidos = data;
-        console.log('Ordenes cargadas:', this.pedidos);
       },
       error: (error) => {
         console.error('Error al cargar la orden:', error);
-      }
+      },
     });
   }
 
@@ -37,7 +36,6 @@ export class ModalDetalleClienteComponent implements OnInit {
 
   open(id: number) {
     this.isVisible = true;
-    console.log('id', id);
     this.orderId = id;
     this.obtenerpedidosOrden(id);
   }

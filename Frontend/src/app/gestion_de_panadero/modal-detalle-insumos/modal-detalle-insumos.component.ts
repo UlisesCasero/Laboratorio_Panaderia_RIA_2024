@@ -7,7 +7,7 @@ import { OrdenesPanaderoService } from 'src/services/ordenes-panadero.service';
 @Component({
   selector: 'app-modal-detalle-insumos',
   templateUrl: './modal-detalle-insumos.component.html',
-  styleUrls: ['./modal-detalle-insumos.component.scss']
+  styleUrls: ['./modal-detalle-insumos.component.scss'],
 })
 export class ModalDetalleInsumosComponent implements OnInit {
   insumosPedido$: Observable<InsumoPedido[]>;
@@ -22,17 +22,15 @@ export class ModalDetalleInsumosComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.insumosPedido$.subscribe((data) => {
-      console.log('Insumos pedido: ', data);
-    });
+    this.insumosPedido$.subscribe((data) => {});
   }
 
   async obtenerInsumosPedidos(): Promise<void> {
     if (this.idOrden !== null) {
-      console.log('ID: ', this.idOrden);
       try {
-        const data = await this.ordenesPanaderoSvc.obtenerInsumosPedido(this.idOrden);
-        console.log('Insumos obtenidos: ', data);
+        const data = await this.ordenesPanaderoSvc.obtenerInsumosPedido(
+          this.idOrden
+        );
       } catch (error) {
         console.error('Error al obtener insumos:', error);
       }

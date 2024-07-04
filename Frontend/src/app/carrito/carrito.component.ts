@@ -27,9 +27,7 @@ export class CarritoComponent implements OnInit {
 
   comprobarCarrito() {
     this.miCarrito$.pipe(take(1)).subscribe((data) => {
-      console.log(data.length);
       this.hayProductos = data.length > 0;
-      console.log(this.hayProductos);
     });
   }
 
@@ -47,12 +45,10 @@ export class CarritoComponent implements OnInit {
   ngOnInit(): void {
     this.carritoSub = this.miCarrito$.subscribe((data) => {
       this.hayProductos = data.length > 0;
-      //console.log('Productos en el carrito:', data);
     });
     this.service.obtenerUsuarioPorId().subscribe(
       (usuario) => {
         this.emailUsuario = usuario.email;
-        //console.log('Emaaaaaaaaaaaail', this.emailUsuario);
       },
       (error) => {
         console.error('Error al obtener el usuario', error);
@@ -95,7 +91,6 @@ export class CarritoComponent implements OnInit {
   }
 
   crearPedido(producto: ProductoCarrito, idOrden: number) {
-    console.log('Producto para pedido: ', producto);
     const nuevoPedido = new Pedido(
       null!,
       producto.id,
@@ -103,12 +98,8 @@ export class CarritoComponent implements OnInit {
       producto.cantidad,
       estadoPedido.PENDIENTE
     );
-
-    console.log('El pedido genereado: ', nuevoPedido);
     this.pedidoSvc.postPedido(nuevoPedido).subscribe(
-      (response) => {
-        //console.log('Pedido creado:', response);
-      },
+      (response) => {},
       (error) => console.error('Error al crear la orden:', error)
     );
   }
@@ -155,8 +146,7 @@ export class CarritoComponent implements OnInit {
             setTimeout(() => {
               this.mensajeConfirmacion = 'Vaciando Carrito.....!';
             }, 2000);
-            setTimeout(() => {
-            }, 1000);
+            setTimeout(() => {}, 1000);
           },
           (error) => console.error('Error al crear la orden:', error)
         );
@@ -168,12 +158,12 @@ export class CarritoComponent implements OnInit {
     }
   }
 
-  vaciarCarrito(){
+  vaciarCarrito() {
     this.carritoSvc.vaciarCarrito();
     this.fechaEntrega = '';
   }
-  
-  cancelarCarrito(){
+
+  cancelarCarrito() {
     this.vaciarCarrito();
     this.router.navigate(['/home']);
   }

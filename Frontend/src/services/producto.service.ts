@@ -1,12 +1,23 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { Observable, catchError, forkJoin, map, switchMap, throwError } from 'rxjs';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpHeaders,
+} from '@angular/common/http';
+import {
+  Observable,
+  catchError,
+  forkJoin,
+  map,
+  switchMap,
+  throwError,
+} from 'rxjs';
 import { Producto } from 'src/models/producto';
 import { ProductoCarrito } from 'src/models/productoCarrito';
 import { Insumo, InsumoP } from 'src/models/insumo';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ProductoService {
   private baseUrl = 'http://localhost:3000';
@@ -17,9 +28,12 @@ export class ProductoService {
   getImageUrl(imageName: string): string {
     return `${this.baseUrl}/uploads/${imageName}`;
   }
-  constructor(private http: HttpClient) { }
-  
-  eliminarInsumoDeProducto(idProducto: number, idInsumo: number): Observable<any> {
+  constructor(private http: HttpClient) {}
+
+  eliminarInsumoDeProducto(
+    idProducto: number,
+    idInsumo: number
+  ): Observable<any> {
     const url = `${this.apiUrlProductoInsumo}/${idProducto}/${idInsumo}`;
     return this.http.delete(url);
   }
@@ -33,13 +47,14 @@ export class ProductoService {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        'Authorization': 'bearer ' + token
-      })
+        Authorization: 'bearer ' + token,
+      }),
     };
 
-    return this.http.get<Producto[]>('http://localhost:3000/productos/', httpOptions)
+    return this.http
+      .get<Producto[]>('http://localhost:3000/productos/', httpOptions)
       .pipe(
-        catchError(error => {
+        catchError((error) => {
           return throwError(error);
         })
       );
@@ -54,13 +69,14 @@ export class ProductoService {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        'Authorization': 'bearer ' + token
-      })
+        Authorization: 'bearer ' + token,
+      }),
     };
 
-    return this.http.get<ProductoCarrito[]>('http://localhost:3000/productos/', httpOptions)
+    return this.http
+      .get<ProductoCarrito[]>('http://localhost:3000/productos/', httpOptions)
       .pipe(
-        catchError(error => {
+        catchError((error) => {
           return throwError(error);
         })
       );
@@ -75,19 +91,19 @@ export class ProductoService {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        'Authorization': 'bearer ' + token
-      })
+        Authorization: 'bearer ' + token,
+      }),
     };
 
     const url = `http://localhost:3000/productos/${productoId}`;
-    return this.http.get<any>(url, httpOptions)
-      .pipe(
-        catchError(error => {
-          return throwError(error);
-        })
-      );
+    return this.http.get<any>(url, httpOptions).pipe(
+      catchError((error) => {
+        return throwError(error);
+      })
+    );
   }
-  private cloudinaryUrl = 'https://api.cloudinary.com/v1_1/dv9jvsqhr/image/upload'; // Reemplaza TU_CLOUD_NAME con tu nombre de cloud
+  private cloudinaryUrl =
+    'https://api.cloudinary.com/v1_1/dv9jvsqhr/image/upload'; // Reemplaza TU_CLOUD_NAME con tu nombre de cloud
 
   subirImagen(imagen: FormData): Observable<any> {
     const preset = 'dv9jvsqhr'; // Reemplaza TU_UPLOAD_PRESET con tu upload preset
@@ -104,16 +120,15 @@ export class ProductoService {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        'Authorization': token
-      })
+        Authorization: token,
+      }),
     };
 
-    return this.http.post<any>(this.apiUrl, producto, httpOptions)
-      .pipe(
-        catchError(error => {
-          return throwError(error);
-        })
-      );
+    return this.http.post<any>(this.apiUrl, producto, httpOptions).pipe(
+      catchError((error) => {
+        return throwError(error);
+      })
+    );
   }
 
   delteProducto(productoId: number) {
@@ -125,21 +140,22 @@ export class ProductoService {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        'Authorization': 'bearer ' + token
-      })
+        Authorization: 'bearer ' + token,
+      }),
     };
 
     const url = `http://localhost:3000/productos/${productoId}`;
-    return this.http.delete<any>(url, httpOptions)
-      .pipe(
-        catchError((error: HttpErrorResponse) => {
-          if (error.status === 400) {
-            return throwError(error.error.message || 'Error al eliminar el producto');
-          } else {
-            return throwError('Error del servidor');
-          }
-        })
-      );
+    return this.http.delete<any>(url, httpOptions).pipe(
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 400) {
+          return throwError(
+            error.error.message || 'Error al eliminar el producto'
+          );
+        } else {
+          return throwError('Error del servidor');
+        }
+      })
+    );
   }
 
   putProducto(productoModificado: Producto) {
@@ -151,17 +167,16 @@ export class ProductoService {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        'Authorization': 'bearer ' + token
-      })
+        Authorization: 'bearer ' + token,
+      }),
     };
 
     const url = `http://localhost:3000/productos/${productoModificado.id}`;
-    return this.http.put<Producto>(url, productoModificado, httpOptions)
-      .pipe(
-        catchError(error => {
-          return throwError(error);
-        })
-      );
+    return this.http.put<Producto>(url, productoModificado, httpOptions).pipe(
+      catchError((error) => {
+        return throwError(error);
+      })
+    );
   }
 
   getInsumos2(): Observable<Insumo[]> {
@@ -172,16 +187,17 @@ export class ProductoService {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        'Authorization': 'bearer ' + token
-      })
+        Authorization: 'bearer ' + token,
+      }),
     };
     // Suponiendo que la URL para obtener los insumos es '/api/insumos'
-    return this.http.get<Insumo[]>('http://localhost:3000/insumos/', httpOptions)
-    .pipe(
-      catchError(error => {
-        return throwError(error);
-      })
-    );
+    return this.http
+      .get<Insumo[]>('http://localhost:3000/insumos/', httpOptions)
+      .pipe(
+        catchError((error) => {
+          return throwError(error);
+        })
+      );
   }
 
   getInsumos(): Observable<Insumo> {
@@ -193,13 +209,14 @@ export class ProductoService {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        'Authorization': 'bearer ' + token
-      })
+        Authorization: 'bearer ' + token,
+      }),
     };
 
-    return this.http.get<Insumo>('http://localhost:3000/insumos/', httpOptions)
+    return this.http
+      .get<Insumo>('http://localhost:3000/insumos/', httpOptions)
       .pipe(
-        catchError(error => {
+        catchError((error) => {
           return throwError(error);
         })
       );
@@ -214,16 +231,15 @@ export class ProductoService {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        'Authorization': 'bearer ' + token
-      })
+        Authorization: 'bearer ' + token,
+      }),
     };
 
-    return this.http.get<Insumo[]>(this.apiUrlInsumo, httpOptions)
-      .pipe(
-        catchError(error => {
-          return throwError(error);
-        })
-      );
+    return this.http.get<Insumo[]>(this.apiUrlInsumo, httpOptions).pipe(
+      catchError((error) => {
+        return throwError(error);
+      })
+    );
   }
 
   postInsumo(producto: Insumo): Observable<any> {
@@ -235,19 +251,24 @@ export class ProductoService {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        'Authorization': token
-      })
+        Authorization: token,
+      }),
     };
 
-    return this.http.post<any>(this.apiUrlInsumo, producto, httpOptions)
-      .pipe(
-        catchError(error => {
-          return throwError(error);
-        })
-      );
+    return this.http.post<any>(this.apiUrlInsumo, producto, httpOptions).pipe(
+      catchError((error) => {
+        return throwError(error);
+      })
+    );
   }
 
-  postProductoConInsumos(insumosSeleccionados: { idProducto: number, idInsumo: number, cantidad: number }[]): Observable<any> {
+  postProductoConInsumos(
+    insumosSeleccionados: {
+      idProducto: number;
+      idInsumo: number;
+      cantidad: number;
+    }[]
+  ): Observable<any> {
     const token = localStorage.getItem('token');
     if (!token) {
       return throwError('No hay token almacenado');
@@ -256,21 +277,28 @@ export class ProductoService {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        'Authorization': `bearer ${token}`
-      })
+        Authorization: `bearer ${token}`,
+      }),
     };
 
-    const observables: Observable<any>[] = insumosSeleccionados.map(insumo => {
-      const { idProducto, idInsumo, cantidad } = insumo;
-      console.log(`Enviando: ID Producto ${idProducto}, ID Insumo ${idInsumo}, Cantidad ${cantidad}`);
+    const observables: Observable<any>[] = insumosSeleccionados.map(
+      (insumo) => {
+        const { idProducto, idInsumo, cantidad } = insumo;
 
-      return this.http.post<any>(`${this.baseUrl}/productoInsumo/`, { idProducto, idInsumo, cantidad }, httpOptions).pipe(
-        catchError(error => {
-          console.error('Error al enviar insumo:', error);
-          return throwError(error);
-        })
-      );
-    });
+        return this.http
+          .post<any>(
+            `${this.baseUrl}/productoInsumo/`,
+            { idProducto, idInsumo, cantidad },
+            httpOptions
+          )
+          .pipe(
+            catchError((error) => {
+              console.error('Error al enviar insumo:', error);
+              return throwError(error);
+            })
+          );
+      }
+    );
 
     return forkJoin(observables);
   }
@@ -289,33 +317,35 @@ export class ProductoService {
 
     const url = `${this.apiUrlProductoInsumo}${idProducto}`;
     return this.http.get<InsumoP[]>(url, httpOptions).pipe(
-      catchError(error => {
+      catchError((error) => {
         return throwError(error);
       })
     );
   }
 
   getInsumosForProductos(productos: any[]): Observable<InsumoP[][]> {
-    const requests = productos.map(producto => this.getInsumosIdsByProductoId2(producto.id));
+    const requests = productos.map((producto) =>
+      this.getInsumosIdsByProductoId2(producto.id)
+    );
     return forkJoin(requests);
   }
-  
+
   getInsumosIdsByProductoId(idProducto: number): Observable<number[]> {
     const token = localStorage.getItem('token');
     if (!token) {
       return throwError('No hay token almacenado');
     }
-  
+
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
         Authorization: 'bearer ' + token,
       }),
     };
-  
+
     const url = `${this.apiUrlProductoInsumo}${idProducto}`;
     return this.http.get<{ idInsumo: number }[]>(url, httpOptions).pipe(
-      map(response => response.map(item => item.idInsumo)), // Extraer solo los idInsumo del arreglo de objetos
+      map((response) => response.map((item) => item.idInsumo)), // Extraer solo los idInsumo del arreglo de objetos
       catchError((error) => {
         return throwError(error);
       })
@@ -335,14 +365,21 @@ export class ProductoService {
     };
 
     const url = `${this.apiUrlProductoInsumo}${idProducto}`;
-    return this.http.get<{ idProducto: number, idInsumo: number, cantidad: number }[]>(url, httpOptions).pipe(
-      map(response => {
-        return response.map(item => new InsumoP(item.idInsumo, '', item.cantidad)); // Ajusta según tu modelo InsumoP
-      }),
-      catchError(error => {
-        return throwError(error);
-      })
-    );
+    return this.http
+      .get<{ idProducto: number; idInsumo: number; cantidad: number }[]>(
+        url,
+        httpOptions
+      )
+      .pipe(
+        map((response) => {
+          return response.map(
+            (item) => new InsumoP(item.idInsumo, '', item.cantidad)
+          ); // Ajusta según tu modelo InsumoP
+        }),
+        catchError((error) => {
+          return throwError(error);
+        })
+      );
   }
   getDescripcionInsumoById(idInsumo: number): Observable<string> {
     const token = localStorage.getItem('token');
@@ -367,13 +404,20 @@ export class ProductoService {
     );
   }
 
-  getInsumosYDescripciones(idProducto: number): Observable<{ id: number, nombre: string }[]> {
+  getInsumosYDescripciones(
+    idProducto: number
+  ): Observable<{ id: number; nombre: string }[]> {
     return this.getInsumosIdsByProductoId(idProducto).pipe(
       switchMap((idsInsumos) => {
-        const requests: Observable<string>[] = idsInsumos.map(id => this.getDescripcionInsumoById(id));
+        const requests: Observable<string>[] = idsInsumos.map((id) =>
+          this.getDescripcionInsumoById(id)
+        );
         return forkJoin(requests).pipe(
           map((descripciones: string[]) => {
-            return idsInsumos.map((idInsumo, index) => ({ id: idInsumo, nombre: descripciones[index] }));
+            return idsInsumos.map((idInsumo, index) => ({
+              id: idInsumo,
+              nombre: descripciones[index],
+            }));
           }),
           catchError((error) => {
             return throwError(error);
@@ -387,36 +431,47 @@ export class ProductoService {
   }
 
   deleteInsumo(insumoId: number): Observable<any> {
-    const headers = new HttpHeaders().set('Authorization', 'bearer ' + localStorage.getItem('token')); 
-    return this.http.delete<any>(`${this.apiUrlInsumos}${insumoId}`, { headers }).pipe(
-      catchError(this.handleError)
+    const headers = new HttpHeaders().set(
+      'Authorization',
+      'bearer ' + localStorage.getItem('token')
     );
+    return this.http
+      .delete<any>(`${this.apiUrlInsumos}${insumoId}`, { headers })
+      .pipe(catchError(this.handleError));
   }
 
   putInsumo(insumoId: number, insumo: Insumo): Observable<any> {
-    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + localStorage.getItem('token')); // Ajusta según tu método de autenticación
-    return this.http.put<any>(`${this.apiUrlInsumos}${insumoId}`, insumo, { headers }).pipe(
-      catchError(this.handleError)
-    );
+    const headers = new HttpHeaders().set(
+      'Authorization',
+      'Bearer ' + localStorage.getItem('token')
+    ); // Ajusta según tu método de autenticación
+    return this.http
+      .put<any>(`${this.apiUrlInsumos}${insumoId}`, insumo, { headers })
+      .pipe(catchError(this.handleError));
   }
 
   private handleError(error: any) {
     console.error('API Error:', error);
-    return throwError('Error de la API. Por favor, inténtalo nuevamente más tarde.');
+    return throwError(
+      'Error de la API. Por favor, inténtalo nuevamente más tarde.'
+    );
   }
 
-  eliminarProductoInsumo(idProducto: number, idInsumo: number): Observable<any> {
+  eliminarProductoInsumo(
+    idProducto: number,
+    idInsumo: number
+  ): Observable<any> {
     const url = `${this.apiUrlProductoInsumo}/${idProducto}/${idInsumo}`;
     const token = localStorage.getItem('token');
-    
+
     if (!token) {
       return throwError('No hay token almacenado');
     }
-    
+
     const headers = new HttpHeaders({
-      'Authorization': `bearer ${token}`
+      Authorization: `bearer ${token}`,
     });
-    
+
     return this.http.delete(url, { headers });
   }
 }

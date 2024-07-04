@@ -6,7 +6,7 @@ import { ServiciosService } from 'src/services/servicios.service';
 @Component({
   selector: 'app-perfil-cliente',
   templateUrl: './perfil-cliente.component.html',
-  styleUrls: ['./perfil-cliente.component.scss']
+  styleUrls: ['./perfil-cliente.component.scss'],
 })
 export class PerfilClienteComponent implements OnInit {
   usuario = {
@@ -22,18 +22,20 @@ export class PerfilClienteComponent implements OnInit {
   confirmPassword: string = '';
   notification = { message: '', type: '' };
 
-  constructor(private router: Router, private serviciosService: ServiciosService) {
-
-  }
+  constructor(
+    private router: Router,
+    private serviciosService: ServiciosService
+  ) {}
 
   ngOnInit(): void {
     const userIdString = localStorage.getItem('userId');
 
     if (userIdString) {
       this.userId = parseInt(userIdString, 10);
-      console.log(this.userId);
     } else {
-      console.error('No se encontró userId en el localStorage o es null/undefined.');
+      console.error(
+        'No se encontró userId en el localStorage o es null/undefined.'
+      );
     }
 
     if (this.userId !== undefined) {
@@ -46,7 +48,6 @@ export class PerfilClienteComponent implements OnInit {
       (response: any) => {
         this.usuario.email = response.email;
         this.usuario.telefono = response.telefono;
-        console.log('fdsfsfsf', response);
       },
       (error: any) => {
         console.error('Error al obtener usuario por ID:', error);
@@ -92,18 +93,21 @@ export class PerfilClienteComponent implements OnInit {
       this.usuario.telefono = this.newTelefono;
       setTimeout(() => {
         this.usuario.telefono = this.newTelefono;
-        this.notification = { message: 'Teléfono actualizado correctamente', type: 'bg-green-500 text-white' };
+        this.notification = {
+          message: 'Teléfono actualizado correctamente',
+          type: 'bg-green-500 text-white',
+        };
         this.closeChangeTelefonoModal();
       }, 1000);
       this.clearNotification();
-      this.serviciosService.actualizarUsuario(Number(this.userId), this.usuario).subscribe(
-        response => {
-          console.log('Usuario actualizado correctamente:', response);
-        },
-        error => {
-          console.error('Error al actualizar usuario:', error);
-        }
-      );
+      this.serviciosService
+        .actualizarUsuario(Number(this.userId), this.usuario)
+        .subscribe(
+          (response) => {},
+          (error) => {
+            console.error('Error al actualizar usuario:', error);
+          }
+        );
     }
     this.closeChangeTelefonoModal();
   }
@@ -111,28 +115,34 @@ export class PerfilClienteComponent implements OnInit {
   submitChangePassword() {
     if (this.newPassword === this.confirmPassword) {
       setTimeout(() => {
-        this.notification = { message: 'Contraseña actualizada correctamente', type: 'bg-green-500 text-white' };
+        this.notification = {
+          message: 'Contraseña actualizada correctamente',
+          type: 'bg-green-500 text-white',
+        };
         this.closeChangePasswordModal();
       }, 1000);
     } else {
-      this.notification = { message: 'Las contraseñas no coinciden', type: 'bg-red-500 text-white' };
+      this.notification = {
+        message: 'Las contraseñas no coinciden',
+        type: 'bg-red-500 text-white',
+      };
     }
     this.clearNotification();
 
     const userId = localStorage.getItem('userId');
     if (userId) {
       this.usuario.password = this.newPassword;
-      this.serviciosService.actualizarUsuario(Number(userId), this.usuario).subscribe(
-        response => {
-          console.log('Usuario actualizado correctamente:', response);
-        },
-        error => {
-          console.error('Error al actualizar usuario:', error);
-          setTimeout(() => {
-            this.logout();
-          }, 4000);
-        }
-      );
+      this.serviciosService
+        .actualizarUsuario(Number(userId), this.usuario)
+        .subscribe(
+          (response) => {},
+          (error) => {
+            console.error('Error al actualizar usuario:', error);
+            setTimeout(() => {
+              this.logout();
+            }, 4000);
+          }
+        );
     }
 
     this.closeChangePasswordModal();
@@ -143,10 +153,11 @@ export class PerfilClienteComponent implements OnInit {
     }, 5000);
   }
   logout() {
-
     setTimeout(() => {
-      console.log('Usuario ha cerrado sesión');
-      this.notification = { message: 'Sesión cerrada correctamente', type: 'bg-green-500 text-white' };
+      this.notification = {
+        message: 'Sesión cerrada correctamente',
+        type: 'bg-green-500 text-white',
+      };
     }, 4000);
     this.clearNotification();
     localStorage.removeItem('token');
