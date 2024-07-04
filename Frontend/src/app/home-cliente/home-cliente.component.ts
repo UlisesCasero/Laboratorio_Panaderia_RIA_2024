@@ -8,7 +8,7 @@ import { Subscription, take } from 'rxjs';
 @Component({
   selector: 'app-home-cliente',
   templateUrl: './home-cliente.component.html',
-  styleUrls: ['./home-cliente.component.scss']
+  styleUrls: ['./home-cliente.component.scss'],
 })
 export class HomeClienteComponent {
   productos: ProductoCarrito[] = [];
@@ -16,8 +16,12 @@ export class HomeClienteComponent {
   terminoBusqueda: string = '';
   notificationMessage: string = '';
   carritoSub!: Subscription;
-  
-  constructor(private serviciosService: ServiciosService, private carritoSvc: CarritoService, private productosSvc: ProductoService) { }
+
+  constructor(
+    private serviciosService: ServiciosService,
+    private carritoSvc: CarritoService,
+    private productosSvc: ProductoService
+  ) {}
 
   ngOnInit(): void {
     this.obtenerProductos();
@@ -33,24 +37,25 @@ export class HomeClienteComponent {
   }
 
   obtenerProductos() {
-    this.productosSvc.getProductosCarrito().subscribe(
-      (data) => {
-        this.productos = data;
-        this.productosFiltrados = this.productos;
-        this.carritoSvc.miCarrito$.pipe(take(1)).subscribe(carrito => {
-          this.actualizarCantidades(carrito);
-        });
-      },
-      (error) => {
-        console.error('Error al obtener productos:', error);
-      }
-    );
+    if (localStorage.getItem('rol') === 'USER') {
+      this.productosSvc.getProductosCarrito().subscribe(
+        (data) => {
+          this.productos = data;
+          this.productosFiltrados = this.productos;
+          this.carritoSvc.miCarrito$.pipe(take(1)).subscribe((carrito) => {
+            this.actualizarCantidades(carrito);
+          });
+        },
+        (error) => {
+          console.error('Error al obtener productos:', error);
+        }
+      );
+    }
   }
-
 
   actualizarCantidades(carrito: ProductoCarrito[]) {
     this.productos.forEach((producto) => {
-      const productoEnCarrito = carrito.find(p => p.id === producto.id);
+      const productoEnCarrito = carrito.find((p) => p.id === producto.id);
       if (productoEnCarrito) {
         producto.cantidad = productoEnCarrito.cantidad;
       } else {
@@ -68,7 +73,7 @@ export class HomeClienteComponent {
     }, 500);
     this.carritoSvc.addProducto(producto);
   }
-  
+
   serverBaseUrl = 'http://localhost:3000/uploads/';
 
   getImageUrl(imageName: string | null | ArrayBuffer): string {
@@ -103,13 +108,15 @@ export class HomeClienteComponent {
   }
 
   filtrarProductos(): void {
-    const nombresProductos = this.productos.map(producto => producto.nombre.toLowerCase());
+    const nombresProductos = this.productos.map((producto) =>
+      producto.nombre.toLowerCase()
+    );
     const termino = this.terminoBusqueda.toLowerCase().trim();
     if (termino === '') {
       this.productosFiltrados = [...this.productos];
     } else {
-      this.productosFiltrados = this.productos.filter((productos, index) =>
-        nombresProductos[index].includes(termino),
+      this.productosFiltrados = this.productos.filter(
+        (productos, index) => nombresProductos[index].includes(termino),
         console.log('aaadsdf', this.productosFiltrados)
       );
     }

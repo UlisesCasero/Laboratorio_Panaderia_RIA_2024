@@ -47,23 +47,12 @@ export class OrdenesAdminService {
 
   //Obtener Ordenes de compra
   async obtenerOrdenesAdmin() {
-    console.log('VIENE ACA getOrdenCompraAdmin 1 ');
-
     try {
-    console.log('VIENE ACA getOrdenCompraAdmin 2 ');
-
       const ordenes = await lastValueFrom(
         this.getOrdenCompraAdmin()
       );
-    console.log('VIENE ACA getOrdenCompraAdmin 3 ');
-
-      console.log('Ordenes: ', ordenes);
       this.listaOrdenesAdmin = ordenes;
-    console.log('VIENE ACA getOrdenCompraAdmin 4 ');
-
       this.ordenesAdmin.next(this.listaOrdenesAdmin);
-    console.log('VIENE ACA getOrdenCompraAdmin 5 ');
-
     } catch (error) {
       console.error('Error al obtener insumos para el pedido:', error);
     }

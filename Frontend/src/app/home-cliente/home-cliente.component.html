@@ -12,7 +12,7 @@
         <h6 class="font-medium leading-6 truncate">{{ producto.nombre }}</h6>
         <h6 class="font-semibold leading-6 text-indigo-600">$ {{ producto.precio }}</h6>
       </div>
-      <div class="producto-actions flex justify-center mt-auto">
+      <div *ngIf="producto.cantidad < 1" class="producto-actions flex justify-center mt-auto">
         <button (click)="addCarrito(producto)"
           class="p-2 rounded-full bg-white border border-gray-300 flex items-center justify-center group shadow-sm transition-all duration-500 hover:shadow-gray-200 hover:border-gray-400 hover:bg-gray-50">
           <svg class="stroke-gray-900 transition-all duration-500 group-hover:stroke-black" xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23" fill="none">

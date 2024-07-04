@@ -1762,38 +1762,6 @@
         }
       }
     },
-    "/ordenesCompra/filtro-insumos-info/": {
-      "get": {
-        "tags": [
-          "Ordenes"
-        ],
-        "summary": "Obtiene la informacion necesaria para realizar filtros de insumos",
-        "description": "",
-        "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        },
-        "security": [
-          {
-            "BearerAuth": []
-          }
-        ]
-      }
-    },
     "/ordenesCompra/filtro-insumos-panadero/{id}": {
       "get": {
         "tags": [
@@ -1841,6 +1809,45 @@
         "summary": "Obtiene la informacion necesaria para realizar filtros de  para admin",
         "description": "",
         "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/ordenesCompra/ordenEntregada/{id}": {
+      "put": {
+        "tags": [
+          "Ordenes"
+        ],
+        "summary": "Mediante id de orden modifica el valor del campo entregada a true",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID orden"
+          },
           {
             "name": "authorization",
             "in": "header",

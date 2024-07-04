@@ -23,7 +23,7 @@ export class OrdenesNoAsignadasComponent implements OnInit {
   filtroFecha: string = '';
   ordenesOriginales: OrdenVista[] = [];
   
-  constructor(private router: Router, private ordenesSvc: OrdenCompraService, private ordenesPanaderoSvc: OrdenesPanaderoService) {
+  constructor(private router: Router, private ordenesPanaderoSvc: OrdenesPanaderoService) {
     this.ordenesSinAsignar$ = this.ordenesPanaderoSvc.ordenSinAsignar$;
   }
 

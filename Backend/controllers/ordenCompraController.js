@@ -8,14 +8,14 @@ const estadoPedido = require('../enums/estadoPedido');
 const { insumos } = require('./insumosController');
 
 const ordenes = [
-    { id: 1, idCliente: 5, total: 30, fecha_entrega: '2024-05-22', idPanadero: 3, estado: estadoOrden.PENDIENTE, asignada: true },
-    { id: 2, idCliente: 5, total: 100, fecha_entrega: '2024-06-02', idPanadero: 3, estado: estadoOrden.PENDIENTE, asignada: true },
-    { id: 3, idCliente: 5, total: 30, fecha_entrega: '2024-05-22', idPanadero: null, estado: estadoOrden.PENDIENTE, asignada: false },
-    { id: 4, idCliente: 5, total: 30, fecha_entrega: '2024-05-22', idPanadero: null, estado: estadoOrden.PENDIENTE, asignada: false },
-    { id: 5, idCliente: 5, total: 30, fecha_entrega: '2024-05-22', idPanadero: 3, estado: estadoOrden.PENDIENTE, asignada: true },
-    { id: 6, idCliente: 5, total: 30, fecha_entrega: '2024-07-05', idPanadero: 3, estado: estadoOrden.PENDIENTE, asignada: true },
-    { id: 7, idCliente: 5, total: 30, fecha_entrega: '2024-08-03', idPanadero: 3, estado: estadoOrden.PENDIENTE, asignada: true },
-    { id: 8, idCliente: 5, total: 30, fecha_entrega: '2024-07-01', idPanadero: 3, estado: estadoOrden.PENDIENTE, asignada: true }
+    { id: 1, idCliente: 5, total: 30, fecha_entrega: '2024-05-22', idPanadero: 3, estado: estadoOrden.PENDIENTE, asignada: true, entregada: false },
+    { id: 2, idCliente: 5, total: 100, fecha_entrega: '2024-06-02', idPanadero: 3, estado: estadoOrden.PENDIENTE, asignada: true, entregada: false },
+    { id: 3, idCliente: 5, total: 30, fecha_entrega: '2024-05-22', idPanadero: null, estado: estadoOrden.PENDIENTE, asignada: false, entregada: false },
+    { id: 4, idCliente: 5, total: 30, fecha_entrega: '2024-05-22', idPanadero: null, estado: estadoOrden.PENDIENTE, asignada: false, entregada: false },
+    { id: 5, idCliente: 5, total: 30, fecha_entrega: '2024-05-22', idPanadero: 3, estado: estadoOrden.PENDIENTE, asignada: true, entregada: false },
+    { id: 6, idCliente: 5, total: 30, fecha_entrega: '2024-07-05', idPanadero: 3, estado: estadoOrden.PENDIENTE, asignada: true, entregada: false },
+    { id: 7, idCliente: 5, total: 30, fecha_entrega: '2024-08-03', idPanadero: 3, estado: estadoOrden.PENDIENTE, asignada: true, entregada: false },
+    { id: 8, idCliente: 5, total: 30, fecha_entrega: '2024-07-01', idPanadero: 3, estado: estadoOrden.PENDIENTE, asignada: true, entregada: false }
 ];
 
 exports.ordenes = ordenes;
@@ -50,7 +50,7 @@ exports.getOrdenesCompraSinAsignar = (req, res) => {
 // Obtiene las oredenes para un cliente especifico
 exports.getOrdenCompraParaCliente = (req, res) => {
     const { id } = req.params;
-    const ordenesDelUsuario = ordenes.filter(o => o.idCliente == id);
+    const ordenesDelUsuario = ordenes.filter(o => o.idCliente == id && !o.entregada);
     if (ordenesDelUsuario.length > 0) {
         res.json(ordenesDelUsuario);
     } else {
@@ -91,6 +91,7 @@ exports.getOrdenesCompraAdmin = async (req, res) => {
                     fecha_entrega: orden.fecha_entrega,
                     cantPedidos: cantPedidos,
                     estadoOrden: orden.estado,
+                    //entregada: orden.entregada,
                     pedidos: pedidosDetalles
                 };
             }));
@@ -146,6 +147,7 @@ exports.getOrdenesCompraPanadero = async (req, res) => {
                     fecha_entrega: orden.fecha_entrega,
                     cantPedidos: cantPedidos,
                     estadoOrden: orden.estado,
+                    //esntregada: orden.entregada
                     pedidos: pedidosDetalles
                 };
             }));
@@ -156,62 +158,6 @@ exports.getOrdenesCompraPanadero = async (req, res) => {
         }
     } else {
         res.status(404).json({ message: 'Ordenes de compras asignadas a idPanadero no encontradas' });
-    }
-};
-
-// Falta ruta, Funcion que obtiene ordenes asignadas a un panadero para un cliente especifico
-exports.getOrdenesCompraPanaderoCliente = async (req, res) => {
-    const { idPan, idCli } = req.params;
-    const ordenesPanadero = ordenes.filter(o => o.idPanadero === parseInt(idPan));
-    const ordenesPanaderoCliente = ordenesPanadero.filter(op => op.idCliente === parseInt(idCli));
-
-    if (ordenesPanadero.length > 0) {
-        if (ordenesPanaderoCliente.length > 0) {
-            try {
-                const pedidosConDetalles = await Promise.all(ordenesPanaderoCliente.map(async (orden) => {
-                    const cliente = await obtenerUserById(orden.idCliente);
-                    if (!cliente) {
-                        throw new Error(`Cliente con ID ${orden.idCliente} no encontrado`);
-                    }
-
-                    const pedidosOrden = pedidos.filter(p => p.idOrden == orden.id);
-                    if (pedidosOrden.length === 0) {
-                        throw new Error(`Pedidos para la orden con ID ${orden.id} no encontrados`);
-                    }
-
-                    const pedidosDetalles = await Promise.all(pedidosOrden.map(async (pedido) => {
-                        const producto = await obtenerProductoById(pedido.idProducto);
-                        if (!producto) {
-                            throw new Error(`Producto con ID ${pedido.idProducto} no encontrado`);
-                        }
-                        return {
-                            idPedido: pedido.id,
-                            idProducto: pedido.idProducto,
-                            productoNombre: producto.nombre,
-                            cantidad: pedido.cantidad,
-                            estado: pedido.estado
-                        };
-                    }));
-
-                    return {
-                        idOrden: orden.id,
-                        idCliente: cliente.id,
-                        clienteNombre: cliente.nombre,
-                        fecha_entrega: orden.fecha_entrega,
-                        estadoOrden: orden.estado,
-                        pedidos: pedidosDetalles
-                    };
-                }));
-
-                res.json(pedidosConDetalles);
-            } catch (error) {
-                res.status(500).json({ message: error.message });
-            }
-        } else {
-            res.status(404).json({ message: 'Ordenes de compras asignadas a cliente para este panadero no encontradas' });
-        }
-    } else {
-        res.status(404).json({ message: 'Ordenes de compras asignadas a este panadero no encontradas' });
     }
 };
 
@@ -250,6 +196,7 @@ exports.getOrdenesCompraNoAsignadas = async (req, res) => {
                     fecha_entrega: orden.fecha_entrega,
                     cantPedidos: cantPedidos,
                     estadoOrden: orden.estado,
+                    //esntregada: orden.entregada
                     pedidos: pedidosDetalles
                 };
             }));
@@ -331,50 +278,6 @@ exports.actualizarEstadoOrdenCompra = (req, res) => {
         }
     } else {
         res.status(404).json({ message: 'Orden de compra no encontrada' });
-    }
-};
-
-
-// Funcion para filtro de insumos para pedidos de ordenes
-exports.InfoFiltroInsumos = async (req, res) => {
-    const ordenesRestantes = ordenes.filter(o => o.estado != estadoOrden.LISTO_PARA_RECOGER);
-    //console.log('ORDENES RESTANTES',ordenesRestantes);
-    if (ordenesRestantes.length > 0) {
-        try {
-            //console.log('ENTRA TRY');
-            const pedidosInfo = await Promise.all(ordenesRestantes.map(async (orden) => {
-                //console.log('ENTRA PROMISE 1');
-                let insumosTotales = [];
-                const insumosObtenidos = await getInsumosPedido(orden.id);
-                //console.log('INSUMOS:', insumosObtenidos);
-                
-                for (const insumo of insumosObtenidos) {
-                    const existeInsumo = insumosTotales.find(i => i.insumoNombre === insumo.insumoNombre);
-                    if (existeInsumo) {
-                        existeInsumo.totalInsumo += insumo.totalInsumo;
-                    } else {
-                        insumosTotales.push({
-                            insumoNombre: insumo.insumoNombre,
-                            totalInsumo: insumo.totalInsumo,
-                        });
-                    }
-                }
-
-                //console.log('insumosTotales: ',insumosTotales);
-
-                return {
-                    fecha_entrega: orden.fecha_entrega,
-                    estadoOrden: orden.estado,
-                    insumos: insumosTotales
-                };
-            }));
-
-            res.json(pedidosInfo);
-        } catch (error) {
-            res.status(500).json({ message: `Error al procesar las órdenes: ${error.message}` });
-        }
-    } else {
-        res.status(404).json({ message: 'Ordenes de compras asignadas a idPanadero no encontradas' });
     }
 };
 
@@ -473,6 +376,20 @@ exports.asignarOrdenPanadero = (req, res) => {
         orden.idPanadero = parseInt(idPanadero);
         orden.asignada = true;
         res.json(orden);
+    } else {
+        res.status(404).json({ message: 'Orden de compra no encontrada' });
+    }
+};
+
+exports.cambioEstadoEntregada = (req, res) => {
+    const { id } = req.params;
+
+    const orden = ordenes.find(o => o.id == id);
+    if (orden) {
+        orden.entregada = true;
+        res.json({
+            message: 'Estado de entrega actualizado correctamente',
+        });
     } else {
         res.status(404).json({ message: 'Orden de compra no encontrada' });
     }

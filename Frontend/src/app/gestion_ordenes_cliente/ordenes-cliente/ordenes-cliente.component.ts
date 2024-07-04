@@ -107,4 +107,15 @@ export class OrdenesClienteComponent implements OnInit {
   openModalModificacion(id: number) {
     this.modificarProductoModal.open(id);
   }
+
+  confirmarEntrega(id:number){
+    this.oredenesSVC.confirmarEntrega(id).subscribe({
+      next: (data) => {
+        console.log(data);
+      },
+      error: (error) => {
+        console.error('Error al cargar ordenes:', error);
+      }
+    });
+  }
 }

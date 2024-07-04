@@ -111,6 +111,7 @@ export class CarritoComponent implements OnInit {
           this.fechaEntrega,
           null!,
           estadoOrden.PENDIENTE,
+          false,
           false
         );
         console.log('LLEGA AHSTA ACA 1');
