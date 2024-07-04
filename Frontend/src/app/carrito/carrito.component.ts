@@ -22,7 +22,15 @@ export class CarritoComponent implements OnInit {
   minDate: string;
   carritoSub!: Subscription;
   hayProductos: boolean = false;
-  idOrden!: number;
+  idOrden!: number;  
+  comprobarCarrito(){
+    this.miCarrito$.pipe(take(1)).subscribe((data) => {
+      console.log(data.length);
+      this.hayProductos = data.length > 0;
+      console.log(this.hayProductos);
+    })
+  }
+
 
   constructor(
     private carritoSvc: CarritoService,
@@ -36,8 +44,7 @@ export class CarritoComponent implements OnInit {
   emailUsuario!: string;
   ngOnInit(): void {
     this.carritoSub = this.miCarrito$.subscribe((data) => {
-      console.log('Productos en el carrito:', data);
-      this.hayProductos = data.length > 0;
+      //console.log('Productos en el carrito:', data);
     });
     this.service.obtenerUsuarioPorId().subscribe(usuario => {
       this.emailUsuario = usuario.email;
@@ -45,6 +52,7 @@ export class CarritoComponent implements OnInit {
     }, error => {
       console.error('Error al obtener el usuario', error);
     });
+    this.comprobarCarrito();
   }
 
   ngOnDestroy(): void {
@@ -57,6 +65,7 @@ export class CarritoComponent implements OnInit {
 
   borrarProd(id: number) {
     this.carritoSvc.eliminarProd(id);
+    this.comprobarCarrito();
   }
 
   actualizarCantidad(operacion: string, id: number) {
@@ -71,6 +80,7 @@ export class CarritoComponent implements OnInit {
       if (producto.cantidad === 0) {
         this.carritoSvc.eliminarProd(id);
       }
+      this.comprobarCarrito();
     }
   }
 
@@ -78,7 +88,6 @@ export class CarritoComponent implements OnInit {
     return this.carritoSvc.totalCarrito();
   }
 
-  // falla
   crearPedido(producto: ProductoCarrito, idOrden: number) {
     console.log('Producto para pedido: ', producto);
     const nuevoPedido = new Pedido(
@@ -110,6 +119,7 @@ export class CarritoComponent implements OnInit {
           this.fechaEntrega,
           null!,
           estadoOrden.PENDIENTE,
+          false,
           false
         );
         console.log('LLEGA AHSTA ACA 1');

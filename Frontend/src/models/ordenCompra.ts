@@ -6,6 +6,7 @@ export class OrdenCompra {
         public fecha_entrega: string,
         public idPanadero: number,
         public estado: string,
+        public entregada: boolean,
         public asigando: boolean
     ) {}
 }

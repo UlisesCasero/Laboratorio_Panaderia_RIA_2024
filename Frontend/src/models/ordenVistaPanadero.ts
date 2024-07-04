@@ -9,6 +9,7 @@ export class OrdenVista {
     public fecha_entrega: string,
     public cantPedidos: number,
     public estadoOrden: estadoOrden,
+    public entegada: boolean,
     public pedidos: {
       idPedido: number;
       idProducto: number;

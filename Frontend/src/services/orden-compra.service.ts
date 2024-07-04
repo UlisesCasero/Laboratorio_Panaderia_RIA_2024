@@ -193,4 +193,26 @@ export class OrdenCompraService {
 
     return insumosFiltrados;
   }
+
+  confirmarEntrega(id: number){
+    const token = localStorage.getItem('token');
+    if (!token) {
+      return throwError('No hay token almacenado');
+    }
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'bearer ' + token
+      })
+    };
+
+    const url = `http://localhost:3000/ordenesCompra/ordenEntregada/${id}`;
+    return this.http.put<any>(url, httpOptions)
+      .pipe(
+        catchError(error => {
+          return throwError(error);
+        })
+      );
+  }
 }
