@@ -21,7 +21,7 @@ let pedidos = [
     { id: 8, idProducto: 4, idOrden: 4, cantidad: 4, estado: estadoPedido.PENDIENTE },
     { id: 9, idProducto: 1, idOrden: 5, cantidad: 2, estado: estadoPedido.PENDIENTE },
     { id: 10, idProducto: 2, idOrden: 5, cantidad: 1, estado: estadoPedido.PENDIENTE },
-    { id: 11, idProducto: 2, idOrden: 5, cantidad: 1, estado: estadoPedido.PENDIENTE },
+    { id: 11, idProducto: 3, idOrden: 5, cantidad: 1, estado: estadoPedido.PENDIENTE },
     { id: 12, idProducto: 4, idOrden: 5, cantidad: 4, estado: estadoPedido.PENDIENTE },
     { id: 13, idProducto: 4, idOrden: 6, cantidad: 4, estado: estadoPedido.PENDIENTE },
     { id: 14, idProducto: 1, idOrden: 7, cantidad: 2, estado: estadoPedido.PENDIENTE },
