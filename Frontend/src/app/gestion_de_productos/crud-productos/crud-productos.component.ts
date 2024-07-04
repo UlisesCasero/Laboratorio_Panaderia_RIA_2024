@@ -1,4 +1,10 @@
-import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { Producto } from 'src/models/producto';
 import { ProductoService } from 'src/services/producto.service';
 import { CrearProductoComponent } from '../crear-producto/crear-producto.component';
@@ -11,14 +17,13 @@ import { NgForm } from '@angular/forms';
 @Component({
   selector: 'app-crud-productos',
   templateUrl: './crud-productos.component.html',
-  styleUrls: ['./crud-productos.component.scss']
+  styleUrls: ['./crud-productos.component.scss'],
 })
 export class CRUDProductosComponent implements OnInit {
-
   @ViewChild('imagenInput') imagenInputRef!: ElementRef<HTMLInputElement>;
   imagenSeleccionada: string | ArrayBuffer | null = null;
   insumo: Insumo | null = null;
-  insumoss2: { insumo: Insumo, cantidad: number }[] = [];
+  insumoss2: { insumo: Insumo; cantidad: number }[] = [];
   serverBaseUrl = 'http://localhost:3000/uploads/';
   mensajeError: string = '';
   productoEliminadoExitosamente = false;
@@ -46,12 +51,15 @@ export class CRUDProductosComponent implements OnInit {
     precio: null,
   };
 
-  constructor(private productoSVC: ProductoService, private cd: ChangeDetectorRef) { }
+  constructor(
+    private productoSVC: ProductoService,
+    private cd: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.obtenerProductos();
   }
-  
+
   ngOnDestroy(): void {
     this.productoSubscription.unsubscribe();
   }
@@ -76,8 +84,10 @@ export class CRUDProductosComponent implements OnInit {
       next: (data) => {
         this.productosOriginales = data;
         if (this.terminoBusqueda.trim() !== '') {
-          this.productos = this.productosOriginales.filter(producto =>
-            producto.nombre.toLowerCase().includes(this.terminoBusqueda.toLowerCase())
+          this.productos = this.productosOriginales.filter((producto) =>
+            producto.nombre
+              .toLowerCase()
+              .includes(this.terminoBusqueda.toLowerCase())
           );
         } else {
           this.productos = [...data];
@@ -86,7 +96,7 @@ export class CRUDProductosComponent implements OnInit {
       },
       error: (error) => {
         console.error(error);
-      }
+      },
     });
   }
 
@@ -106,14 +116,14 @@ export class CRUDProductosComponent implements OnInit {
     });
   }
 
-  agregarInsumo(event: { insumo: Insumo, cantidad: number }): void {
+  agregarInsumo(event: { insumo: Insumo; cantidad: number }): void {
     const { insumo, cantidad } = event;
     const nuevoInsumoP = new InsumoP(insumo.id, insumo.nombre, cantidad);
     this.insumosSeleccionados.push(nuevoInsumoP);
-    console.log('Insumos seleccionados en productos:', this.insumosSeleccionados);
   }
 
-  @ViewChild('modificarProductoModal') modificarProductoModal!: ModificarProductoComponent;
+  @ViewChild('modificarProductoModal')
+  modificarProductoModal!: ModificarProductoComponent;
   openModalModificacion(producto: Producto) {
     this.modificarProductoModal.open(producto);
   }
@@ -121,7 +131,6 @@ export class CRUDProductosComponent implements OnInit {
   modificarProducto(productoModificado: Producto) {
     this.productoSVC.putProducto(productoModificado).subscribe({
       next: (data) => {
-        console.log('Producto modificado:', data);
         this.productoSVC.getProductos().subscribe({
           next: (productos) => {
             this.productos = productos;
@@ -129,40 +138,45 @@ export class CRUDProductosComponent implements OnInit {
           },
           error: (error) => {
             console.error(error);
-          }
+          },
         });
       },
       error: (error) => {
         console.error('Error al modificar producto:', error);
-      }
+      },
     });
   }
 
   eliminarProducto(productoId: number): void {
     this.productoSVC.delteProducto(productoId).subscribe({
       next: (data) => {
-        console.log('Producto eliminado:', data);
         if (this.terminoBusqueda.trim() === '') {
           // No hay filtro, actualizar lista completa de productos
-          this.productos = this.productos.filter(p => p.id !== productoId);
+          this.productos = this.productos.filter((p) => p.id !== productoId);
         } else {
           // Hay filtro, eliminar de la lista filtrada y actualizar lista original si es necesario
-          this.productos = this.productos.filter(p => p.id !== productoId);
-          const productoEliminado = this.productosOriginales.find(p => p.id === productoId);
+          this.productos = this.productos.filter((p) => p.id !== productoId);
+          const productoEliminado = this.productosOriginales.find(
+            (p) => p.id === productoId
+          );
           if (productoEliminado) {
-            this.productosOriginales = this.productosOriginales.filter(p => p.id !== productoId);
+            this.productosOriginales = this.productosOriginales.filter(
+              (p) => p.id !== productoId
+            );
             if (this.terminoBusqueda.trim() !== '') {
-              this.productos = this.productosOriginales.filter(producto =>
-                producto.nombre.toLowerCase().includes(this.terminoBusqueda.toLowerCase())
+              this.productos = this.productosOriginales.filter((producto) =>
+                producto.nombre
+                  .toLowerCase()
+                  .includes(this.terminoBusqueda.toLowerCase())
               );
             }
           }
         }
-        this.mostrarMensajeExito2(); 
+        this.mostrarMensajeExito2();
       },
       error: (error) => {
-        this.mostrarMensajeError2(error); 
-      }
+        this.mostrarMensajeError2(error);
+      },
     });
   }
 
@@ -187,7 +201,9 @@ export class CRUDProductosComponent implements OnInit {
   }
 
   siguientePagina(): void {
-    const ultimaPagina = Math.ceil(this.productos.length / this.productosPorPagina);
+    const ultimaPagina = Math.ceil(
+      this.productos.length / this.productosPorPagina
+    );
     if (this.paginaActual < ultimaPagina) {
       this.paginaActual++;
     }
@@ -205,9 +221,10 @@ export class CRUDProductosComponent implements OnInit {
       this.obtenerProductos();
       this.productosActuales = [...this.productosOriginales];
     } else {
-      this.productos = this.productosOriginales.filter(producto =>
-        producto.nombre.toLowerCase().includes(termino) &&
-        this.productos.some(p => p.id === producto.id)
+      this.productos = this.productosOriginales.filter(
+        (producto) =>
+          producto.nombre.toLowerCase().includes(termino) &&
+          this.productos.some((p) => p.id === producto.id)
       );
     }
     this.paginaActual = 1;
@@ -262,85 +279,83 @@ export class CRUDProductosComponent implements OnInit {
       this.mostrarMensajeError('Debes agregar al menos un insumo.');
       return;
     }
-    const insumosSeleccionadosReducidos = this.insumosSeleccionados.map(insumo => ({
-      id: insumo.id,
-      nombre: insumo.nombre
-    }));
-    if (datosFormulario.valid) {
-    const nuevoProducto = new Producto(
-      1,
-      datosFormulario.value.nombre,
-      datosFormulario.value.descripcion,
-      this.imagenSeleccionada,
-      datosFormulario.value.precio,
-      insumosSeleccionadosReducidos
+    const insumosSeleccionadosReducidos = this.insumosSeleccionados.map(
+      (insumo) => ({
+        id: insumo.id,
+        nombre: insumo.nombre,
+      })
     );
+    if (datosFormulario.valid) {
+      const nuevoProducto = new Producto(
+        1,
+        datosFormulario.value.nombre,
+        datosFormulario.value.descripcion,
+        this.imagenSeleccionada,
+        datosFormulario.value.precio,
+        insumosSeleccionadosReducidos
+      );
 
-    console.log('Producto creado:', nuevoProducto);
-    this.productoSVC.postProducto(nuevoProducto).subscribe({
-      next: (data) => {
-        const insumosParaEnviar: {
-          idProducto: number;
-          idInsumo: number;
-          cantidad: number;
-        }[] = this.insumosSeleccionados.map(insumo => ({
-          idProducto: data.id,
-          idInsumo: insumo.id,
-          cantidad: insumo.cantidad || 0
-        }));
+      this.productoSVC.postProducto(nuevoProducto).subscribe({
+        next: (data) => {
+          const insumosParaEnviar: {
+            idProducto: number;
+            idInsumo: number;
+            cantidad: number;
+          }[] = this.insumosSeleccionados.map((insumo) => ({
+            idProducto: data.id,
+            idInsumo: insumo.id,
+            cantidad: insumo.cantidad || 0,
+          }));
 
-        this.productoSVC.postProductoConInsumos(insumosParaEnviar).subscribe({
-          next: (response) => {
-            console.log('Insumos asociados al producto enviado:', response);
-          },
-          error: (error) => {
-            console.error('Error al asociar insumos al producto:', error);
-            this.mostrarMensajeError('Error al asociar insumos al producto. Por favor, intenta nuevamente.');
-          }
-        });
-        console.log('Insumos seleccionados para enviar:', insumosParaEnviar);
+          this.productoSVC.postProductoConInsumos(insumosParaEnviar).subscribe({
+            next: (response) => {},
+            error: (error) => {
+              console.error('Error al asociar insumos al producto:', error);
+              this.mostrarMensajeError(
+                'Error al asociar insumos al producto. Por favor, intenta nuevamente.'
+              );
+            },
+          });
+          this.obtenerProductos();
+          this.resetFormulario();
+          this.mostrarMensajeExito();
+          this.insumosSeleccionados.forEach((insumo) => {});
 
-        console.log('Producto creado:', data);
-        this.obtenerProductos();
-        this.resetFormulario();
-        this.mostrarMensajeExito();
-        this.insumosSeleccionados.forEach(insumo => {
-          console.log(`ID: ${insumo.id}, Nombre: ${insumo.nombre}, Cantidad: ${insumo.cantidad}`);
-        });
-
-        setTimeout(() => {
-          this.crearProductoModal.close();
-        }, 2000);
-
-      },
-      error: (error) => {
-        console.error('Error al crear producto:', error);
-        setTimeout(() => {
-          this.mostrarMensajeError('Error al crear producto. Por favor, intenta nuevamente.');
-        }, 2000);
+          setTimeout(() => {
+            this.crearProductoModal.close();
+          }, 2000);
+        },
+        error: (error) => {
+          console.error('Error al crear producto:', error);
+          setTimeout(() => {
+            this.mostrarMensajeError(
+              'Error al crear producto. Por favor, intenta nuevamente.'
+            );
+          }, 2000);
+        },
+      });
+    }
+    Object.keys(datosFormulario.controls).forEach((key) => {
+      const control = datosFormulario.controls[key];
+      if (control.invalid && control.touched) {
+        // Mostrar mensaje de error específico por campo
+        switch (key) {
+          case 'nombre':
+            this.mostrarMensajeError('Nombre del producto es obligatorio.');
+            break;
+          case 'descripcion':
+            this.mostrarMensajeError(
+              'Descripción del producto es obligatoria.'
+            );
+            break;
+          case 'precio':
+            this.mostrarMensajeError('Precio del producto es obligatoria.');
+            break;
+          default:
+            break;
+        }
       }
     });
-
-  }  Object.keys(datosFormulario.controls).forEach(key => {
-    const control = datosFormulario.controls[key];
-    if (control.invalid && control.touched) {
-      // Mostrar mensaje de error específico por campo
-      switch (key) {
-        case 'nombre':
-          this.mostrarMensajeError('Nombre del producto es obligatorio.');
-          break;
-        case 'descripcion':
-          this.mostrarMensajeError('Descripción del producto es obligatoria.');
-          break;
-          case 'precio':
-          this.mostrarMensajeError('Precio del producto es obligatoria.');
-          break;
-        default:
-          break;
-      }
-    }
-  });
-
   }
   insumoSeleccionados(insumo: any) {
     this.insumoss.push(insumo);

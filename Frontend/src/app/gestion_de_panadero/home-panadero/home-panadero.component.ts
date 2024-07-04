@@ -20,7 +20,12 @@ export class HomePanaderoComponent implements OnInit {
   currentPage = 1;
   ordenesAsignadas: OrdenVista[] = [];
   ordenes: OrdenVista[] = [];
-  constructor(private router: Router, private ordenesSvc: OrdenCompraService, private ordenesPanaderoSvc: OrdenesPanaderoService, private pedidoSvc: PedidoService) {
+  constructor(
+    private router: Router,
+    private ordenesSvc: OrdenCompraService,
+    private ordenesPanaderoSvc: OrdenesPanaderoService,
+    private pedidoSvc: PedidoService
+  ) {
     this.misOrdenes$ = this.ordenesPanaderoSvc.misOrdenes$;
   }
 
@@ -29,10 +34,10 @@ export class HomePanaderoComponent implements OnInit {
     this.misOrdenes$.subscribe((data) => {
       this.ordenes = data;
       this.filteredOrdenes = this.ordenes;
-      console.log('orrrrdeeeeee', data);
     });
   }
-  @ViewChild(ModalOrdenesDetallesComponent) crearProductoModal!: ModalOrdenesDetallesComponent;
+  @ViewChild(ModalOrdenesDetallesComponent)
+  crearProductoModal!: ModalOrdenesDetallesComponent;
 
   openModalCreacion(idOrden: number) {
     if (this.crearProductoModal) {
@@ -68,7 +73,7 @@ export class HomePanaderoComponent implements OnInit {
 
   verDetalle(idOrden: number, origen: string) {
     this.router.navigate(['/pedidos-orden', idOrden], {
-      queryParams: { origen: origen }
+      queryParams: { origen: origen },
     });
   }
 
@@ -76,7 +81,8 @@ export class HomePanaderoComponent implements OnInit {
     this.router.navigate(['/totalFiltro']);
   }
 
-  @ViewChild(ModalDetalleInsumosTotalesComponent) crearProductoModal2!: ModalDetalleInsumosTotalesComponent;
+  @ViewChild(ModalDetalleInsumosTotalesComponent)
+  crearProductoModal2!: ModalDetalleInsumosTotalesComponent;
 
   openModalCreacion2() {
     if (this.crearProductoModal2) {
@@ -99,7 +105,10 @@ export class HomePanaderoComponent implements OnInit {
   }
 
   get endIndex(): number {
-    return Math.min(this.startIndex + this.pageSize - 1, this.ordenes.length - 1);
+    return Math.min(
+      this.startIndex + this.pageSize - 1,
+      this.ordenes.length - 1
+    );
   }
 
   goToPreviousPage() {

@@ -8,13 +8,17 @@ import { ProductoCarrito } from 'src/models/productoCarrito';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent implements OnInit{
+export class HomeComponent implements OnInit {
   productos: any[] = [];
-  notificationMessage: string = ''; 
+  notificationMessage: string = '';
 
-  constructor(private serviciosService: ServiciosService, private carritoSvc: CarritoService, private productosSvc: ProductoService) { }
+  constructor(
+    private serviciosService: ServiciosService,
+    private carritoSvc: CarritoService,
+    private productosSvc: ProductoService
+  ) {}
 
   ngOnInit(): void {
     this.obtenerProductos();
@@ -22,18 +26,16 @@ export class HomeComponent implements OnInit{
 
   obtenerProductos() {
     if (this.isUser()) {
-      this.productosSvc.getProductosCarrito()
-          .subscribe(
-              (data) => {
-                  this.productos = data;
-              },
-              (error) => {
-                  console.error('Error al obtener productos:', error);
-              }
-          );
-  } else {
-      console.log('El usuario no tiene permisos para obtener productos.');
-  }
+      this.productosSvc.getProductosCarrito().subscribe(
+        (data) => {
+          this.productos = data;
+        },
+        (error) => {
+          console.error('Error al obtener productos:', error);
+        }
+      );
+    } else {
+    }
   }
 
   isAdmin(): boolean {
@@ -51,8 +53,7 @@ export class HomeComponent implements OnInit{
     return role === 'PANADERO';
   }
 
-  addCarrito(producto: ProductoCarrito){
-    console.log(producto);
+  addCarrito(producto: ProductoCarrito) {
     return this.carritoSvc.addProducto(producto);
   }
 }

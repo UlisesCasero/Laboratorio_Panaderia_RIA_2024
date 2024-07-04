@@ -25,7 +25,7 @@ export class ModalOrdenesDetallesComponent implements OnInit {
   idOrden!: number;
   ordenEstado = false;
   ordenEstadoListo = '';
-  email!:string;
+  email!: string;
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -38,9 +38,7 @@ export class ModalOrdenesDetallesComponent implements OnInit {
 
   ngOnInit(): void {
     this.obtenerPedidosOrden();
-    this.pedidosOrden$.subscribe((data) => {
-      console.log('Pedidos Orden: ', data);
-    });
+    this.pedidosOrden$.subscribe((data) => {});
   }
 
   async obtenerPedidosOrden(): Promise<void> {
@@ -48,7 +46,6 @@ export class ModalOrdenesDetallesComponent implements OnInit {
       const data = await this.ordenesPanaderoSvc.obtenerpedidosOrden(
         this.idOrden
       );
-     // console.log('Pedidos obtenidos: ', data);
     } catch (error) {
       console.error('Error al obtener pedidos:', error);
     }
@@ -57,51 +54,58 @@ export class ModalOrdenesDetallesComponent implements OnInit {
   actualizarEstado(idPedido: number) {
     this.pedidoSvc.getPedidoById(idPedido).subscribe({
       next: (data) => {
-        console.log('DATA: ', data);
         this.pedidoSvc.actualizarPedidoEstado(data.id).subscribe({
           next: () => {
-            this.ordenesPanaderoSvc.actualizarEstadoOrden(this.idOrden).subscribe({
-              next: (response) => {
-                console.log('Respuesta de actualizarEstadoOrden:', response.estado, this.idOrden);
-                this.obtenerPedidosOrden();
-                this.mostrarMensajeExito2();
-                
-                if (response.estado === 'Listo para recoger') { 
-                  this.service.obtenerUsuarioPorId2(response.idCliente).subscribe(
-                    (usuario) => {
-                      this.email = usuario.email;
-                      console.log('Email del usuario:', this.email);
-                      
-                      this.service.enviarEmailPedidoPronto(this.idOrden,this.email).subscribe(
-                        () => {
-                          console.log('Correo enviado exitosamente');
+            this.ordenesPanaderoSvc
+              .actualizarEstadoOrden(this.idOrden)
+              .subscribe({
+                next: (response) => {
+                  this.obtenerPedidosOrden();
+                  this.mostrarMensajeExito2();
+
+                  if (response.estado === 'Listo para recoger') {
+                    this.service
+                      .obtenerUsuarioPorId2(response.idCliente)
+                      .subscribe(
+                        (usuario) => {
+                          this.email = usuario.email;
+
+                          this.service
+                            .enviarEmailPedidoPronto(this.idOrden, this.email)
+                            .subscribe(
+                              () => {},
+                              (error) => {
+                                console.error(
+                                  'Error al enviar el correo:',
+                                  error
+                                );
+                              }
+                            );
                         },
                         (error) => {
-                          console.error('Error al enviar el correo:', error);
+                          console.error('Error al obtener el usuario:', error);
                         }
                       );
-                    },
-                    (error) => {
-                      console.error('Error al obtener el usuario:', error);
-                    }
+                  }
+                },
+                error: (error) => {
+                  console.error(
+                    'Error al actualizar el estado de la orden:',
+                    error
                   );
-                }
-              },
-              error: (error) => {
-                console.error('Error al actualizar el estado de la orden:', error);
-              }
-            });
+                },
+              });
           },
           error: (error) => {
             console.error('Error al actualizar el estado del pedido:', error);
-          }
+          },
         });
       },
       error: (error) => {
         console.error('Error al obtener el pedido:', error);
-      }
+      },
     });
-  }  
+  }
 
   cerrarModal() {
     this.mostrar = false;
@@ -111,7 +115,7 @@ export class ModalOrdenesDetallesComponent implements OnInit {
   verDetalle(idPedido: number) {
     this.router.navigate(['/insumos-pedido', idPedido]);
   }
-  
+
   @ViewChild(ModalDetalleInsumosComponent)
   crearProductoModal2!: ModalDetalleInsumosComponent;
 

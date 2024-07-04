@@ -8,11 +8,10 @@ import { ModalModificarComponent } from './modal-modificar/modal-modificar.compo
 @Component({
   selector: 'app-insumos',
   templateUrl: './insumos.component.html',
-  styleUrls: ['./insumos.component.scss']
+  styleUrls: ['./insumos.component.scss'],
 })
 export class InsumosComponent {
-
-  constructor(private productoSVC: ProductoService) { }
+  constructor(private productoSVC: ProductoService) {}
   insumos: Insumo[] = [];
   public lista: Insumo[] = [];
   public insumosOriginales: Insumo[] = [];
@@ -41,11 +40,10 @@ export class InsumosComponent {
           this.insumos = [data];
         }
         this.insumosOriginales = this.insumos.slice();
-        console.log('Insumos cargados:', this.insumos);
       },
       error: (error) => {
         console.error(error);
-      }
+      },
     });
   }
 
@@ -78,7 +76,7 @@ export class InsumosComponent {
     if (termino === '') {
       this.obtenerInsumos();
     } else {
-      this.insumos = this.insumosOriginales.filter(insumo => {
+      this.insumos = this.insumosOriginales.filter((insumo) => {
         return insumo.nombre.toLowerCase().includes(termino);
       });
       this.paginaActual = 1;
@@ -86,7 +84,7 @@ export class InsumosComponent {
   }
 
   datosFormulario: any = {
-    nombre: ''
+    nombre: '',
   };
 
   resetFormulario(): void {
@@ -95,37 +93,30 @@ export class InsumosComponent {
   }
 
   crearInsumo(datosFormulario: any): void {
-    const nuevoInsumo = new Insumo(
-      1,
-      datosFormulario.nombre
-    );
-
-    console.log('Insumo creado:', nuevoInsumo);
+    const nuevoInsumo = new Insumo(1, datosFormulario.nombre);
     this.productoSVC.postInsumo(nuevoInsumo).subscribe({
       next: (data) => {
-        console.log('Insumo creado:', data);
         this.obtenerInsumos();
         this.resetFormulario();
         this.crearInsumoModal.close();
       },
       error: (error) => {
         console.error('Error al crear insumo:', error);
-      }
+      },
     });
   }
 
   eliminarInsumo(insumoId: number): void {
-      this.productoSVC.deleteInsumo(insumoId).subscribe({
-        next: (data) => {
-          console.log('Insumo eliminado:', data);
-          this.obtenerInsumos();
-          this.mostrarMensajeExito2();
-        },
-        error: (error) => {
-          this.mostrarMensajeError2(error);
-          console.error('Error al eliminar insumo:', error);
-        }
-      });
+    this.productoSVC.deleteInsumo(insumoId).subscribe({
+      next: (data) => {
+        this.obtenerInsumos();
+        this.mostrarMensajeExito2();
+      },
+      error: (error) => {
+        this.mostrarMensajeError2(error);
+        console.error('Error al eliminar insumo:', error);
+      },
+    });
   }
 
   mostrarMensajeExito2(): void {
@@ -144,9 +135,9 @@ export class InsumosComponent {
       this.mensajeError = '';
     }, 5000);
   }
-  ngAfterViewInit(): void {
-  }
-  @ViewChild('modificarInsumoModal') modificarInsumoModal!: ModalModificarComponent;
+  ngAfterViewInit(): void {}
+  @ViewChild('modificarInsumoModal')
+  modificarInsumoModal!: ModalModificarComponent;
   openModalModificacion(insumo: Insumo) {
     if (this.modificarInsumoModal) {
       this.modificarInsumoModal.open(insumo);
@@ -154,21 +145,17 @@ export class InsumosComponent {
       console.error('Error: modificarInsumoModal no está definido.');
     }
   }
-  
 
   modificarInsumo(insumo: Insumo): void {
-    //this.openModalModificacion(insumo);
     const insumoModificado = { ...insumo };
     this.productoSVC.putInsumo(insumo.id, insumoModificado).subscribe({
       next: (data) => {
-        console.log('Insumo modificado:', data);
-        this.obtenerInsumos(); // Vuelve a cargar la lista de insumos después de modificar
+        this.obtenerInsumos();
       },
       error: (error) => {
         console.error('Error al modificar insumo:', error);
-        // Muestra un mensaje de error si no se pudo modificar el insumo
         alert('Error al modificar el insumo. Por favor, intenta nuevamente.');
-      }
+      },
     });
   }
 }

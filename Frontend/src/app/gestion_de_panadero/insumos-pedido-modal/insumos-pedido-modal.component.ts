@@ -23,18 +23,14 @@ export class InsumosPedidoModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.obtenerInsumosPedidos();
-    this.insumosPedido$.subscribe((data) => {
-      console.log('Insumos pedido: ', data);
-    });
+    this.insumosPedido$.subscribe((data) => {});
   }
 
   async obtenerInsumosPedidos(): Promise<void> {
     this.route.params.subscribe(async (params) => {
       const id = +params['id'];
-      console.log('ID: ', id);
       try {
         const data = await this.ordenesPanaderoSvc.obtenerInsumosPedido(id);
-        console.log('Insumos obtenidos: ', data);
       } catch (error) {
         console.error('Error al obtener insumos:', error);
       }
@@ -44,9 +40,7 @@ export class InsumosPedidoModalComponent implements OnInit {
   cerrarModal() {
     this.route.params.subscribe(async (params) => {
       const id = +params['id'];
-      console.log('ID: ', id);
       this.router.navigate(['/pedidos-orden', id]);
     });
-    
   }
 }

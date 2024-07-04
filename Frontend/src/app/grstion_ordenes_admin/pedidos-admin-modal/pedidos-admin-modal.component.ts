@@ -1,4 +1,10 @@
-import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { OrdenCompraService } from 'src/services/orden-compra.service';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { OrdenesPanaderoService } from 'src/services/ordenes-panadero.service';
@@ -7,7 +13,6 @@ import { PedidoService } from 'src/services/pedido.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OrdenesAdminService } from 'src/services/ordenes-admin.service';
 import { ModalDetalleInsumosComponent } from 'src/app/gestion_de_panadero/modal-detalle-insumos/modal-detalle-insumos.component';
-
 
 @Component({
   selector: 'app-pedidos-admin-modal',
@@ -37,18 +42,13 @@ export class PedidosAdminModalComponent {
 
   ngOnInit(): void {
     this.obtenerPedidosOrden();
-    this.pedidosOrden$.subscribe((data) => {
-      console.log('Pedidos Orden: ', data);
-    });
+    this.pedidosOrden$.subscribe((data) => {});
     //this.obtenerPedidosOrden(1);
   }
 
   async obtenerPedidosOrden(): Promise<void> {
     try {
-      const data = await this.ordenesAdminSvc.obtenerpedidosOrden(
-        this.idOrden
-      );
-      console.log('Pedidos obtenidos: ', data);
+      const data = await this.ordenesAdminSvc.obtenerpedidosOrden(this.idOrden);
     } catch (error) {
       console.error('Error al obtener pedidos:', error);
     }
@@ -63,7 +63,6 @@ export class PedidosAdminModalComponent {
     this.router.navigate(['/insumos-pedido', idPedido]);
   }
 
-  
   @ViewChild(ModalDetalleInsumosComponent)
   crearProductoModal2!: ModalDetalleInsumosComponent;
 

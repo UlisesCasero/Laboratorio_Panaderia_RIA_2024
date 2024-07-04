@@ -6,7 +6,7 @@ import { ServiciosService } from 'src/services/servicios.service';
 @Component({
   selector: 'app-modal-modif-user',
   templateUrl: './modal-modif-user.component.html',
-  styleUrls: ['./modal-modif-user.component.scss']
+  styleUrls: ['./modal-modif-user.component.scss'],
 })
 export class ModalModifUserComponent implements OnInit {
   mostrar: boolean = false;
@@ -18,7 +18,7 @@ export class ModalModifUserComponent implements OnInit {
     telefono: '',
     role: '',
     enabled: true,
-    password: ''
+    password: '',
   };
 
   @Output() usuarioModificado = new EventEmitter<Usuario>();
@@ -32,7 +32,7 @@ export class ModalModifUserComponent implements OnInit {
   }
 
   actualizarUsuario() {
-    this.servicio.actualizarUsuario(this.usuarioId,this.usuario).subscribe(
+    this.servicio.actualizarUsuario(this.usuarioId, this.usuario).subscribe(
       (response) => {
         this.registroExitoso = true;
         this.registroFallido = false;
@@ -52,18 +52,16 @@ export class ModalModifUserComponent implements OnInit {
       }
     );
   }
-  usuarioId!:number;
+  usuarioId!: number;
   open(id: number) {
     this.mostrar = true;
-    console.log(id);
     this.usuarioId = id;
     this.obtener();
-  }  
+  }
   obtener() {
     this.servicio.obtenerUsuarioPorId2(this.usuarioId).subscribe(
       (usuario: Usuario2) => {
         this.usuario = usuario;
-        console.log('Datos del usuario recibido:', this.usuario);
       },
       (error) => {
         console.error('Error al obtener los datos del usuario:', error);

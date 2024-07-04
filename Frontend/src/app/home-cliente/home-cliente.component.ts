@@ -66,7 +66,6 @@ export class HomeClienteComponent {
   }
 
   addCarrito(producto: ProductoCarrito) {
-    console.log('PRODUCTO: ', producto);
     this.notificationMessage = 'Agregado!';
     setTimeout(() => {
       this.notificationMessage = '';
@@ -115,11 +114,9 @@ export class HomeClienteComponent {
     if (termino === '') {
       this.productosFiltrados = [...this.productos];
     } else {
-      this.productosFiltrados = this.productos.filter(
-        (productos, index) => nombresProductos[index].includes(termino),
-        console.log('aaadsdf', this.productosFiltrados)
+      this.productosFiltrados = this.productos.filter((productos, index) =>
+        nombresProductos[index].includes(termino)
       );
     }
-    console.log(termino);
   }
 }

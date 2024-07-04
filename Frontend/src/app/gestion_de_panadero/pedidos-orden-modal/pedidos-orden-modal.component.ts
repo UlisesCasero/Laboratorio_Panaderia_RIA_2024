@@ -25,9 +25,7 @@ export class PedidosOrdenModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.obtenerPedidosOrden();
-    this.pedidosOrden$.subscribe((data) => {
-      console.log('Pedidos Orden: ', data);
-    });
+    this.pedidosOrden$.subscribe((data) => {});
     //this.obtenerPedidosOrden(1);
   }
 
@@ -36,7 +34,6 @@ export class PedidosOrdenModalComponent implements OnInit {
       const id = +params['id'];
       try {
         const data = await this.ordenesPanaderoSvc.obtenerpedidosOrden(id);
-        console.log('Pedidos obtenidos: ', data);
       } catch (error) {
         console.error('Error al obtener pedidos:', error);
       }
@@ -46,15 +43,12 @@ export class PedidosOrdenModalComponent implements OnInit {
   actualizarEstado(idPedido: number) {
     this.pedidoSvc.getPedidoById(idPedido).subscribe({
       next: (data) => {
-        console.log('DATA: ', data);
         this.pedidoSvc.actualizarPedidoEstado(data.id).subscribe({
           next: () => {
             this.route.params.subscribe((params) => {
               const id = +params['id'];
-              console.log('ID ORDEN Actualizar: ', id);
               this.ordenesPanaderoSvc.actualizarEstadoOrden(id).subscribe({
                 next: (response) => {
-                  console.log('Respuesta de actualizarEstadoOrden:', response);
                   this.obtenerPedidosOrden();
                 },
                 error: (error) => {
@@ -87,7 +81,6 @@ export class PedidosOrdenModalComponent implements OnInit {
 
   isPanadero(): boolean {
     const role = localStorage.getItem('rol');
-    console.log('Rol actual:', role);
     return role === 'PANADERO';
   }
 }

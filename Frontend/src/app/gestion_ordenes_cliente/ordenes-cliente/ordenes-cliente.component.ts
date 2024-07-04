@@ -9,21 +9,24 @@ import { ModalDetalleClienteComponent } from '../modal-detalle-cliente/modal-det
 @Component({
   selector: 'app-ordenes-cliente',
   templateUrl: './ordenes-cliente.component.html',
-  styleUrls: ['./ordenes-cliente.component.scss']
+  styleUrls: ['./ordenes-cliente.component.scss'],
 })
 export class OrdenesClienteComponent implements OnInit {
   public misOrdenes: OrdenCompra[] = [];
-  public pageSize: number = 5; 
-  public currentPage: number = 1; 
-  public totalItems: number = 0; 
+  public pageSize: number = 5;
+  public currentPage: number = 1;
+  public totalItems: number = 0;
 
-  constructor(private oredenesSVC: OrdenCompraService, private router: Router) {}
+  constructor(
+    private oredenesSVC: OrdenCompraService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.getOrdenesCliente();
   }
 
-  getOrdenesCliente(){
+  getOrdenesCliente() {
     const id = Number(localStorage.getItem('userId'));
 
     this.oredenesSVC.getOrdenCompraByCienteId(id).subscribe({
@@ -34,12 +37,12 @@ export class OrdenesClienteComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error al cargar ordenes:', error);
-      }
+      },
     });
   }
 
-  verDetalle(id: number){
-    this.router.navigate(['/pedidosOrden',id]);
+  verDetalle(id: number) {
+    this.router.navigate(['/pedidosOrden', id]);
   }
 
   nextPage(): void {
@@ -63,13 +66,15 @@ export class OrdenesClienteComponent implements OnInit {
   }
 
   get endIndex(): number {
-    return Math.min(this.startIndex + this.pageSize - 1, this.filteredOrdenes.length - 1);
+    return Math.min(
+      this.startIndex + this.pageSize - 1,
+      this.filteredOrdenes.length - 1
+    );
   }
 
   get paginatedOrdenes(): OrdenCompra[] {
     return this.filteredOrdenes.slice(this.startIndex, this.endIndex + 1);
   }
-
 
   onPageChange(page: number) {
     this.currentPage = page;
@@ -80,9 +85,15 @@ export class OrdenesClienteComponent implements OnInit {
     if (this.misOrdenes) {
       this.filteredOrdenes.sort((a, b) => {
         if (this.ordenAscendente) {
-          return new Date(a.fecha_entrega).getTime() - new Date(b.fecha_entrega).getTime();
+          return (
+            new Date(a.fecha_entrega).getTime() -
+            new Date(b.fecha_entrega).getTime()
+          );
         } else {
-          return new Date(b.fecha_entrega).getTime() - new Date(a.fecha_entrega).getTime();
+          return (
+            new Date(b.fecha_entrega).getTime() -
+            new Date(a.fecha_entrega).getTime()
+          );
         }
       });
       this.ordenAscendente = !this.ordenAscendente;
@@ -102,30 +113,30 @@ export class OrdenesClienteComponent implements OnInit {
   filteredOrdenes: OrdenCompra[] = [];
   selectedEstado: string = 'Todos';
   estados: string[] = ['Listo para recoger', 'Pendiente', 'En preparación'];
-  
-  @ViewChild('modificarProductoModal') modificarProductoModal!: ModalDetalleClienteComponent;
+
+  @ViewChild('modificarProductoModal')
+  modificarProductoModal!: ModalDetalleClienteComponent;
   openModalModificacion(id: number) {
     this.modificarProductoModal.open(id);
   }
   mensajeConfirmacion: string = '';
 
-confirmarEntrega(id: number) {
-  this.oredenesSVC.confirmarEntrega(id).subscribe({
-    next: (data) => {
-      console.log('confirmado', data);
-      this.mensajeConfirmacion = 'Recibido!';
-      setTimeout(() => {
-        this.mensajeConfirmacion = 'Actualizando datos.....!';
-      }, 3000);
-      setTimeout(() => {
-        this.mensajeConfirmacion = '';
-        this.misOrdenes = this.misOrdenes.filter(orden => orden.id !== id);
-        this.applyEstadoFilter();
-      }, 6000);
-    },
-    error: (error) => {
-      console.error('Error al cargar ordenes:', error);
-    }
-  });
-}
+  confirmarEntrega(id: number) {
+    this.oredenesSVC.confirmarEntrega(id).subscribe({
+      next: (data) => {
+        this.mensajeConfirmacion = 'Recibido!';
+        setTimeout(() => {
+          this.mensajeConfirmacion = 'Actualizando datos.....!';
+        }, 3000);
+        setTimeout(() => {
+          this.mensajeConfirmacion = '';
+          this.misOrdenes = this.misOrdenes.filter((orden) => orden.id !== id);
+          this.applyEstadoFilter();
+        }, 6000);
+      },
+      error: (error) => {
+        console.error('Error al cargar ordenes:', error);
+      },
+    });
+  }
 }

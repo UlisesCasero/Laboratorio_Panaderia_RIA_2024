@@ -13,7 +13,6 @@ function deleteProducto(id, productos, productoInsumosss) {
     const pedidosProducto = pedidosModule.filter(pedido => pedido.idProducto == id);
 
     const idProductosPedidos = pedidosProducto.map(pedido => pedido.idProducto);
-    console.log('ID Productos de pedidos a eliminar:', idProductosPedidos);
 
     if (pedidosProducto.length > 0) {
       const puedeEliminar = pedidosProducto.every(pedido => pedido.estado === estadoPedidoModule.LISTO);
