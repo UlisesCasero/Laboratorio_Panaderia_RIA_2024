@@ -1,32 +1,47 @@
 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
   <div class="mb-4">
-    <input type="text" [(ngModel)]="terminoBusqueda" (input)="filtrarProductos()" placeholder="Buscar producto..." class="p-2 border border-gray-300 rounded w-full">
+    <input type="text" [(ngModel)]="terminoBusqueda" (input)="filtrarProductos()" placeholder="Buscar producto..."
+      class="p-2 border border-gray-300 rounded w-full">
   </div>
   <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-8">
-
-  
-    <div *ngFor="let producto of productosFiltrados"
-      class="producto-container bg-white p-4 rounded-lg shadow flex flex-col justify-between">
+    <div *ngFor="let producto of productosFiltrados" class="producto-container bg-white p-4 rounded-lg shadow flex flex-col justify-between">
       <div class="w-full aspect-w-16 aspect-h-9">
-        <img [src]="getImageUrl(producto.imagen)" alt="Imagen del producto"
-          class="w-full h-full object-cover rounded-t-lg">
+        <img [src]="getImageUrl(producto.imagen)" alt="Imagen del producto" class="w-full h-full object-cover rounded-t-lg">
       </div>
       <div class="producto-info px-4 py-2">
         <h6 class="font-medium leading-6 truncate">{{ producto.nombre }}</h6>
         <h6 class="font-semibold leading-6 text-indigo-600">$ {{ producto.precio }}</h6>
       </div>
-      <div class="producto-actions flex justify-center mt-auto"> <!-- mt-auto para alinear al final -->
+      <div class="producto-actions flex justify-center mt-auto">
         <button (click)="addCarrito(producto)"
           class="p-2 rounded-full bg-white border border-gray-300 flex items-center justify-center group shadow-sm transition-all duration-500 hover:shadow-gray-200 hover:border-gray-400 hover:bg-gray-50">
-          <svg class="stroke-gray-900 transition-all duration-500 group-hover:stroke-black"
-            xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23" fill="none">
+          <svg class="stroke-gray-900 transition-all duration-500 group-hover:stroke-black" xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23" fill="none">
             <path stroke-linecap="round" stroke-linejoin="round"
               d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
           </svg>
           <span class="ml-2">Agregar al carrito</span>
         </button>
       </div>
+      <div *ngIf="producto.cantidad > 0" class="producto-actions flex justify-center mt-2">
+        <div class="flex items-center space-x-1">
+          <button (click)="actualizarCantidad(producto.id,'minus')"
+            class="p-1 rounded-full border border-gray-200 flex items-center justify-center shadow-sm transition-all duration-500 hover:shadow-gray-200 hover:border-gray-300 hover:bg-gray-50">
+            <svg class="stroke-gray-900 transition-all duration-500 group-hover:stroke-black" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M12 8H4" stroke="" stroke-width="1.6" stroke-linecap="round" />
+            </svg>
+          </button>
+          <span class="border border-gray-200 px-2 py-1 text-gray-900 font-semibold text-sm">{{ producto.cantidad }}</span>
+          <button (click)="actualizarCantidad(producto.id,'add')"
+            class="p-1 rounded-full border border-gray-200 flex items-center justify-center shadow-sm transition-all duration-500 hover:shadow-gray-200 hover:border-gray-300 hover:bg-gray-50">
+            <svg class="stroke-gray-900 transition-all duration-500 group-hover:stroke-black" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M8 4V12M12 8H4" stroke="" stroke-width="1.6" stroke-linecap="round" />
+            </svg>
+          </button>
+        </div>
+      </div>
     </div>
+    
+
   </div>
   <div *ngIf="notificationMessage" class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mt-4 rounded-md">
     {{ notificationMessage }}
