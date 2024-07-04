@@ -12,14 +12,14 @@ const Mail = require('nodemailer/lib/mailer');
 const nodemailer = require('nodemailer');
 require('dotenv').config();
 const ordenes = [
-    { id: 1, idCliente: 3, total: 30, fecha_entrega: '2024-05-22', idPanadero: 3, estado: estadoOrden.PENDIENTE, asignada: true, entregada: false },
-    { id: 2, idCliente: 3, total: 100, fecha_entrega: '2024-06-02', idPanadero: 3, estado: estadoOrden.PENDIENTE, asignada: true, entregada: false },
+    { id: 1, idCliente: 3, total: 30, fecha_entrega: '2024-05-22', idPanadero: 2, estado: estadoOrden.PENDIENTE, asignada: true, entregada: false },
+    { id: 2, idCliente: 3, total: 100, fecha_entrega: '2024-06-02', idPanadero: 2, estado: estadoOrden.PENDIENTE, asignada: true, entregada: false },
     { id: 3, idCliente: 3, total: 30, fecha_entrega: '2024-05-22', idPanadero: null, estado: estadoOrden.PENDIENTE, asignada: false, entregada: false },
     { id: 4, idCliente: 4, total: 30, fecha_entrega: '2024-05-22', idPanadero: null, estado: estadoOrden.PENDIENTE, asignada: false, entregada: false },
-    { id: 5, idCliente: 4, total: 30, fecha_entrega: '2024-05-22', idPanadero: 3, estado: estadoOrden.PENDIENTE, asignada: true, entregada: false },
-    { id: 6, idCliente: 4, total: 30, fecha_entrega: '2024-07-05', idPanadero: 3, estado: estadoOrden.PENDIENTE, asignada: true, entregada: false },
-    { id: 7, idCliente: 5, total: 30, fecha_entrega: '2024-08-03', idPanadero: 3, estado: estadoOrden.PENDIENTE, asignada: true, entregada: false },
-    { id: 8, idCliente: 5, total: 30, fecha_entrega: '2024-07-01', idPanadero: 3, estado: estadoOrden.PENDIENTE, asignada: true, entregada: false }
+    { id: 5, idCliente: 4, total: 30, fecha_entrega: '2024-05-22', idPanadero: 2, estado: estadoOrden.PENDIENTE, asignada: true, entregada: false },
+    { id: 6, idCliente: 4, total: 30, fecha_entrega: '2024-07-05', idPanadero: null, estado: estadoOrden.PENDIENTE, asignada: true, entregada: false },
+    { id: 7, idCliente: 5, total: 30, fecha_entrega: '2024-08-03', idPanadero: null, estado: estadoOrden.PENDIENTE, asignada: true, entregada: false },
+    { id: 8, idCliente: 5, total: 30, fecha_entrega: '2024-07-01', idPanadero: null, estado: estadoOrden.PENDIENTE, asignada: true, entregada: false }
 ];
 
 exports.ordenes = ordenes;
@@ -244,10 +244,10 @@ exports.updateOrdenCompra = (req, res) => {
 
 exports.actualizarEstadoOrdenCompra = (req, res) => {
     const { id } = req.params;
-    //console.log('Id llego a funcion actualizar orden', id);
+    console.log('Id llego a funcion actualizar orden', id);
     const orden = ordenes.find(o => o.id == id);
 
-    //console.log('Encontro orden', orden);
+    console.log('Encontro orden', orden);
 
     if (orden) {
         try {
@@ -256,19 +256,19 @@ exports.actualizarEstadoOrdenCompra = (req, res) => {
                 throw new Error(`Pedidos para la orden con ID ${orden.id} no encontrados`);
             } else {
                 let pedidosEstado = pedidosOrden.filter(p => p.estado == estadoPedido.LISTO);
-                //console.log('Pedidos estado 1: ', pedidosEstado);
+                console.log('Pedidos estado 1: ', pedidosEstado);
                 if (pedidosEstado.length == pedidosOrden.length) {
                     orden.estado = estadoOrden.LISTO_PARA_RECOGER;
                 } else {
                     pedidosEstado = pedidosOrden.filter(p => p.estado == estadoPedido.EN_PREPARACION);
-                    //console.log('Pedidos estado 2: ', pedidosEstado);
+                    console.log('Pedidos estado 2: ', pedidosEstado);
                     if (pedidosEstado.length == pedidosOrden.length) {
                         if (orden.estado == estadoOrden.PENDIENTE) {
                             orden.estado = estadoOrden.EN_PREPARACION;
                         }
                     } else {
                         pedidosEstado = pedidosOrden.filter(p => p.estado == estadoPedido.LISTO || p.estado == estadoPedido.EN_PREPARACION);
-                        //console.log('Pedidos estado 3: ', pedidosEstado);
+                        console.log('Pedidos estado 3: ', pedidosEstado);
                         if (pedidosEstado.length > 0 && pedidosEstado.length < pedidosOrden.length) {
                             if (orden.estado == estadoOrden.PENDIENTE) {
                                 orden.estado = estadoOrden.EN_PREPARACION;

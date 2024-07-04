@@ -22,15 +22,15 @@ export class CarritoComponent implements OnInit {
   minDate: string;
   carritoSub!: Subscription;
   hayProductos: boolean = false;
-  idOrden!: number;  
-  comprobarCarrito(){
+  idOrden!: number;
+
+  comprobarCarrito() {
     this.miCarrito$.pipe(take(1)).subscribe((data) => {
       console.log(data.length);
       this.hayProductos = data.length > 0;
       console.log(this.hayProductos);
-    })
+    });
   }
-
 
   constructor(
     private carritoSvc: CarritoService,
@@ -44,14 +44,18 @@ export class CarritoComponent implements OnInit {
   emailUsuario!: string;
   ngOnInit(): void {
     this.carritoSub = this.miCarrito$.subscribe((data) => {
+      this.hayProductos = data.length > 0;
       //console.log('Productos en el carrito:', data);
     });
-    this.service.obtenerUsuarioPorId().subscribe(usuario => {
-      this.emailUsuario = usuario.email;
-      //console.log('Emaaaaaaaaaaaail', this.emailUsuario);
-    }, error => {
-      console.error('Error al obtener el usuario', error);
-    });
+    this.service.obtenerUsuarioPorId().subscribe(
+      (usuario) => {
+        this.emailUsuario = usuario.email;
+        //console.log('Emaaaaaaaaaaaail', this.emailUsuario);
+      },
+      (error) => {
+        console.error('Error al obtener el usuario', error);
+      }
+    );
     this.comprobarCarrito();
   }
 
@@ -101,7 +105,7 @@ export class CarritoComponent implements OnInit {
     console.log('El pedido genereado: ', nuevoPedido);
     this.pedidoSvc.postPedido(nuevoPedido).subscribe(
       (response) => {
-        console.log('Pedido creado:', response);
+        //console.log('Pedido creado:', response);
       },
       (error) => console.error('Error al crear la orden:', error)
     );
@@ -122,8 +126,6 @@ export class CarritoComponent implements OnInit {
           false,
           false
         );
-        console.log('LLEGA AHSTA ACA 1');
-
         this.ordenCompraSvc.postOrdenCompra(nuevaOrdenCompra).subscribe(
           (response) => {
             this.carritoSub.unsubscribe();
@@ -134,9 +136,14 @@ export class CarritoComponent implements OnInit {
                 this.idOrden = response.id;
               });
             });
-            this.service.enviarEmailConPedidos(this.idOrden, this.emailUsuario).subscribe(response => {
-            }, error => {
-            });
+
+            this.fechaEntrega = '';
+            this.service
+              .enviarEmailConPedidos(this.idOrden, this.emailUsuario)
+              .subscribe(
+                (response) => {},
+                (error) => {}
+              );
             this.mensajeConfirmacion = 'Orden realizada!';
             setTimeout(() => {
               this.mensajeConfirmacion = '';
