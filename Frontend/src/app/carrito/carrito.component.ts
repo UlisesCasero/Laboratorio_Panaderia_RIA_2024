@@ -93,7 +93,7 @@ export class CarritoComponent implements OnInit {
     console.log('El pedido genereado: ', nuevoPedido);
     this.pedidoSvc.postPedido(nuevoPedido).subscribe(
       (response) => {
-        console.log('Pedido creado:', response);
+        //console.log('Pedido creado:', response);
       },
       (error) => console.error('Error al crear la orden:', error)
     );
@@ -114,8 +114,6 @@ export class CarritoComponent implements OnInit {
           false,
           false
         );
-        console.log('LLEGA AHSTA ACA 1');
-
         this.ordenCompraSvc.postOrdenCompra(nuevaOrdenCompra).subscribe(
           (response) => {
             this.carritoSub.unsubscribe();
@@ -127,6 +125,8 @@ export class CarritoComponent implements OnInit {
                 this.crearPedido(producto, response.id);
               });
             });
+
+            this.fechaEntrega = '';
             this.mensajeConfirmacion = 'Orden realizada!';
             setTimeout(() => {
               this.mensajeConfirmacion = '';
