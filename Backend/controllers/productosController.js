@@ -12,11 +12,11 @@ let productoInsumosss = [
   { idProducto: 5, idInsumo: 2, cantidad: 100 }
 ];
 let productos = [
-  { id: 1, nombre: 'Pan', descripcion: 'Descripción 1', imagen: 'producto-1.jpg', precio: 10.0 },
-  { id: 2, nombre: 'Sandwich de miga', descripcion: 'Descripción 2', imagen: 'producto-2.jpg', precio: 20.0 },
-  { id: 3, nombre: 'Scones', descripcion: 'Descripción 3', imagen: 'producto-3.jpg', precio: 20.0 },
-  { id: 4, nombre: 'Pan catalan', descripcion: 'Descripción 4', imagen: 'producto-4.jpg', precio: 20.0 },
-  { id: 5, nombre: 'Pan integral', descripcion: 'Descripción 5', imagen: 'producto-5.jpg', precio: 20.0 }
+  { id: 1, nombre: 'Pan', descripcion: 'Descripción 1', imagen: 'Pan.jpg', precio: 10.0 },
+  { id: 2, nombre: 'Sandwich de miga', descripcion: 'Descripción 2', imagen: 'Sandwich.jpg', precio: 20.0 },
+  { id: 3, nombre: 'Scones', descripcion: 'Descripción 3', imagen: 'Scones.jpg', precio: 20.0 },
+  { id: 4, nombre: 'Pan catalan', descripcion: 'Descripción 4', imagen: 'Catalan.jpg', precio: 20.0 },
+  { id: 5, nombre: 'Pan integral', descripcion: 'Descripción 5', imagen: 'Integral.jpg', precio: 20.0 }
 ];
 
 exports.productos = productos;

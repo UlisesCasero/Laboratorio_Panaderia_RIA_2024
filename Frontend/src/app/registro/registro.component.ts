@@ -11,8 +11,10 @@ import { ServiciosService } from 'src/services/servicios.service';
 export class RegistroComponent {
   registroExitoso: boolean = false;
   registroFallido: boolean = false;
+  verReseteo: boolean = false;
 
   constructor(private router: Router, private servicioService: ServiciosService) { }
+
 
   registro(form: NgForm) {
     if (form.valid) {

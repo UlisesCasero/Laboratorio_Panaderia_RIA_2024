@@ -1,14 +1,14 @@
 <div class="modal" [ngClass]="{'show': mostrar}" (click)="close()">
     <div class="modal-content" (click)="$event.stopPropagation()">
-     
+
         <div class="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
             <button (click)="close()"
                 class="bg-red-500 text-white active:bg-red-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                 type="button">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                     xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M6 18L18 6M6 6l12 12"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
                 </svg>
             </button>
         </div>
@@ -17,49 +17,61 @@
             <label for="" class="block mt-3 text-sm text-gray-700 text-center font-semibold">
                 Registro Usuario
             </label>
-            <form (ngSubmit)="registro(f)" #f="ngForm" class="mt-10">
+            <form (ngSubmit)="registro(f)" #f="ngForm" class="mt-10" #usuarioForm="ngForm">
                 <div>
-                    <input type="text" name="Telefono" ngModel required placeholder="Telefono"
+                    <input type="tel" name="Telefono" ngModel placeholder="Telefono" pattern="[0-9]{9}" required
                         class="mt-1 block w-full border-none bg-gray-100 h-11 rounded-xl shadow-lg hover:bg-blue-100 focus:bg-blue-100 focus:ring-0">
-                    <div *ngIf="f.submitted && f.controls['Telefono']?.errors?.['required']" class="text-red-500 text-xs mt-1">
-                        El teléfono es obligatorio.
+                    <div *ngIf="f.controls['Telefono']?.invalid && f.controls['Telefono']?.touched"
+                        class="text-red-600 text-sm">
+                        Número de celular no válido
                     </div>
-                </div>  
+                </div>
+
                 <div class="mt-7">
-                    <input type="email" name="Correo" ngModel required placeholder="Correo electronico"
+                    <input type="email" name="Correo" ngModel placeholder="Correo electronico" required email
                         class="mt-1 block w-full border-none bg-gray-100 h-11 rounded-xl shadow-lg hover:bg-blue-100 focus:bg-blue-100 focus:ring-0">
-                    <div *ngIf="f.submitted && f.controls['Correo']?.errors?.['required']" class="text-red-500 text-xs mt-1">
-                        El correo electrónico es obligatorio.
+                    <div *ngIf="f.controls['Correo']?.invalid && f.controls['Correo']?.touched"
+                        class="text-red-600 text-sm">
+                        Correo electrónico no válido
                     </div>
-                </div>      
+                </div>
+
                 <div class="mt-7">
-                    <input type="password" name="Contraseña" ngModel required placeholder="Contraseña"
+                    <input type="password" name="Contraseña" ngModel placeholder="Contraseña" minlength="8" required
                         class="mt-1 block w-full border-none bg-gray-100 h-11 rounded-xl shadow-lg hover:bg-blue-100 focus:bg-blue-100 focus:ring-0">
-                    <div *ngIf="f.submitted && f.controls['Contraseña']?.errors?.['required']" class="text-red-500 text-xs mt-1">
-                        La contraseña es obligatoria.
+                    <div *ngIf="f.controls['Contraseña']?.invalid && f.controls['Contraseña']?.touched"
+                        class="text-red-600 text-sm">
+                        La contraseña debe tener al menos 8 caracteres
                     </div>
-                </div> 
+                </div>
+
                 <div class="mt-7">
-                    <select name="role" ngModel required class="mt-1 block w-full border-none bg-gray-100 h-11 rounded-xl shadow-lg hover:bg-blue-100 focus:bg-blue-100 focus:ring-0">
+                    <select name="role" ngModel required
+                        class="mt-1 block w-full border-none bg-gray-100 h-11 rounded-xl shadow-lg hover:bg-blue-100 focus:bg-blue-100 focus:ring-0">
                         <option value="">Selecciona un rol</option>
                         <option value="USER">USER</option>
                         <option value="PANADERO">PANADERO</option>
                     </select>
-                    <div *ngIf="f.submitted && f.controls['role']?.errors?.['required']" class="text-red-500 text-xs mt-1">
-                        El rol es obligatorio.
+                    <div *ngIf="f.controls['role']?.invalid && f.controls['role']?.touched"
+                        class="text-red-600 text-sm">
+                        Debes seleccionar un rol
                     </div>
                 </div>
+
                 <div class="mt-7">
-                    <button type="submit"
-                        class="bg-blue-500 w-full py-3 rounded-xl text-white shadow-xl hover:shadow-inner focus:outline-none transition duration-500 ease-in-out  transform hover:-translate-x hover:scale-105">
+                    <button type="submit" [disabled]="f.invalid"
+                        class="bg-blue-500 w-full py-3 rounded-xl text-white shadow-xl hover:shadow-inner focus:outline-none transition duration-500 ease-in-out transform hover:-translate-x hover:scale-105">
                         Registrar
                     </button>
                 </div>
             </form>
-            <div *ngIf="registroExitoso" class="bg-blue-100 border-t border-b border-blue-500 text-blue-700 px-4 py-3" role="alert">
+
+            <div *ngIf="registroExitoso" class="bg-blue-100 border-t border-b border-blue-500 text-blue-700 px-4 py-3"
+                role="alert">
                 <p class="font-bold">Registro exitoso</p>
             </div>
-            <div *ngIf="registroFallido" class="bg-blue-100 border-t border-b border-blue-500 text-blue-700 px-4 py-3" role="alert">
+            <div *ngIf="registroFallido" class="bg-blue-100 border-t border-b border-blue-500 text-blue-700 px-4 py-3"
+                role="alert">
                 <p class="font-bold">Registro fallido</p>
             </div>
         </div>
