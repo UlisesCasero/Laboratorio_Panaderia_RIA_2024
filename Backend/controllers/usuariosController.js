@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const Mail = require('nodemailer/lib/mailer');
-const { enviar_mail_cambio_constrasenia, enviar_reset_constrasenia } = require('../templates/registro');
+const { enviar_mail_cambio_constrasenia, enviar_reset_constrasenia, enviar_mail } = require('../templates/registro');
 const usuarios = [];
 
 const generateToken = (user) => {
@@ -51,6 +51,7 @@ const register = async (req, res) => {
     enabled: true,
   };
   usuarios.push(newUser);
+  enviar_mail(email); 
   res.status(201).json(newUser);
 };
 
