@@ -9,6 +9,7 @@ import { PedidoService } from 'src/services/pedido.service';
 import { estadoOrden } from '../../enums/estado-orden';
 import { estadoPedido } from 'src/enums/estado-pedido';
 import { ServiciosService } from 'src/services/servicios.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-carrito',
@@ -36,7 +37,8 @@ export class CarritoComponent implements OnInit {
     private carritoSvc: CarritoService,
     private ordenCompraSvc: OrdenCompraService,
     private pedidoSvc: PedidoService,
-    private service: ServiciosService
+    private service: ServiciosService,
+    private router: Router
   ) {
     this.miCarrito$ = this.carritoSvc.miCarrito$;
     this.minDate = new Date().toISOString().split('T')[0];
@@ -136,8 +138,6 @@ export class CarritoComponent implements OnInit {
                 this.idOrden = response.id;
               });
             });
-
-            this.fechaEntrega = '';
             this.service
               .enviarEmailConPedidos(this.idOrden, this.emailUsuario)
               .subscribe(
@@ -149,13 +149,13 @@ export class CarritoComponent implements OnInit {
               this.mensajeConfirmacion = '';
             }, 3000);
             setTimeout(() => {
-              this.carritoSvc.vaciarCarrito();
+              this.vaciarCarrito();
+              this.mensajeConfirmacion = '';
             }, 3000);
             setTimeout(() => {
               this.mensajeConfirmacion = 'Vaciando Carrito.....!';
             }, 2000);
             setTimeout(() => {
-              this.mensajeConfirmacion = '';
             }, 1000);
           },
           (error) => console.error('Error al crear la orden:', error)
@@ -166,6 +166,16 @@ export class CarritoComponent implements OnInit {
     } else {
       console.error('No se encontró el ID de usuario en localStorage');
     }
+  }
+
+  vaciarCarrito(){
+    this.carritoSvc.vaciarCarrito();
+    this.fechaEntrega = '';
+  }
+  
+  cancelarCarrito(){
+    this.vaciarCarrito();
+    this.router.navigate(['/home']);
   }
 
   serverBaseUrl = 'http://localhost:3000/uploads/';
