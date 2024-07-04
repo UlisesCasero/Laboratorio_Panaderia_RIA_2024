@@ -22,15 +22,15 @@ export class CarritoComponent implements OnInit {
   minDate: string;
   carritoSub!: Subscription;
   hayProductos: boolean = false;
-  idOrden!: number;  
-  comprobarCarrito(){
+  idOrden!: number;
+
+  comprobarCarrito() {
     this.miCarrito$.pipe(take(1)).subscribe((data) => {
       console.log(data.length);
       this.hayProductos = data.length > 0;
       console.log(this.hayProductos);
-    })
+    });
   }
-
 
   constructor(
     private carritoSvc: CarritoService,
@@ -44,14 +44,18 @@ export class CarritoComponent implements OnInit {
   emailUsuario!: string;
   ngOnInit(): void {
     this.carritoSub = this.miCarrito$.subscribe((data) => {
+      this.hayProductos = data.length > 0;
       //console.log('Productos en el carrito:', data);
     });
-    this.service.obtenerUsuarioPorId().subscribe(usuario => {
-      this.emailUsuario = usuario.email;
-      //console.log('Emaaaaaaaaaaaail', this.emailUsuario);
-    }, error => {
-      console.error('Error al obtener el usuario', error);
-    });
+    this.service.obtenerUsuarioPorId().subscribe(
+      (usuario) => {
+        this.emailUsuario = usuario.email;
+        //console.log('Emaaaaaaaaaaaail', this.emailUsuario);
+      },
+      (error) => {
+        console.error('Error al obtener el usuario', error);
+      }
+    );
     this.comprobarCarrito();
   }
 
@@ -134,9 +138,12 @@ export class CarritoComponent implements OnInit {
             });
 
             this.fechaEntrega = '';
-            this.service.enviarEmailConPedidos(this.idOrden, this.emailUsuario).subscribe(response => {
-            }, error => {
-            });
+            this.service
+              .enviarEmailConPedidos(this.idOrden, this.emailUsuario)
+              .subscribe(
+                (response) => {},
+                (error) => {}
+              );
             this.mensajeConfirmacion = 'Orden realizada!';
             setTimeout(() => {
               this.mensajeConfirmacion = '';

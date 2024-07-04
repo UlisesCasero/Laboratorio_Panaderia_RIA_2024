@@ -14,6 +14,8 @@ const createDefaultUsers = async () => {
     { email: 'maria.sellanes@estudiantes.utec.edu.uy', password: 'admin123', role: 'ADMIN', telefono: '123456789' },
     { email: 'panadero@example.com', password: 'panadero123', role: 'PANADERO', telefono: '987654321' },
     { email: 'user@example.com', password: 'user123', role: 'USER', telefono: '456123789' },
+    { email: 'user@example.com2', password: 'user123', role: 'USER', telefono: '987654321' },
+    { email: 'user@example.com3', password: 'user123', role: 'USER', telefono: '456123789' },
   ];
 
   for (const user of defaultUsers) {
