@@ -26,7 +26,7 @@ export class ModificarProductoComponent {
   insumoSeleccionadoss: any[] = [];
   registroExitoso: boolean = false;
   registroFallido: boolean = false;
-
+  id!:number;
   constructor(private productoSVC: ProductoService, private cd: ChangeDetectorRef) { }
 
   @Output() closed = new EventEmitter<void>();
@@ -38,6 +38,7 @@ export class ModificarProductoComponent {
 
   open(producto: Producto) {
     if (producto.id) {
+      this.id = producto.id;
       this.loadInsumos(producto.id);
     } else {
       console.error('Producto es null');
@@ -78,6 +79,7 @@ export class ModificarProductoComponent {
     this.isVisible = false;
     console.log('acaaa', this.insumosSeleccionados);
     this.closed.emit();
+    this.loadInsumos(this.id);
     this.insumosSeleccionados = [];
     this.idsInsumosEliminados = [];
   }
@@ -270,8 +272,11 @@ export class ModificarProductoComponent {
         this.insumoSeleccionadoss = [];
          this.registroExitoso = true;
           setTimeout(() => {
+            this.registroExitoso = false;
+            
           this.close();
         }, 4000);
+        this.insumosSeleccionados2 = [];
         this.cd.detectChanges();
       },
       error: (error) => {

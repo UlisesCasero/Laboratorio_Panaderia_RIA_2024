@@ -6,6 +6,7 @@ import { ModificarProductoComponent } from '../modificar-producto/modificar-prod
 import { Insumo, InsumoP } from 'src/models/insumo';
 import { Subscription } from 'rxjs';
 import { InsumosModalComponent } from '../insumos-modal/insumos-modal.component';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-crud-productos',
@@ -25,7 +26,7 @@ export class CRUDProductosComponent implements OnInit {
   public productosActuales: Producto[] = [];
   public productosOriginales: Producto[] = [];
   paginaActual: number = 1;
-  productosPorPagina: number = 5;
+  productosPorPagina: number = 3;
   totalProductos: number = 0;
   terminoBusqueda: string = '';
   private productoSubscription: Subscription = new Subscription();
@@ -252,22 +253,26 @@ export class CRUDProductosComponent implements OnInit {
     }
   }
 
-  crearProducto(datosFormulario: any): void {
+  crearProducto(datosFormulario: NgForm): void {
     if (!this.imagenSeleccionada) {
-      console.error('No se ha seleccionado una imagen válida.');
+      this.mostrarMensajeError('No se ha seleccionado una imagen válida.');
+      return;
+    }
+    if (this.insumosSeleccionados.length === 0) {
+      this.mostrarMensajeError('Debes agregar al menos un insumo.');
       return;
     }
     const insumosSeleccionadosReducidos = this.insumosSeleccionados.map(insumo => ({
       id: insumo.id,
       nombre: insumo.nombre
     }));
-
+    if (datosFormulario.valid) {
     const nuevoProducto = new Producto(
       1,
-      datosFormulario.nombre,
-      datosFormulario.descripcion,
+      datosFormulario.value.nombre,
+      datosFormulario.value.descripcion,
       this.imagenSeleccionada,
-      datosFormulario.precio,
+      datosFormulario.value.precio,
       insumosSeleccionadosReducidos
     );
 
@@ -316,8 +321,27 @@ export class CRUDProductosComponent implements OnInit {
       }
     });
 
-  }
+  }  Object.keys(datosFormulario.controls).forEach(key => {
+    const control = datosFormulario.controls[key];
+    if (control.invalid && control.touched) {
+      // Mostrar mensaje de error específico por campo
+      switch (key) {
+        case 'nombre':
+          this.mostrarMensajeError('Nombre del producto es obligatorio.');
+          break;
+        case 'descripcion':
+          this.mostrarMensajeError('Descripción del producto es obligatoria.');
+          break;
+          case 'precio':
+          this.mostrarMensajeError('Precio del producto es obligatoria.');
+          break;
+        default:
+          break;
+      }
+    }
+  });
 
+  }
   insumoSeleccionados(insumo: any) {
     this.insumoss.push(insumo);
     this.cerrarInsumosModal();

@@ -1,4 +1,4 @@
-<aside class="hidden md:flex h-screen w-16 flex-col space-y-10 items-center justify-center relative bg-slate-900 text-white">
+<aside [class.open]="isSidebarOpen" class="sidebar hidden md:flex h-screen w-16 flex-col space-y-10 items-center justify-center relative bg-slate-900 text-white">
 
     <div [routerLink]="['/home']" *ngIf="!isAdmin()"
         class="h-10 w-10 flex items-center justify-center rounded-lg cursor-pointer hover:text-gray-800 hover:bg-white hover:duration-300 hover:ease-linear focus:bg-white">
@@ -76,3 +76,8 @@
         </svg>
     </div>
 </aside>
+<button (click)="toggleSidebar()" class="md:hidden p-2 bg-slate-900 text-white absolute top-0 left-0 mt-2 ml-2">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+    </svg>
+</button>

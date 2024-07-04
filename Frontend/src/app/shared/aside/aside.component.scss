@@ -35,4 +35,30 @@ aside {
       height: 3rem; /* Altura fija para cada ítem */
     }
   }
+
+  /* Default hidden sidebar for small screens */
+.sidebar {
+  display: none;
+}
+
+/* Sidebar visible on medium and larger screens */
+@media (min-width: 768px) {
+  .sidebar {
+    display: flex;
+  }
+}
+
+/* Open sidebar when isSidebarOpen is true */
+.sidebar.open {
+  display: flex;
+}
+
+/* Style for the toggle button */
+button {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 1000;
+}
+
   

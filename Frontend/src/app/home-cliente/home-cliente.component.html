@@ -1,5 +1,6 @@
+
 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-  <div class="mb-4">
+  <div class="mb-4" *ngIf="isUser()">
     <input type="text" [(ngModel)]="terminoBusqueda" (input)="filtrarProductos()" placeholder="Buscar producto..."
       class="p-2 border border-gray-300 rounded w-full">
   </div>

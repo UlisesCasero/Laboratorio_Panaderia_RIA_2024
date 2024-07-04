@@ -9,6 +9,11 @@ import { CarritoService } from 'src/services/carrito.service';
 })
 export class AsideComponent {
   cantCarrito: number = 0;
+  isSidebarOpen: boolean = false;
+
+  toggleSidebar() {
+    this.isSidebarOpen = !this.isSidebarOpen;
+  }
 
   constructor(private carritoService: CarritoService) {}
 

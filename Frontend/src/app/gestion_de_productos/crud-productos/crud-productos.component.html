@@ -67,19 +67,26 @@
     </div>
     <div class="form-container max-w-md mx-auto">
       <app-crear-producto #crearProductoModal>
-        <form #productoForm="ngForm" (ngSubmit)="crearProducto(productoForm.value)" class="space-y-4">
+        <form #productoForm="ngForm" (ngSubmit)="crearProducto(productoForm)" class="space-y-4">
           <div>
             <label for="nombre" class="block text-sm font-medium text-gray-700">Nombre del Producto</label>
-            <input type="text" name="nombre" id="nombre" [(ngModel)]="datosFormulario.nombre" required
+            <input type="text" name="nombre" id="nombre" [(ngModel)]="datosFormulario.nombre"  ngModel required placeholder="Nombre"
               placeholder="Nombre del producto"
               class="mt-1 p-2 block w-full rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300">
-          </div>
+              <div *ngIf="productoForm.submitted && productoForm.controls['nombre']?.errors?.['required']"
+              class="text-red-500 text-xs mt-1">
+              El nombre es obligatorio.
+            </div></div>
+          
           <div>
             <label for="descripcion" class="block text-sm font-medium text-gray-700">Descripción</label>
             <textarea name="descripcion" id="descripcion" [(ngModel)]="datosFormulario.descripcion" required
               placeholder="Descripción"
               class="mt-1 p-2 block w-full rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300"></textarea>
-          </div>
+              <div *ngIf="productoForm.submitted && productoForm.controls['descripcion']?.errors?.['required']"
+              class="text-red-500 text-xs mt-1">
+              La descripción es obligatoria.
+            </div></div>
           <div class="flex items-center space-x-2">
             <input type="file" id="imagenInput" (change)="onFileSelected($event)" style="display: none"
               accept="image/*">
@@ -90,13 +97,18 @@
             <div *ngIf="imagenSeleccionada">
               <img [src]="imagenSeleccionada" alt="Imagen seleccionada" class="max-w-[200px] mb-4 mt-2">
             </div>
+           </div> <div *ngIf="!imagenSeleccionada && productoForm.submitted" class="text-red-500 text-xs mt-1">
+            No se ha seleccionado una imagen válida.
           </div>
           <div>
             <label for="precio" class="block text-sm font-medium text-gray-700">Precio</label>
             <input type="number" name="precio" id="precio" [(ngModel)]="datosFormulario.precio" required
               placeholder="Precio"
               class="mt-1 p-2 block w-full rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300">
-          </div>
+              <div *ngIf="productoForm.submitted && productoForm.controls['nombre']?.errors?.['required']"
+              class="text-red-500 text-xs mt-1">
+              El precio es obligatorio.
+            </div></div>
           <div class="flex items-center space-x-2">
             <button type="button" (click)="openModalRelacion()"
               class="inline-block text-sm font-medium leading-normal text-center align-middle cursor-pointer rounded-2xl transition-colors duration-150 ease-in-out text-light-inverse bg-celeste-pastel border-celeste-pastel shadow-none border-0 py-2 px-5 hover:bg-secondary active:bg-light focus:bg-light">
