@@ -10,10 +10,11 @@ import { ProductoService } from 'src/services/producto.service';
 export class InsumosModalComponent implements OnInit {
   mostrar: boolean = false;
   insumos: Insumo[] = [];
-
+  mostrarMje: boolean = false;
+  mostrarMje2: boolean = false;
   @Output() insumoAgregado = new EventEmitter<{ insumo: InsumoP, cantidad: number }>();
 
-  constructor(private productoService: ProductoService) {}
+  constructor(private productoService: ProductoService) { }
 
   ngOnInit(): void {
     this.obtenerInsumos();
@@ -26,7 +27,7 @@ export class InsumosModalComponent implements OnInit {
   close(): void {
     this.mostrar = false;
   }
-  
+
   obtenerInsumos(): void {
     this.productoService.getInsumoss().subscribe(
       (insumos: Insumo[]) => {
@@ -39,10 +40,21 @@ export class InsumosModalComponent implements OnInit {
   }
 
   agregarInsumo(insumo: Insumo, cantidad: string): void {
+    if (cantidad == '') {
+      this.mostrarMje = true;
+      setTimeout(() => {
+        this.mostrarMje = false;
+      }, 3000);
+     
+      return;
+    }
     const cantidadNumber = parseInt(cantidad, 10);
-    console.log('ID del insumo:', insumo.id);
-    console.log('Cantidad ingresada:', cantidadNumber);
+    this.mostrarMje2 = true;
+    setTimeout(() => {
+      this.mostrarMje2 = false;
+    }, 3000);
     this.insumoAgregado.emit({ insumo, cantidad: cantidadNumber });
     this.insumos = this.insumos.filter(i => i !== insumo);
+    this.mostrarMje = false;
   }
 }
