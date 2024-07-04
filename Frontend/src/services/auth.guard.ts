@@ -6,24 +6,21 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthGuard implements CanActivate {
-  constructor(private router: Router) {}
+  constructor(private router: Router) { }
 
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-      
-    // Verifica si hay un token en el localStorage
+
     const token = localStorage.getItem('token');
 
-    // Si hay un token, devuelve true (el usuario está autenticado)
     if (token) {
+      const rol = localStorage.getItem('rol');
+      if (rol === 'ADMIN') {
+        return this.router.parseUrl('/ordenes-admin');
+      }
       return true;
     }
-
-    // Si no hay token, redirige al usuario a la página de inicio de sesión
-    this.router.navigate(['/login']);
-
-    // Devuelve false ya que el usuario no está autenticado
     return false;
   }
 }
