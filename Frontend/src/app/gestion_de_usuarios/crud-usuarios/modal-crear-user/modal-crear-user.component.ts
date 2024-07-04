@@ -25,8 +25,8 @@ export class ModalCrearUserComponent {
   constructor(private servicioService: ServiciosService) { }
 
   ngOnInit(): void { }
-mensaje: string ='';
-mensajeError: string= '';
+  mensaje: string = '';
+  mensajeError: string = '';
   registro(form: NgForm) {
     if (form.valid) {
       const telefono = form.value.Telefono;
@@ -73,7 +73,7 @@ mensajeError: string= '';
   }
 
   actualizarUsuario() {
-    this.servicioService.actualizarUsuario(this.usuario.id,this.usuario).subscribe(
+    this.servicioService.actualizarUsuario(this.usuario.id, this.usuario).subscribe(
       (response) => {
         this.registroExitoso = true;
         this.registroFallido = false;
